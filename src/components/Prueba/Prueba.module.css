@@ -1,0 +1,6 @@
+body {
+    background: linear-gradient(to right, #2c8a36, #76c043, #a6d953, #f1da4d);
+    margin: 0; /* Asegúrate de que no haya márgenes que interfieran */
+    min-height: 100vh; /* Asegura que cubra la altura completa de la ventana */
+  }
+  
