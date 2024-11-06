@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Login = () =>{
 
@@ -8,10 +9,9 @@ const Login = () =>{
         password: "",    
       });
 
+const datos = useSelector(state=>state.token);
 
-
-
-
+console.log("datos",datos);
 
  const changeHandler = (event) =>{
    const property = event.target.name;
