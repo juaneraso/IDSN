@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 const Login = () =>{
 
  const [form, setForm] = useState({
-        username: "",
+        email: "",
         password: "",    
       });
 
@@ -20,7 +20,7 @@ console.log("datos",datos);
   
  }
 
- const formIsDisabled = !form.password || !form.username;
+ const formIsDisabled = !form.password || !form.email;
 
 
 return( 
@@ -32,10 +32,10 @@ return(
         <div>
         <input
          type="text"
-         placeholder="Usuario"       
-         value={form.username}
+         placeholder="Email"       
+         value={form.email}
          onChange={changeHandler}
-         name="username"        
+         name="email"        
         />      
         </div>        
         <div>
