@@ -6,6 +6,8 @@ import { Routes, Route} from 'react-router-dom'
 import Prueba from './components/Prueba/Prueba.jsx'
 import Dashboard from './components/dashboard/Dashboard.jsx'
 import RegistroUsuario from './components/Registro/RegistroUsuario.jsx'
+import Dashbo from './components/Dashbo/Dashbo.jsx'
+import ReportForm from './components/Report/ReportForm.jsx'
 
 function App() {
 
@@ -16,6 +18,8 @@ function App() {
        <Route path="/login" element={<Prueba/>}/>
        <Route path="/dashboard" element={<Dashboard/>}/>
        <Route path="/register" element={<RegistroUsuario/>}/>
+       <Route path="/dashbo" element={<Dashbo/>}/>
+       <Route path="/reportes" element={<ReportForm/>}/>
        
 
 

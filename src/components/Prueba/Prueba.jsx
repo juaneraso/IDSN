@@ -122,14 +122,13 @@ function Prueba() {
       const data = await response.json();
       const datos = {
         token:data.jwt,
-        user:form.identifier
-        
+        user:form.identifier        
          }  
-
+       //localStorage.setItem('user', form);
       console.log("Fetch POST Response:", data);
       
       dispatch(loginSuccess(datos))
-      navigate('/');
+      navigate('/dashbo');
       
 
     } catch (error) {
@@ -190,7 +189,7 @@ function Prueba() {
               </MDBBtn>
               <a className="small text-muted" href="#!">Olvidaste tu contraseña?</a>
               <p className="mb-5 pb-lg-2" style={{ color: '#393f81' }}>
-                Don't have an account? <a href="#!" style={{ color: '#393f81' }}>Register here</a>
+                ¿No tienes cuenta ?<a href="/register" style={{ color: '#393f81' }}>Registrate Aqui</a>
               </p>
 
               <div className='d-flex flex-row justify-content-start'>
