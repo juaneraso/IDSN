@@ -1,0 +1,56 @@
+.activityItem {
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.activityHeader {
+  cursor: pointer;
+  background-color: #f5f5f5;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activityHeader:hover {
+  background-color: #eaeaea;
+}
+
+.activityDetails {
+  padding: 0.5rem;
+}
+
+.field {
+  margin-bottom: 0.5rem;
+}
+
+.field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.field input {
+  width: 100%;
+  padding: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.removeButton {
+  padding: 10px 20px; /* Ajusta el espacio interno del botón */
+  font-size: 14px; /* Ajusta el tamaño del texto */
+  width: auto; /* Puedes usar 'width' para especificar un ancho fijo o 'auto' para que se ajuste al contenido */
+  height: auto; /* Similar a width, ajusta la altura */
+  border-radius: 4px; /* Opcional: para bordes redondeados */
+  background-color: #ff6347; /* Opcional: color de fondo */
+  color: white; /* Opcional: color del texto */
+  cursor: pointer; /* Cambia el cursor cuando el mouse pasa sobre el botón */
+}
+
+.removeButton:hover {
+  background-color: #c0392b;
+}
