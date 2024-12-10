@@ -1,257 +1,176 @@
-// import React, { useState } from "react";
-// import styles from "./ReportForm.module.css";
-// import Header from "../Header/Header";
-// import ActivityList from "../Activities/ActivityList";
-
-// const ReportForm = () => {
-//   const [reportData, setReportData] = useState({
-//     subregion: "",
-//     municipality: "",
-//     actaInicio: "",
-//     fechaInicio: "",
-//     fechaFin: "",
-//     fechaRegistro: "",
-//     actaSocializacion: "",
-//     certificadoLiquidacion: "",
-//   });
-
-//   const [file, setFile] = useState(null);
-//   const [loading, setLoading] = useState(false);
-//   const [success, setSuccess] = useState(null);
-//   const [activities, setActivities] = useState([]);
-
-//   const subregions = ["Norte", "Sur", "Oriente", "Occidente"];
-//   const municipalities = {
-//     Norte: ["El Charco", "La Tola"],
-//     Sur: ["Ipiales", "Aldana"],
-//     Oriente: ["Belen", "Alban"],
-//     Occidente: ["Tumaco", "Fransisco Pizarro"],
-//   };
-
-//   const handleChange = (event) => {
-//     const { name, value } = event.target;
-//     setReportData({ ...reportData, [name]: value });
-//   };
-
-//   const handleFileChange = (event) => {
-//     setFile(event.target.files[0]);
-//   };
-
-//   const handleSubmit = async (event) => {
-//     event.preventDefault();
-//     setLoading(true);
-//     setSuccess(null);
-
-//     try {
-//       const data = new FormData();
-//       Object.keys(reportData).forEach((key) =>
-//         data.append(key, reportData[key])
-//       );
-//       if (file) data.append("file", file);
-//       data.append("activities", JSON.stringify(activities));
-
-//       const response = await fetch("http://localhost:4000/api/reports", {
-//         method: "POST",
-//         body: data,
-//       });
-
-//       if (!response.ok) throw new Error("Error al enviar el reporte.");
-
-//       setSuccess(true);
-//       setReportData({
-//         subregion: "",
-//         municipality: "",
-//         actaInicio: "",
-//         fechaInicio: "",
-//         fechaFin: "",
-//         fechaRegistro: "",
-//         actaSocializacion: "",
-//         certificadoLiquidacion: "",
-//       });
-//       setFile(null);
-//       setActivities([]);
-//     } catch (error) {
-//       console.error(error);
-//       setSuccess(false);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <>
-//       <Header />
-//       <div className={styles.formContainer}>
-//         <h2>Anexo Técnico</h2>
-//         <form onSubmit={handleSubmit} className={styles.formGrid}>
-//           <div className={styles.field}>
-//             <label htmlFor="fechaRegistro">Fecha de Registro</label>
-//             <input
-//               type="date"
-//               id="fechaRegistro"
-//               name="fechaRegistro"
-//               value={reportData.fechaRegistro}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <div className={styles.field}>
-//             <label htmlFor="fechaInicio">Fecha de Inicio</label>
-//             <input
-//               type="date"
-//               id="fechaInicio"
-//               name="fechaInicio"
-//               value={reportData.fechaInicio}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <div className={styles.field}>
-//             <label htmlFor="fechaFin">Fecha de Fin</label>
-//             <input
-//               type="date"
-//               id="fechaFin"
-//               name="fechaFin"
-//               value={reportData.fechaFin}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <div className={styles.field}>
-//             <label htmlFor="subregion">Subregión</label>
-//             <select
-//               id="subregion"
-//               name="subregion"
-//               value={reportData.subregion}
-//               onChange={handleChange}
-//               required
-//             >
-//               <option value="">Seleccione una subregión</option>
-//               {subregions.map((subregion, index) => (
-//                 <option key={index} value={subregion}>
-//                   {subregion}
-//                 </option>
-//               ))}
-//             </select>
-//           </div>
-//           <div className={styles.field}>
-//             <label htmlFor="municipality">Municipio</label>
-//             <select
-//               id="municipality"
-//               name="municipality"
-//               value={reportData.municipality}
-//               onChange={handleChange}
-//               required
-//               disabled={!reportData.subregion}
-//             >
-//               <option value="">Seleccione un municipio</option>
-//               {reportData.subregion &&
-//                 municipalities[reportData.subregion]?.map(
-//                   (municipality, index) => (
-//                     <option key={index} value={municipality}>
-//                       {municipality}
-//                     </option>
-//                   )
-//                 )}
-//             </select>
-//           </div>
-//           <div className={styles.field}>
-//             <label htmlFor="actaInicio">Acta de Inicio</label>
-//             <input
-//               type="text"
-//               id="actaInicio"
-//               name="actaInicio"
-//               value={reportData.actaInicio}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <div className={styles.field}>
-//             <label htmlFor="actaSocializacion">Acta de Socialización</label>
-//             <input
-//               type="text"
-//               id="actaSocializacion"
-//               name="actaSocializacion"
-//               value={reportData.actaSocializacion}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <div className={styles.field}>
-//             <label htmlFor="certificadoLiquidacion">
-//               Certificado de Liquidación
-//             </label>
-//             <input
-//               type="text"
-//               id="certificadoLiquidacion"
-//               name="certificadoLiquidacion"
-//               value={reportData.certificadoLiquidacion}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <div className={styles.field}>
-//             <label htmlFor="archivo">Adjuntar Archivo</label>
-//             <input
-//               type="file"
-//               id="archivo"
-//               name="archivo"
-//               onChange={handleFileChange}
-//             />
-//           </div>
-
-//           {/* Componente de actividades */}
-//         </form>
-
-//         <ActivityList activities={activities} setActivities={setActivities} />
-
-//         <button className={styles.buttonMain} type="submit" disabled={loading}>
-//           {loading ? "Enviando..." : "Enviar Reporte"}
-//         </button>
-
-//         {success === true && (
-//           <p className={styles.success}>¡Reporte enviado con éxito!</p>
-//         )}
-//         {success === false && (
-//           <p className={styles.error}>Error al enviar el reporte.</p>
-//         )}
-//       </div>
-//     </>
-//   );
-// };
-
-// export default ReportForm;
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./ReportForm.module.css";
 import Header from "../Header/Header";
 import ActivityList from "../Activities/ActivityList";
 import ReportFields from "../Fields/ReportFields";
+import Product from "../Product/Product";
+import Event from "../Event/Event";
+import { useSelector } from "react-redux";
+import qs from "qs";
+
+// const queryParameters = {
+//   fields: ["documentId", "nombre"], // Campos específicos que necesitas
+// };
+
+// const queryString = qs.stringify(queryParameters, { encodeValuesOnly: true });
+
+// const url = `http://localhost:1337/api/municipios?${queryString}`;
+
+const queryParameters = {
+  fields: ["documentId", "nombre"], // Campos del recurso principal
+  populate: {
+    municipios: {
+      fields: ["nombre"], // Campos específicos de la relación
+    },
+  },
+};
+
+const queryString = qs.stringify(queryParameters, { encodeValuesOnly: true });
+
+const url = `http://localhost:1337/api/subregions?${queryString}`;
 
 const ReportForm = () => {
   const [reportData, setReportData] = useState({
     subregion: "",
     municipality: "",
-    actaInicio: "",
-    fechaInicio: "",
-    fechaFin: "",
     fechaRegistro: "",
-    actaSocializacion: "",
-    certificadoLiquidacion: "",
+    codigo_territorio: "",
+    codigo_micro_territorio: "",
+    numero_micro_territorio: "",
+    numero_hogares: "",
+    proyecto: "",
+    actividad_pas: "",
+    descripcion: "",
+    tipo_territorio: "",
+    tipo_micro_territorio: "",
+    nombre_micro_territorio: "",
   });
+
+  const token = useSelector((state) => state.token.token);
+  console.log("token", token);
 
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [activities, setActivities] = useState([]);
 
-  const subregions = ["Norte", "Sur", "Oriente", "Occidente"];
-  const municipalities = {
-    Norte: ["El Charco", "La Tola"],
-    Sur: ["Ipiales", "Aldana"],
-    Oriente: ["Belen", "Alban"],
-    Occidente: ["Tumaco", "Fransisco Pizarro"],
-  };
+  //const [municipalities, setMunicipalities] = useState([]);
+  const [subregions, setSubregions] = useState([]);
+
+  // const subregions = ["Norte", "Sur", "Oriente", "Occidente"];
+  // const municipalities = {
+  //   Norte: ["El Charco", "La Tola"],
+  //   Sur: ["Ipiales", "Aldana"],
+  //   Oriente: ["Belen", "Alban"],
+  //   Occidente: ["Tumaco", "Fransisco Pizarro"],
+  // };
+
+  const [productData, setProductData] = useState({
+    producto: {
+      descripcion_producto: "",
+      indicador_de_producto: "",
+      indicador_Linea_Base: "",
+    },
+    // soporte: {
+    //   tipo_soporte: "",
+    //   descripcion: "",
+    //   archivos: null,
+    //   valor_porcentual: "",
+    // },
+    // cups: {
+    //   codigo: "",
+    //   subcodigo: "",
+    //   descripcion: "",
+    //   valor: "",
+    // },
+  });
+
+  const [eventData, setEventData] = useState(null); // Recibirá datos finales del componente Event
+
+  // useEffect(() => {
+  //   const fetchMunicipalities = async () => {
+  //     try {
+  //       const queryParameters = {
+  //         fields: ["documentId", "nombre"], // Campos específicos que necesitas
+  //       };
+
+  //       const queryString = qs.stringify(queryParameters, {
+  //         encodeValuesOnly: true,
+  //       });
+
+  //       const response = await fetch(
+  //         `http://localhost:1337/api/municipios?${queryString}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       if (!response.ok) throw new Error("Error al obtener municipios.");
+
+  //       const data = await response.json();
+  //       setMunicipalities(data.data);
+  //     } catch (error) {
+  //       console.error("Error fetching municipalities:", error);
+  //     }
+  //   };
+
+  //   const fetchSubregions = async () => {
+  //     try {
+  //       const queryParameters = {
+  //         fields: ["documentId", "nombre"], // Ajusta los campos necesarios
+  //       };
+
+  //       const queryString = qs.stringify(queryParameters, {
+  //         encodeValuesOnly: true,
+  //       });
+
+  //       const response = await fetch(
+  //         `http://localhost:1337/api/subregions?${queryString}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       if (!response.ok) throw new Error("Error al obtener subregiones.");
+
+  //       const data = await response.json();
+  //       setSubregions(data.data);
+  //     } catch (error) {
+  //       console.error("Error fetching subregions:", error);
+  //     }
+  //   };
+
+  //   fetchMunicipalities();
+  //   fetchSubregions();
+  // }, [token]);
+
+  useEffect(() => {
+    const fetchSubregions = async () => {
+      try {
+        const response = await fetch(`${url}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error("Error al obtener subregiones.");
+        const data = await response.json();
+        setSubregions(data.data); // Guardar subregiones con municipios
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching subregions:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchSubregions();
+  }, [token]);
+
+  //console.log("municipios", municipalities);
+  console.log("subregiones", subregions);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -262,39 +181,237 @@ const ReportForm = () => {
     setFile(event.target.files[0]);
   };
 
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   setLoading(true);
+  //   setSuccess(null);
+
+  //   try {
+  //     const data = new FormData();
+
+  //     // Agregar datos del formulario principal
+  //     Object.keys(reportData).forEach((key) =>
+  //       data.append(key, reportData[key])
+  //     );
+
+  //     // Agregar archivo adjunto
+  //     if (file) data.append("file", file);
+
+  //     // Agregar actividades
+  //     data.append("activities", JSON.stringify(activities));
+
+  //     // Agregar datos de producto
+  //     Object.keys(productData).forEach((section) => {
+  //       if (typeof productData[section] === "object") {
+  //         Object.keys(productData[section]).forEach((field) => {
+  //           data.append(`${section}_${field}`, productData[section][field]);
+  //         });
+  //       } else {
+  //         data.append(section, productData[section]);
+  //       }
+  //     });
+
+  //     // Agregar datos de evento
+  //     if (eventData) {
+  //       Object.keys(eventData).forEach((key) =>
+  //         data.append(`event_${key}`, eventData[key])
+  //       );
+  //     }
+
+  //     // Ver datos en consola (opcional)
+  //     for (let pair of data.entries()) {
+  //       console.log(`${pair[0]}: ${pair[1]}`);
+  //     }
+
+  //     // Realizar la solicitud
+  //     const response = await fetch("http://localhost:1337/api/anexo-tecnicos", {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: data,
+  //     });
+
+  //     if (!response.ok) throw new Error("Error al enviar el reporte.");
+
+  //     setSuccess(true);
+
+  //     // Reiniciar el formulario
+  //     setReportData({
+  //       subregion: "",
+  //       municipality: "",
+  //       fechaRegistro: "",
+  //       codigo_territorio: "",
+  //       codigo_micro_territorio: "",
+  //       numero_micro_territorio: "",
+  //       numero_hogares: "",
+  //       proyecto: "",
+  //       actividad_pas: "",
+  //       descripcion: "",
+  //       tipo_territorio: "",
+  //       tipo_micro_territorio: "",
+  //       nombre_micro_territorio: "",
+  //     });
+  //     setFile(null);
+  //     setActivities([]);
+  //     setProductData({
+  //       producto: {
+  //         descripcion_producto: "",
+  //         indicador_de_producto: "",
+  //         indicador_Linea_Base: "",
+  //       },
+  //       // soporte: {
+  //       //   tipo_soporte: "",
+  //       //   descripcion: "",
+  //       //   archivos: null,
+  //       //   valor_porcentual: "",
+  //       // },
+  //       // cups: {
+  //       //   codigo: "",
+  //       //   subcodigo: "",
+  //       //   descripcion: "",
+  //       //   valor: "",
+  //       // },
+  //     });
+  //     setEventData(null);
+  //   } catch (error) {
+  //     console.error(error);
+  //     setSuccess(false);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     setSuccess(null);
 
     try {
-      const data = new FormData();
-      Object.keys(reportData).forEach((key) =>
-        data.append(key, reportData[key])
-      );
-      if (file) data.append("file", file);
-      data.append("activities", JSON.stringify(activities));
+      // Transformar los datos al formato requerido
+      const transformedData = {
+        data: {
+          territorializacion: {
+            numero_microterritorios: reportData.numero_micro_territorio || null,
+            numero_hogares: parseInt(reportData.numero_hogares, 10),
+            ubicacion: {
+              municipio: {
+                connect: [{ documentId: reportData.municipality }], // Ajusta según IDs reales
+              },
+              subregion: {
+                connect: [{ documentId: reportData.subregion }], // Ajusta según IDs reales
+              },
+            },
+            territorio: [
+              {
+                id_territorio: `Territorio ${reportData.codigo_territorio}`,
+                tipo: reportData.tipo_territorio === "1" ? "urbano" : "rural", // Ejemplo de transformación
+              },
+            ],
+            microterritorio: [
+              {
+                id_microterritorio: reportData.codigo_micro_territorio,
+                tipo:
+                  reportData.tipo_micro_territorio === "1" ? "urbano" : "rural",
+                nombre: reportData.nombre_micro_territorio,
+              },
+            ],
+          },
+          eventos: [
+            {
+              descripcion: eventData.descripcion,
+              indicadores: [
+                {
+                  nombre: eventData.nombre_indicador,
+                  descripcion: eventData.descripcion_indicador,
+                  meta_resultado: eventData.meta_resultado,
+                },
+              ],
+              ejes_estrategicos: [
+                {
+                  nombre: eventData.eje_estrategico,
+                },
+              ],
+              lineas_operativa: {
+                nombre: eventData.linea_operativa,
+              },
+              contenido_producto: {
+                descripcion: productData.producto.descripcion_producto,
+                productos: [
+                  {
+                    indicador: productData.producto.indicador_de_producto,
+                    indicador_linea_base:
+                      productData.producto.indicador_Linea_Base,
+                    actividades: activities.map((activity) => ({
+                      descripcion: activity.descripcion_Actividad,
+                      cantidad_a_ejecutar: activity.cantidad,
+                      unidad_medida: {
+                        nombre: activity.unidadMedida,
+                      },
+                      entornos: [
+                        {
+                          nombre: activity.entorno,
+                        },
+                      ],
+                      tecnologias: [
+                        {
+                          nombre: activity.tecnologia,
+                        },
+                      ],
+                      poblaciones: [
+                        {
+                          nombre: activity.poblacionSujeto,
+                        },
+                      ],
+                      soportes: [
+                        {
+                          tipo: activity.Tipo_soporte,
+                          descripcion: activity.Descripcion_Soporte,
+                          municipio: {
+                            count: parseInt(activity.municipio, 10),
+                          },
+                        },
+                      ],
+                      equipos: [
+                        {
+                          nombre: activity.equipo,
+                        },
+                      ],
+                      perfiles_profesionales: [
+                        {
+                          nombre: activity.perfilProfesional,
+                        },
+                      ],
+                      cups: [
+                        {
+                          codigo: activity.codigoCups,
+                        },
+                      ],
+                    })),
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      };
 
-      const response = await fetch("http://localhost:4000/api/reports", {
+      console.log("Transformed Data:", transformedData);
+
+      // Realizar la solicitud
+      const response = await fetch("http://localhost:1337/api/anexo-tecnicos", {
         method: "POST",
-        body: data,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(transformedData),
       });
 
       if (!response.ok) throw new Error("Error al enviar el reporte.");
 
       setSuccess(true);
-      setReportData({
-        subregion: "",
-        municipality: "",
-        actaInicio: "",
-        fechaInicio: "",
-        fechaFin: "",
-        fechaRegistro: "",
-        actaSocializacion: "",
-        certificadoLiquidacion: "",
-      });
-      setFile(null);
-      setActivities([]);
+      // Reiniciar el formulario
+      resetForm();
     } catch (error) {
       console.error(error);
       setSuccess(false);
@@ -308,29 +425,35 @@ const ReportForm = () => {
       <Header />
       <div className={styles.formContainer}>
         <h2>Anexo Técnico</h2>
+
         <form onSubmit={handleSubmit} className={styles.formGrid}>
           <ReportFields
             reportData={reportData}
             handleChange={handleChange}
             subregions={subregions}
-            municipalities={municipalities}
+            // municipalities={municipalities}
             file={file}
             handleFileChange={handleFileChange}
           />
+
+          <Event setEventData={setEventData} />
+          <Product productData={productData} setProductData={setProductData} />
+          <ActivityList activities={activities} setActivities={setActivities} />
+
+          {success === true && (
+            <p className={styles.success}>¡Reporte enviado con éxito!</p>
+          )}
+          {success === false && (
+            <p className={styles.error}>Error al enviar el reporte.</p>
+          )}
+          <button
+            className={styles.buttonMain}
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Enviando..." : "Enviar Reporte"}
+          </button>
         </form>
-
-        <ActivityList activities={activities} setActivities={setActivities} />
-
-        <button className={styles.buttonMain} type="submit" disabled={loading}>
-          {loading ? "Enviando..." : "Enviar Reporte"}
-        </button>
-
-        {success === true && (
-          <p className={styles.success}>¡Reporte enviado con éxito!</p>
-        )}
-        {success === false && (
-          <p className={styles.error}>Error al enviar el reporte.</p>
-        )}
       </div>
     </>
   );

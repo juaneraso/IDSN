@@ -21,28 +21,7 @@ const ReportFields = ({
         required
       />
     </div>
-    <div className={styles.field}>
-      <label htmlFor="fechaInicio">Fecha de Inicio</label>
-      <input
-        type="date"
-        id="fechaInicio"
-        name="fechaInicio"
-        value={reportData.fechaInicio}
-        onChange={handleChange}
-        required
-      />
-    </div>
-    <div className={styles.field}>
-      <label htmlFor="fechaFin">Fecha de Fin</label>
-      <input
-        type="date"
-        id="fechaFin"
-        name="fechaFin"
-        value={reportData.fechaFin}
-        onChange={handleChange}
-        required
-      />
-    </div>
+
     <div className={styles.field}>
       <label htmlFor="subregion">Subregión</label>
       <select
@@ -53,13 +32,14 @@ const ReportFields = ({
         required
       >
         <option value="">Seleccione una subregión</option>
-        {subregions.map((subregion, index) => (
-          <option key={index} value={subregion}>
-            {subregion}
+        {subregions.map((subregion) => (
+          <option key={subregion.documentId} value={subregion.documentId}>
+            {subregion.nombre}
           </option>
         ))}
       </select>
     </div>
+
     <div className={styles.field}>
       <label htmlFor="municipality">Municipio</label>
       <select
@@ -72,57 +52,137 @@ const ReportFields = ({
       >
         <option value="">Seleccione un municipio</option>
         {reportData.subregion &&
-          municipalities[reportData.subregion]?.map((municipality, index) => (
-            <option key={index} value={municipality}>
-              {municipality}
-            </option>
-          ))}
+          subregions
+            .find((subregion) => subregion.documentId === reportData.subregion)
+            ?.municipios.map((municipio) => (
+              <option key={municipio.documentId} value={municipio.documentId}>
+                {municipio.nombre}
+              </option>
+            ))}
       </select>
     </div>
+
     <div className={styles.field}>
-      <label htmlFor="actaInicio">Acta de Inicio</label>
+      <label htmlFor="proyecto">Proyecto</label>
       <input
         type="text"
-        id="actaInicio"
-        name="actaInicio"
-        value={reportData.actaInicio}
+        id="proyecto"
+        name="proyecto"
+        value={reportData.proyecto}
+        onChange={handleChange}
+        required
+      />
+    </div>
+
+    <div className={styles.field}>
+      <label htmlFor="actividad_pas">Actividad PAS</label>
+      <input
+        type="text"
+        id="actividad_pas"
+        name="actividad_pas"
+        value={reportData.actividad_pas}
+        onChange={handleChange}
+        required
+      />
+    </div>
+
+    <div className={styles.field}>
+      <label htmlFor="descripcion">Descripción</label>
+      <input
+        type="text"
+        id="descripcion"
+        name="descripcion"
+        value={reportData.descripcion}
+        onChange={handleChange}
+        required
+      />
+    </div>
+    <h3>Seccion Territorio</h3>
+    <div className={styles.field}>
+      <label htmlFor="codigo_territorio">Código Territorio</label>
+      <input
+        type="text"
+        id="codigo_territorio"
+        name="codigo_territorio"
+        value={reportData.codigo_territorio}
+        onChange={handleChange}
+        required
+      />
+    </div>
+
+    <div className={styles.field}>
+      <label htmlFor="tipo_territorio">Tipo Territorio</label>
+      <input
+        type="text"
+        id="tipo_territorio"
+        name="tipo_territorio"
+        value={reportData.tipo_territorio}
+        onChange={handleChange}
+        required
+      />
+    </div>
+    <h3>Seccion MicroTerritorio</h3>
+
+    <div className={styles.field}>
+      <label htmlFor="nombre_micro_territorio">Nombre micro-Territorio</label>
+      <input
+        type="text"
+        id="nombre_micro_territorio"
+        name="nombre_micro_territorio"
+        value={reportData.nombre_micro_territorio}
         onChange={handleChange}
         required
       />
     </div>
     <div className={styles.field}>
-      <label htmlFor="actaSocializacion">Acta de Socialización</label>
+      <label htmlFor="codigo_micro_territorio">Código micro-Territorio</label>
       <input
         type="text"
-        id="actaSocializacion"
-        name="actaSocializacion"
-        value={reportData.actaSocializacion}
+        id="codigo_micro_territorio"
+        name="codigo_micro_territorio"
+        value={reportData.codigo_micro_territorio}
         onChange={handleChange}
         required
       />
     </div>
+
     <div className={styles.field}>
-      <label htmlFor="certificadoLiquidacion">Certificado de Liquidación</label>
+      <label htmlFor="tipo_micro_territorio">Tipo micro-Territorio</label>
       <input
         type="text"
-        id="certificadoLiquidacion"
-        name="certificadoLiquidacion"
-        value={reportData.certificadoLiquidacion}
+        id="tipo_micro_territorio"
+        name="tipo_micro_territorio"
+        value={reportData.tipo_micro_territorio}
         onChange={handleChange}
         required
       />
     </div>
+
+    <div className={styles.field}>
+      <label htmlFor="numero_micro_territorio">numero micro-Territorios</label>
+      <input
+        type="text"
+        id="numero_micro_territorio"
+        name="numero_micro_territorio"
+        value={reportData.numero_micro_territorio}
+        onChange={handleChange}
+        required
+      />
+    </div>
+
+    <div className={styles.field}>
+      <label htmlFor="numero_hogares">Número de Hogares</label>
+      <input
+        type="text"
+        id="numero_hogares"
+        name="numero_hogares"
+        value={reportData.numero_hogares}
+        onChange={handleChange}
+        required
+      />
+    </div>
+
     {/* <div className={styles.field}>
-      <label htmlFor="archivo">Adjuntar Archivo</label>
-      <input
-        type="file"
-        id="archivo"
-        name="archivo"
-        onChange={handleFileChange}
-      />
-      {file && <p>Archivo seleccionado: {file.name}</p>}
-    </div> */}
-    <div className={styles.field}>
       <label htmlFor="archivo">Adjuntar Archivo</label>
       <div className={styles.fileUpload}>
         <input
@@ -136,7 +196,7 @@ const ReportFields = ({
           {file ? `Archivo seleccionado: ${file.name}` : "Seleccionar archivo"}
         </label>
       </div>
-    </div>
+    </div> */}
   </div>
 );
 

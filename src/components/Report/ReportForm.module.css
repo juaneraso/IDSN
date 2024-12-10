@@ -163,7 +163,7 @@ button:hover:not(:disabled) {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 } */
 
-.formContainer {
+/* .formContainer {
   background-color: #ffffff;
   padding: 25px;
   border-radius: 10px;
@@ -178,6 +178,12 @@ h2 {
   margin-bottom: 20px;
   font-size: 1.8rem;
   color: #2c3e50;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .formGrid {
@@ -229,6 +235,118 @@ select {
   border-radius: 5px;
   font-size: 1rem;
   transition: border-color 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #1abc9c;
+  outline: none;
+}
+
+.success,
+.error {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.toggleButton {
+  background-color: #3498db;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.toggleButton:hover {
+  background-color: #2980b9;
+} */
+
+.formContainer {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  max-width: 600px; /* Ajusta el ancho máximo del formulario */
+  margin: 20px auto; /* Centra el formulario horizontalmente */
+  font-family: "Roboto", sans-serif;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #2c3e50;
+}
+
+.formGrid {
+  display: flex;
+  flex-direction: column; /* Coloca los elementos en un flujo vertical */
+  gap: 20px; /* Espaciado entre los elementos */
+  align-items: stretch; /* Asegura que los elementos llenen el ancho del contenedor */
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonMain {
+  align-self: center; /* Centra el botón horizontalmente */
+  padding: 10px 20px; /* Ajusta el tamaño del botón */
+  background-color: #1abc9c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: auto; /* Evita que ocupe todo el ancho */
+}
+
+.buttonMain:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.buttonMain:hover:not(:disabled) {
+  background-color: #16a085;
+}
+
+label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #34495e;
+}
+
+input,
+textarea,
+select {
+  width: 100%; /* Ocupa todo el ancho disponible */
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+  box-sizing: border-box; /* Asegura que padding no rompa el diseño */
 }
 
 input:focus,
