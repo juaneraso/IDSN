@@ -8,14 +8,6 @@ import Event from "../Event/Event";
 import { useSelector } from "react-redux";
 import qs from "qs";
 
-// const queryParameters = {
-//   fields: ["documentId", "nombre"], // Campos específicos que necesitas
-// };
-
-// const queryString = qs.stringify(queryParameters, { encodeValuesOnly: true });
-
-// const url = `http://localhost:1337/api/municipios?${queryString}`;
-
 const queryParameters = {
   fields: ["documentId", "nombre"], // Campos del recurso principal
   populate: {
@@ -54,16 +46,7 @@ const ReportForm = () => {
   const [success, setSuccess] = useState(null);
   const [activities, setActivities] = useState([]);
 
-  //const [municipalities, setMunicipalities] = useState([]);
   const [subregions, setSubregions] = useState([]);
-
-  // const subregions = ["Norte", "Sur", "Oriente", "Occidente"];
-  // const municipalities = {
-  //   Norte: ["El Charco", "La Tola"],
-  //   Sur: ["Ipiales", "Aldana"],
-  //   Oriente: ["Belen", "Alban"],
-  //   Occidente: ["Tumaco", "Fransisco Pizarro"],
-  // };
 
   const [productData, setProductData] = useState({
     producto: {
@@ -86,67 +69,97 @@ const ReportForm = () => {
   });
 
   const [eventData, setEventData] = useState(null); // Recibirá datos finales del componente Event
+  //const [events, setEvents] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchMunicipalities = async () => {
-  //     try {
-  //       const queryParameters = {
-  //         fields: ["documentId", "nombre"], // Campos específicos que necesitas
-  //       };
+  const [events, setEvents] = useState([
+    {
+      description_event: "",
+      indicator_name: "",
+      description_indicator: "",
+      meta_indicator: "",
+      eje_estrategico: "",
+      linea_operativa: "",
+      nombre_entidad: "",
+      municipio: "",
+      descripcion_operador: "",
+      activities: [],
+      productData: {
+        producto: {
+          descripcion_producto: "",
+          indicador_de_producto: "",
+          indicador_Linea_Base: "",
+        },
 
-  //       const queryString = qs.stringify(queryParameters, {
-  //         encodeValuesOnly: true,
-  //       });
+        soporte: {
+          archivos: null,
+          tipo_soporte: "",
+          descripcion: "",
+          valor_porcentual: "",
+        },
+        cups: {
+          codigo: "",
+          subcodigo: "",
+          descripcion: "",
+          valor: "",
+        },
+      },
+    },
+  ]);
 
-  //       const response = await fetch(
-  //         `http://localhost:1337/api/municipios?${queryString}`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
+  // const addEvent = () => {
+  //   setEvents([
+  //     ...events,
+  //     {
+  //       Descripcion_Evento: "",
+  //       Eje_estrategico: "",
+  //       Linea_operativa: "",
+  //       indicadores: [],
+  //       operador_pic: {},
+  //       contenido_producto: {},
+  //     },
+  //   ]);
+  // };
 
-  //       if (!response.ok) throw new Error("Error al obtener municipios.");
+  const resetForm = () => {
+    // Reiniciar los datos del formulario principal
+    setReportData({
+      subregion: "",
+      municipality: "",
+      fechaRegistro: "",
+      codigo_territorio: "",
+      codigo_micro_territorio: "",
+      numero_micro_territorio: "",
+      numero_hogares: "",
+      proyecto: "",
+      actividad_pas: "",
+      descripcion: "",
+      tipo_territorio: "",
+      tipo_micro_territorio: "",
+      nombre_micro_territorio: "",
+    });
 
-  //       const data = await response.json();
-  //       setMunicipalities(data.data);
-  //     } catch (error) {
-  //       console.error("Error fetching municipalities:", error);
-  //     }
-  //   };
+    // Reiniciar el archivo seleccionado
+    setFile(null);
 
-  //   const fetchSubregions = async () => {
-  //     try {
-  //       const queryParameters = {
-  //         fields: ["documentId", "nombre"], // Ajusta los campos necesarios
-  //       };
+    // Reiniciar las actividades
+    setActivities([]);
 
-  //       const queryString = qs.stringify(queryParameters, {
-  //         encodeValuesOnly: true,
-  //       });
+    // Reiniciar los datos del producto
+    setProductData({
+      producto: {
+        descripcion_producto: "",
+        indicador_de_producto: "",
+        indicador_Linea_Base: "",
+      },
+      // Puedes reiniciar otras secciones según sea necesario
+    });
 
-  //       const response = await fetch(
-  //         `http://localhost:1337/api/subregions?${queryString}`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
+    // Reiniciar los datos del evento
+    setEventData(null);
 
-  //       if (!response.ok) throw new Error("Error al obtener subregiones.");
-
-  //       const data = await response.json();
-  //       setSubregions(data.data);
-  //     } catch (error) {
-  //       console.error("Error fetching subregions:", error);
-  //     }
-  //   };
-
-  //   fetchMunicipalities();
-  //   fetchSubregions();
-  // }, [token]);
+    // Reiniciar el estado de éxito
+    setSuccess(null);
+  };
 
   useEffect(() => {
     const fetchSubregions = async () => {
@@ -171,6 +184,12 @@ const ReportForm = () => {
 
   //console.log("municipios", municipalities);
   console.log("subregiones", subregions);
+  console.log("Datos eventos", events);
+  console.log("Datos completos", eventData);
+  console.log("ACVITY DATA", activities);
+  console.log("reportdata", reportData);
+
+  console.log("Description Event", events[0].description_event);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -181,106 +200,6 @@ const ReportForm = () => {
     setFile(event.target.files[0]);
   };
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   setLoading(true);
-  //   setSuccess(null);
-
-  //   try {
-  //     const data = new FormData();
-
-  //     // Agregar datos del formulario principal
-  //     Object.keys(reportData).forEach((key) =>
-  //       data.append(key, reportData[key])
-  //     );
-
-  //     // Agregar archivo adjunto
-  //     if (file) data.append("file", file);
-
-  //     // Agregar actividades
-  //     data.append("activities", JSON.stringify(activities));
-
-  //     // Agregar datos de producto
-  //     Object.keys(productData).forEach((section) => {
-  //       if (typeof productData[section] === "object") {
-  //         Object.keys(productData[section]).forEach((field) => {
-  //           data.append(`${section}_${field}`, productData[section][field]);
-  //         });
-  //       } else {
-  //         data.append(section, productData[section]);
-  //       }
-  //     });
-
-  //     // Agregar datos de evento
-  //     if (eventData) {
-  //       Object.keys(eventData).forEach((key) =>
-  //         data.append(`event_${key}`, eventData[key])
-  //       );
-  //     }
-
-  //     // Ver datos en consola (opcional)
-  //     for (let pair of data.entries()) {
-  //       console.log(`${pair[0]}: ${pair[1]}`);
-  //     }
-
-  //     // Realizar la solicitud
-  //     const response = await fetch("http://localhost:1337/api/anexo-tecnicos", {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: data,
-  //     });
-
-  //     if (!response.ok) throw new Error("Error al enviar el reporte.");
-
-  //     setSuccess(true);
-
-  //     // Reiniciar el formulario
-  //     setReportData({
-  //       subregion: "",
-  //       municipality: "",
-  //       fechaRegistro: "",
-  //       codigo_territorio: "",
-  //       codigo_micro_territorio: "",
-  //       numero_micro_territorio: "",
-  //       numero_hogares: "",
-  //       proyecto: "",
-  //       actividad_pas: "",
-  //       descripcion: "",
-  //       tipo_territorio: "",
-  //       tipo_micro_territorio: "",
-  //       nombre_micro_territorio: "",
-  //     });
-  //     setFile(null);
-  //     setActivities([]);
-  //     setProductData({
-  //       producto: {
-  //         descripcion_producto: "",
-  //         indicador_de_producto: "",
-  //         indicador_Linea_Base: "",
-  //       },
-  //       // soporte: {
-  //       //   tipo_soporte: "",
-  //       //   descripcion: "",
-  //       //   archivos: null,
-  //       //   valor_porcentual: "",
-  //       // },
-  //       // cups: {
-  //       //   codigo: "",
-  //       //   subcodigo: "",
-  //       //   descripcion: "",
-  //       //   valor: "",
-  //       // },
-  //     });
-  //     setEventData(null);
-  //   } catch (error) {
-  //     console.error(error);
-  //     setSuccess(false);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -303,95 +222,197 @@ const ReportForm = () => {
             },
             territorio: [
               {
-                id_territorio: `Territorio ${reportData.codigo_territorio}`,
-                tipo: reportData.tipo_territorio === "1" ? "urbano" : "rural", // Ejemplo de transformación
+                id_territorio: reportData.codigo_territorio,
+                tipo: reportData.tipo_territorio, // Ejemplo de transformación
               },
             ],
             microterritorio: [
               {
                 id_microterritorio: reportData.codigo_micro_territorio,
-                tipo:
-                  reportData.tipo_micro_territorio === "1" ? "urbano" : "rural",
+                tipo: reportData.tipo_micro_territorio,
                 nombre: reportData.nombre_micro_territorio,
               },
             ],
           },
-          eventos: [
-            {
-              descripcion: eventData.descripcion,
-              indicadores: [
-                {
-                  nombre: eventData.nombre_indicador,
-                  descripcion: eventData.descripcion_indicador,
-                  meta_resultado: eventData.meta_resultado,
-                },
-              ],
-              ejes_estrategicos: [
-                {
-                  nombre: eventData.eje_estrategico,
-                },
-              ],
-              lineas_operativa: {
-                nombre: eventData.linea_operativa,
+          eventos: events.map((event) => ({
+            descripcion: event.description_event,
+            indicadores: [
+              {
+                nombre: event.indicator_name,
+                descripcion: event.description_indicator,
+                meta_resultado: event.meta_indicator,
               },
-              contenido_producto: {
-                descripcion: productData.producto.descripcion_producto,
-                productos: [
-                  {
-                    indicador: productData.producto.indicador_de_producto,
-                    indicador_linea_base:
-                      productData.producto.indicador_Linea_Base,
-                    actividades: activities.map((activity) => ({
-                      descripcion: activity.descripcion_Actividad,
-                      cantidad_a_ejecutar: activity.cantidad,
-                      unidad_medida: {
-                        nombre: activity.unidadMedida,
-                      },
-                      entornos: [
-                        {
-                          nombre: activity.entorno,
-                        },
-                      ],
-                      tecnologias: [
-                        {
-                          nombre: activity.tecnologia,
-                        },
-                      ],
-                      poblaciones: [
-                        {
-                          nombre: activity.poblacionSujeto,
-                        },
-                      ],
-                      soportes: [
-                        {
-                          tipo: activity.Tipo_soporte,
-                          descripcion: activity.Descripcion_Soporte,
-                          municipio: {
-                            count: parseInt(activity.municipio, 10),
-                          },
-                        },
-                      ],
-                      equipos: [
-                        {
-                          nombre: activity.equipo,
-                        },
-                      ],
-                      perfiles_profesionales: [
-                        {
-                          nombre: activity.perfilProfesional,
-                        },
-                      ],
-                      cups: [
-                        {
-                          codigo: activity.codigoCups,
-                        },
-                      ],
-                    })),
-                  },
-                ],
+            ],
+            ejes_estrategicos: [
+              {
+                nombre: event.eje_estrategico,
               },
+            ],
+            lineas_operativa: {
+              nombre: event.linea_operativa,
             },
-          ],
+            operador_pic: {
+              nombre_entidad: event.nombre_entidad,
+              municipio: {
+                connect: [{ documentId: event.municipio }],
+              },
+              descripcion: event.descripcion_operador,
+            },
+            contenido_producto: {
+              descripcion: event.productData.producto.descripcion_producto,
+              productos: [
+                {
+                  indicador: event.productData.producto.indicador_de_producto,
+                  indicador_linea_base:
+                    event.productData.producto.indicador_Linea_Base,
+                  actividades: event.activities.map((activity) => ({
+                    descripcion: activity.descripcion_Actividad,
+                    cantidad_a_ejecutar: activity.cantidad,
+                    valor_unitario: activity.valorUnitario,
+                    valor_total: activity.valorTotal,
+                    Observaciones: activity.observacionEjecucion,
+                    porcentaje_cumplimiento: activity.porcentajeCumplimiento,
+                    observaciones_seguimiento: activity.observacionSeguimiento,
+                    unidad_medida: {
+                      nombre: activity.unidadMedida,
+                    },
+                    entornos: [
+                      {
+                        nombre: activity.entorno,
+                      },
+                    ],
+                    tecnologias: [
+                      {
+                        nombre: activity.tecnologia,
+                      },
+                    ],
+                    poblaciones: [
+                      {
+                        nombre: activity.poblacionSujeto,
+                      },
+                    ],
+                    soportes: [
+                      {
+                        tipo: activity.Tipo_soporte,
+                        descripcion: activity.Descripcion_Soporte,
+                        municipio: {
+                          connect: [{ documentId: activity.municipioSoporte }],
+                        },
+                      },
+                    ],
+                    equipos: [
+                      {
+                        nombre: activity.equipo,
+                      },
+                    ],
+                    perfiles_profesionales: [
+                      {
+                        nombre: activity.perfilProfesional,
+                      },
+                    ],
+                    cups: [
+                      {
+                        codigo: activity.codigoCups,
+                      },
+                    ],
+                  })),
+                },
+              ],
+            },
+          })),
+          // eventos: [
+          //   {
+          //     descripcion: events[0].description_event,
+          //     indicadores: [
+          //       {
+          //         nombre: events[0].indicator_name,
+          //         descripcion: events[0].description_indicator,
+          //         meta_resultado: events[0].meta_indicator,
+          //       },
+          //     ],
+          //     ejes_estrategicos: [
+          //       {
+          //         nombre: events[0].eje_estrategico,
+          //       },
+          //     ],
+          //     lineas_operativa: {
+          //       nombre: events[0].linea_operativa,
+          //     },
+          //     operador_pic: {
+          //       nombre_entidad: events[0].nombre_entidad,
+          //       municipio: {
+          //         connect: [{ documentId: events[0].municipio }],
+          //       },
+          //       descripcion: events[0].descripcion_operador,
+          //     },
+          //     contenido_producto: {
+          //       descripcion:
+          //         events[0].productData.producto.descripcion_producto, //productData.producto.descripcion_producto,
+          //       productos: [
+          //         {
+          //           indicador:
+          //             events[0].productData.producto.indicador_de_producto,
+          //           indicador_linea_base:
+          //             events[0].productData.producto.indicador_Linea_Base,
+          //           actividades: events[0].activities.map((activity) => ({
+          //             descripcion: activity.descripcion_Actividad,
+          //             cantidad_a_ejecutar: activity.cantidad,
+          //             valor_unitario: activity.valorUnitario,
+          //             valor_total: activity.valorTotal,
+          //             Observaciones: activity.observacionEjecucion,
+          //             porcentaje_cumplimiento: activity.porcentajeCumplimiento,
+          //             observaciones_seguimiento:
+          //               activity.observacionSeguimiento,
+          //             unidad_medida: {
+          //               nombre: activity.unidadMedida,
+          //             },
+          //             entornos: [
+          //               {
+          //                 nombre: activity.entorno,
+          //               },
+          //             ],
+          //             tecnologias: [
+          //               {
+          //                 nombre: activity.tecnologia,
+          //               },
+          //             ],
+          //             poblaciones: [
+          //               {
+          //                 nombre: activity.poblacionSujeto,
+          //               },
+          //             ],
+          //             soportes: [
+          //               {
+          //                 tipo: activity.Tipo_soporte,
+          //                 descripcion: activity.Descripcion_Soporte,
+          //                 municipio: {
+          //                   connect: [
+          //                     { documentId: activity.municipioSoporte },
+          //                   ], // Ajusta según IDs reales
+          //                 },
+          //               },
+          //             ],
+          //             equipos: [
+          //               {
+          //                 nombre: activity.equipo,
+          //               },
+          //             ],
+          //             perfiles_profesionales: [
+          //               {
+          //                 nombre: activity.perfilProfesional,
+          //               },
+          //             ],
+          //             cups: [
+          //               {
+          //                 codigo: activity.codigoCups,
+          //               },
+          //             ],
+          //           })),
+          //         },
+          //       ],
+          //     },
+          //   },
+          // ],
         },
       };
 
@@ -411,7 +432,7 @@ const ReportForm = () => {
 
       setSuccess(true);
       // Reiniciar el formulario
-      resetForm();
+      // resetForm();
     } catch (error) {
       console.error(error);
       setSuccess(false);
@@ -435,10 +456,39 @@ const ReportForm = () => {
             file={file}
             handleFileChange={handleFileChange}
           />
+          {/* 
+          <Event setEventData={setEventData} subregions={subregions} /> */}
 
-          <Event setEventData={setEventData} />
-          <Product productData={productData} setProductData={setProductData} />
-          <ActivityList activities={activities} setActivities={setActivities} />
+          <Event
+            events={events}
+            setEvents={setEvents}
+            subregions={subregions}
+          />
+
+          {/* {events.map((_, index) => (
+            <Event
+              key={index}
+              index={index}
+              events={events}
+              setEvents={setEvents}
+              subregions={subregions}
+            />
+          ))} */}
+
+          {/* <button
+            type="button"
+            onClick={addEvent}
+            className={styles.buttonSecondary}
+          >
+            Agregar Evento
+          </button> */}
+
+          {/* <Product productData={productData} setProductData={setProductData} />
+          <ActivityList
+            activities={activities}
+            setActivities={setActivities}
+            subregions={subregions}
+          /> */}
 
           {success === true && (
             <p className={styles.success}>¡Reporte enviado con éxito!</p>

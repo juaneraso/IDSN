@@ -112,15 +112,19 @@ const ReportFields = ({
 
     <div className={styles.field}>
       <label htmlFor="tipo_territorio">Tipo Territorio</label>
-      <input
-        type="text"
+      <select
         id="tipo_territorio"
         name="tipo_territorio"
         value={reportData.tipo_territorio}
         onChange={handleChange}
         required
-      />
+      >
+        <option value="">Seleccione un tipo</option>
+        <option value="urbano">Urbano</option>
+        <option value="rural">Rural</option>
+      </select>
     </div>
+
     <h3>Seccion MicroTerritorio</h3>
 
     <div className={styles.field}>
@@ -148,14 +152,17 @@ const ReportFields = ({
 
     <div className={styles.field}>
       <label htmlFor="tipo_micro_territorio">Tipo micro-Territorio</label>
-      <input
-        type="text"
-        id="tipo_micro_territorio"
+      <select
+        id="tipo_micro_territorioo"
         name="tipo_micro_territorio"
         value={reportData.tipo_micro_territorio}
         onChange={handleChange}
         required
-      />
+      >
+        <option value="">Seleccione un tipo</option>
+        <option value="urbano">Urbano</option>
+        <option value="rural">Rural</option>
+      </select>
     </div>
 
     <div className={styles.field}>

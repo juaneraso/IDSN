@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ActivityItem from "../ActivityEditor/ActivityItem";
 import styles from "./ActivityList.module.css";
 
-const ActivityList = ({ activities, setActivities }) => {
+const ActivityList = ({ activities, setActivities, subregions }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
 
   const handleActivityChange = (event, index) => {
@@ -32,7 +32,7 @@ const ActivityList = ({ activities, setActivities }) => {
       Tipo_soporte: "",
       Descripcion_Soporte: "",
       Valor_Porcentual: "",
-      municipio: "",
+      municipioSoporte: "",
       equipo: "",
       perfilProfesional: "",
       codigoCups: "",
@@ -69,6 +69,7 @@ const ActivityList = ({ activities, setActivities }) => {
             toggleExpanded={toggleExpanded}
             handleActivityChange={handleActivityChange}
             handleRemoveActivity={handleRemoveActivity}
+            subregions={subregions}
           />
         ))}
       </ul>

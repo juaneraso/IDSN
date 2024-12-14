@@ -12,6 +12,12 @@ const Product = ({ productData, setProductData }) => {
     }));
   };
 
+  const handleInputChange = (section, field, value) => {
+    setProductData(section, field, value);
+  };
+
+  // console.log("DataProduto", productData);
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setProductData((prevData) => ({
@@ -29,12 +35,17 @@ const Product = ({ productData, setProductData }) => {
       <div className={styles.section}>
         <h3>Producto</h3>
         <div className={styles.field}>
-          <label htmlFor="descripcion_producto">Descripción del Producto</label>
-          <textarea
-            id="descripcion_producto"
+          <label>Descripción del Producto</label>
+          <input
+            type="text"
+            //value={productData?.producto?.descripcion_producto || ""}
             value={productData.producto.descripcion_producto}
             onChange={(e) =>
-              handleChange("producto", "descripcion_producto", e.target.value)
+              handleInputChange(
+                "producto",
+                "descripcion_producto",
+                e.target.value
+              )
             }
           />
         </div>
@@ -45,7 +56,11 @@ const Product = ({ productData, setProductData }) => {
             id="indicador_de_producto"
             value={productData.producto.indicador_de_producto}
             onChange={(e) =>
-              handleChange("producto", "indicador_de_producto", e.target.value)
+              handleInputChange(
+                "producto",
+                "indicador_de_producto",
+                e.target.value
+              )
             }
           />
         </div>
@@ -56,7 +71,11 @@ const Product = ({ productData, setProductData }) => {
             id="indicador_Linea_Base"
             value={productData.producto.indicador_Linea_Base}
             onChange={(e) =>
-              handleChange("producto", "indicador_Linea_Base", e.target.value)
+              handleInputChange(
+                "producto",
+                "indicador_Linea_Base",
+                e.target.value
+              )
             }
           />
         </div>

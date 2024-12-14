@@ -46,7 +46,29 @@ textarea {
 
 input:focus,
 textarea:focus {
-  border-color: #007bff;
+  border-color: #0b9737;
   outline: none;
   box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
+}
+.buttonMain {
+  width: 100%;
+  padding: 12px;
+  background-color: #1abc9c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  grid-column: span 2;
+  margin-bottom: 5px;
+}
+.buttonMain:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.buttonMain:hover:not(:disabled) {
+  background-color: #16a085;
 }
