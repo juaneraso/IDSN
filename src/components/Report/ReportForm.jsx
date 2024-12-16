@@ -84,25 +84,23 @@ const ReportForm = () => {
       descripcion_operador: "",
       activities: [],
       productData: {
-        producto: {
-          descripcion_producto: "",
-          indicador_de_producto: "",
-          indicador_Linea_Base: "",
-        },
-
-        soporte: {
-          archivos: null,
-          tipo_soporte: "",
-          descripcion: "",
-          valor_porcentual: "",
-        },
-        cups: {
-          codigo: "",
-          subcodigo: "",
-          descripcion: "",
-          valor: "",
-        },
+        producto: [
+          {
+            descripcion_producto: "",
+            indicador_de_producto: "",
+            indicador_Linea_Base: "",
+          },
+          // Otros productos
+        ],
       },
+
+      // productData: {
+      //   producto: {
+      //     descripcion_producto: "",
+      //     indicador_de_producto: "",
+      //     indicador_Linea_Base: "",
+      //   },
+      // },
     },
   ]);
 
@@ -145,14 +143,14 @@ const ReportForm = () => {
     setActivities([]);
 
     // Reiniciar los datos del producto
-    setProductData({
-      producto: {
-        descripcion_producto: "",
-        indicador_de_producto: "",
-        indicador_Linea_Base: "",
-      },
-      // Puedes reiniciar otras secciones según sea necesario
-    });
+    // setProductData({
+    //   producto: {
+    //     descripcion_producto: "",
+    //     indicador_de_producto: "",
+    //     indicador_Linea_Base: "",
+    //   },
+    //   // Puedes reiniciar otras secciones según sea necesario
+    // });
 
     // Reiniciar los datos del evento
     setEventData(null);
@@ -183,13 +181,12 @@ const ReportForm = () => {
   }, [token]);
 
   //console.log("municipios", municipalities);
-  console.log("subregiones", subregions);
+  //console.log("subregiones", subregions);
   console.log("Datos eventos", events);
-  console.log("Datos completos", eventData);
-  console.log("ACVITY DATA", activities);
-  console.log("reportdata", reportData);
+  //console.log("Datos completos", eventData);
+  console.log("ACVITY DATA", events[0].activities[1]);
 
-  console.log("Description Event", events[0].description_event);
+  //console.log("reportdata", reportData);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -259,13 +256,13 @@ const ReportForm = () => {
               descripcion: event.descripcion_operador,
             },
             contenido_producto: {
-              descripcion: event.productData.producto.descripcion_producto,
-              productos: [
-                {
-                  indicador: event.productData.producto.indicador_de_producto,
-                  indicador_linea_base:
-                    event.productData.producto.indicador_Linea_Base,
-                  actividades: event.activities.map((activity) => ({
+              descripcion: "Descripción general del contenido de productos", // Si hay una descripción común
+              productos: event.productData.producto.map((producto, index) => ({
+                //descripcion: producto.descripcion_producto,
+                indicador: producto.indicador_de_producto,
+                indicador_linea_base: producto.indicador_Linea_Base,
+                actividades: (event.activities[index] || []).map(
+                  (activity) => ({
                     descripcion: activity.descripcion_Actividad,
                     cantidad_a_ejecutar: activity.cantidad,
                     valor_unitario: activity.valorUnitario,
@@ -295,6 +292,7 @@ const ReportForm = () => {
                       {
                         tipo: activity.Tipo_soporte,
                         descripcion: activity.Descripcion_Soporte,
+                        valor_porcentual: activity.Valor_Porcentual,
                         municipio: {
                           connect: [{ documentId: activity.municipioSoporte }],
                         },
@@ -315,104 +313,137 @@ const ReportForm = () => {
                         codigo: activity.codigoCups,
                       },
                     ],
-                  })),
-                },
-              ],
+                  })
+                ),
+              })),
             },
+
+            // contenido_producto: {
+            //   descripcion: "Descripción general del contenido de productos", // Si hay una descripción común
+            //   productos: event.productData.producto.map((producto) => ({
+            //     //descripcion: producto.descripcion_producto,
+            //     indicador: producto.indicador_de_producto,
+            //     indicador_linea_base: producto.indicador_Linea_Base,
+            //     actividades: event.activities.flatMap((activityGroup) =>
+            //       activityGroup.map((activity) => ({
+            //         descripcion: activity.descripcion_Actividad,
+            //         cantidad_a_ejecutar: activity.cantidad,
+            //         valor_unitario: activity.valorUnitario,
+            //         valor_total: activity.valorTotal,
+            //         Observaciones: activity.observacionEjecucion,
+            //         porcentaje_cumplimiento: activity.porcentajeCumplimiento,
+            //         observaciones_seguimiento: activity.observacionSeguimiento,
+            //         unidad_medida: {
+            //           nombre: activity.unidadMedida,
+            //         },
+            //         entornos: [
+            //           {
+            //             nombre: activity.entorno,
+            //           },
+            //         ],
+            //         tecnologias: [
+            //           {
+            //             nombre: activity.tecnologia,
+            //           },
+            //         ],
+            //         poblaciones: [
+            //           {
+            //             nombre: activity.poblacionSujeto,
+            //           },
+            //         ],
+            //         soportes: [
+            //           {
+            //             tipo: activity.Tipo_soporte,
+            //             descripcion: activity.Descripcion_Soporte,
+            //             valor_porcentual: activity.Valor_Porcentual,
+            //             municipio: {
+            //               connect: [{ documentId: activity.municipioSoporte }],
+            //             },
+            //           },
+            //         ],
+            //         equipos: [
+            //           {
+            //             nombre: activity.equipo,
+            //           },
+            //         ],
+            //         perfiles_profesionales: [
+            //           {
+            //             nombre: activity.perfilProfesional,
+            //           },
+            //         ],
+            //         cups: [
+            //           {
+            //             codigo: activity.codigoCups,
+            //           },
+            //         ],
+            //       }))
+            //     ),
+            //   })),
+            // },
+
+            // contenido_producto: {
+            //   descripcion: event.productData.producto.descripcion_producto,
+            //   productos: [
+            //     {
+            //       indicador: event.productData.producto.indicador_de_producto,
+            //       indicador_linea_base:
+            //         event.productData.producto.indicador_Linea_Base,
+            //       actividades: event.activities.map((activity) => ({
+            //         descripcion: activity.descripcion_Actividad,
+            //         cantidad_a_ejecutar: activity.cantidad,
+            //         valor_unitario: activity.valorUnitario,
+            //         valor_total: activity.valorTotal,
+            //         Observaciones: activity.observacionEjecucion,
+            //         porcentaje_cumplimiento: activity.porcentajeCumplimiento,
+            //         observaciones_seguimiento: activity.observacionSeguimiento,
+            //         unidad_medida: {
+            //           nombre: activity.unidadMedida,
+            //         },
+            //         entornos: [
+            //           {
+            //             nombre: activity.entorno,
+            //           },
+            //         ],
+            //         tecnologias: [
+            //           {
+            //             nombre: activity.tecnologia,
+            //           },
+            //         ],
+            //         poblaciones: [
+            //           {
+            //             nombre: activity.poblacionSujeto,
+            //           },
+            //         ],
+            //         soportes: [
+            //           {
+            //             tipo: activity.Tipo_soporte,
+            //             descripcion: activity.Descripcion_Soporte,
+            //             valor_porcentual: activity.Valor_Porcentual,
+            //             municipio: {
+            //               connect: [{ documentId: activity.municipioSoporte }],
+            //             },
+            //           },
+            //         ],
+            //         equipos: [
+            //           {
+            //             nombre: activity.equipo,
+            //           },
+            //         ],
+            //         perfiles_profesionales: [
+            //           {
+            //             nombre: activity.perfilProfesional,
+            //           },
+            //         ],
+            //         cups: [
+            //           {
+            //             codigo: activity.codigoCups,
+            //           },
+            //         ],
+            //       })),
+            //     },
+            //   ],
+            // },
           })),
-          // eventos: [
-          //   {
-          //     descripcion: events[0].description_event,
-          //     indicadores: [
-          //       {
-          //         nombre: events[0].indicator_name,
-          //         descripcion: events[0].description_indicator,
-          //         meta_resultado: events[0].meta_indicator,
-          //       },
-          //     ],
-          //     ejes_estrategicos: [
-          //       {
-          //         nombre: events[0].eje_estrategico,
-          //       },
-          //     ],
-          //     lineas_operativa: {
-          //       nombre: events[0].linea_operativa,
-          //     },
-          //     operador_pic: {
-          //       nombre_entidad: events[0].nombre_entidad,
-          //       municipio: {
-          //         connect: [{ documentId: events[0].municipio }],
-          //       },
-          //       descripcion: events[0].descripcion_operador,
-          //     },
-          //     contenido_producto: {
-          //       descripcion:
-          //         events[0].productData.producto.descripcion_producto, //productData.producto.descripcion_producto,
-          //       productos: [
-          //         {
-          //           indicador:
-          //             events[0].productData.producto.indicador_de_producto,
-          //           indicador_linea_base:
-          //             events[0].productData.producto.indicador_Linea_Base,
-          //           actividades: events[0].activities.map((activity) => ({
-          //             descripcion: activity.descripcion_Actividad,
-          //             cantidad_a_ejecutar: activity.cantidad,
-          //             valor_unitario: activity.valorUnitario,
-          //             valor_total: activity.valorTotal,
-          //             Observaciones: activity.observacionEjecucion,
-          //             porcentaje_cumplimiento: activity.porcentajeCumplimiento,
-          //             observaciones_seguimiento:
-          //               activity.observacionSeguimiento,
-          //             unidad_medida: {
-          //               nombre: activity.unidadMedida,
-          //             },
-          //             entornos: [
-          //               {
-          //                 nombre: activity.entorno,
-          //               },
-          //             ],
-          //             tecnologias: [
-          //               {
-          //                 nombre: activity.tecnologia,
-          //               },
-          //             ],
-          //             poblaciones: [
-          //               {
-          //                 nombre: activity.poblacionSujeto,
-          //               },
-          //             ],
-          //             soportes: [
-          //               {
-          //                 tipo: activity.Tipo_soporte,
-          //                 descripcion: activity.Descripcion_Soporte,
-          //                 municipio: {
-          //                   connect: [
-          //                     { documentId: activity.municipioSoporte },
-          //                   ], // Ajusta según IDs reales
-          //                 },
-          //               },
-          //             ],
-          //             equipos: [
-          //               {
-          //                 nombre: activity.equipo,
-          //               },
-          //             ],
-          //             perfiles_profesionales: [
-          //               {
-          //                 nombre: activity.perfilProfesional,
-          //               },
-          //             ],
-          //             cups: [
-          //               {
-          //                 codigo: activity.codigoCups,
-          //               },
-          //             ],
-          //           })),
-          //         },
-          //       ],
-          //     },
-          //   },
-          // ],
         },
       };
 

@@ -1,4 +1,4 @@
-.eventContainer {
+/* .eventContainer {
   margin: 20px;
   padding: 20px;
   border: 1px solid #ddd;
@@ -50,6 +50,74 @@ textarea:focus {
   outline: none;
   box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
 }
+.buttonMain {
+  width: 100%;
+  padding: 12px;
+  background-color: #1abc9c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  grid-column: span 2;
+  margin-bottom: 5px;
+}
+.buttonMain:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.buttonMain:hover:not(:disabled) {
+  background-color: #16a085;
+} */
+
+.eventContainer {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accordionButton {
+  padding: 5px 10px;
+  margin-right: 10px;
+  background-color: #1abc9c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.accordionButton:hover {
+  background-color: #16a085;
+}
+
+.deleteButton {
+  padding: 5px 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  background-color: #c0392b;
+}
+
+.content {
+  margin-top: 15px;
+}
+
 .buttonMain {
   width: 100%;
   padding: 12px;
