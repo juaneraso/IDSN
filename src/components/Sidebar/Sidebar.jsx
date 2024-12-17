@@ -1,6 +1,6 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import styles from './Sidebar.module.css';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import styles from "./Sidebar.module.css";
 
 const Sidebar = () => {
   return (
@@ -8,18 +8,27 @@ const Sidebar = () => {
       <nav>
         <ul>
           <li>
-            <NavLink to="/" className={({ isActive }) => isActive ? styles.active : ''}>
+            <NavLink
+              to="/"
+              className={({ isActive }) => (isActive ? styles.active : "")}
+            >
               Inicio
             </NavLink>
           </li>
           <li>
-            <NavLink to="/reportes" className={({ isActive }) => isActive ? styles.active : ''}>
+            <NavLink
+              to="/reportes"
+              className={({ isActive }) => (isActive ? styles.active : "")}
+            >
               Reportes
             </NavLink>
           </li>
           <li>
-            <NavLink to="/settings" className={({ isActive }) => isActive ? styles.active : ''}>
-              Configuración
+            <NavLink
+              to="/view"
+              className={({ isActive }) => (isActive ? styles.active : "")}
+            >
+              Anexo Tecnico
             </NavLink>
           </li>
         </ul>
