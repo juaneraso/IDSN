@@ -22,7 +22,7 @@ const ReportFields = ({
       />
     </div>
 
-    <div className={styles.field}>
+    {/* <div className={styles.field}>
       <label htmlFor="subregion">Subregión</label>
       <select
         id="subregion"
@@ -38,9 +38,9 @@ const ReportFields = ({
           </option>
         ))}
       </select>
-    </div>
+    </div> */}
 
-    <div className={styles.field}>
+    {/* <div className={styles.field}>
       <label htmlFor="municipality">Municipio</label>
       <select
         id="municipality"
@@ -60,9 +60,9 @@ const ReportFields = ({
               </option>
             ))}
       </select>
-    </div>
+    </div> */}
 
-    <div className={styles.field}>
+    {/* <div className={styles.field}>
       <label htmlFor="proyecto">Proyecto</label>
       <input
         type="text"
@@ -72,9 +72,21 @@ const ReportFields = ({
         onChange={handleChange}
         required
       />
-    </div>
+    </div> */}
 
     <div className={styles.field}>
+      <label htmlFor="municipio">Municipio</label>
+      <input
+        type="text"
+        id="municipio"
+        name="municipio"
+        value={reportData.municipio}
+        onChange={handleChange}
+        required
+      />
+    </div>
+
+    {/* <div className={styles.field}>
       <label htmlFor="actividad_pas">Actividad PAS</label>
       <input
         type="text"
@@ -84,9 +96,9 @@ const ReportFields = ({
         onChange={handleChange}
         required
       />
-    </div>
+    </div> */}
 
-    <div className={styles.field}>
+    {/* <div className={styles.field}>
       <label htmlFor="descripcion">Descripción</label>
       <input
         type="text"
@@ -96,7 +108,8 @@ const ReportFields = ({
         onChange={handleChange}
         required
       />
-    </div>
+    </div> */}
+
     <h3>Seccion Territorio</h3>
     <div className={styles.field}>
       <label htmlFor="codigo_territorio">Código Territorio</label>
@@ -110,7 +123,7 @@ const ReportFields = ({
       />
     </div>
 
-    <div className={styles.field}>
+    {/* <div className={styles.field}>
       <label htmlFor="tipo_territorio">Tipo Territorio</label>
       <select
         id="tipo_territorio"
@@ -123,11 +136,11 @@ const ReportFields = ({
         <option value="urbano">Urbano</option>
         <option value="rural">Rural</option>
       </select>
-    </div>
+    </div> */}
 
     <h3>Seccion MicroTerritorio</h3>
 
-    <div className={styles.field}>
+    {/* <div className={styles.field}>
       <label htmlFor="nombre_micro_territorio">Nombre micro-Territorio</label>
       <input
         type="text"
@@ -137,7 +150,7 @@ const ReportFields = ({
         onChange={handleChange}
         required
       />
-    </div>
+    </div> */}
     <div className={styles.field}>
       <label htmlFor="codigo_micro_territorio">Código micro-Territorio</label>
       <input
@@ -150,7 +163,7 @@ const ReportFields = ({
       />
     </div>
 
-    <div className={styles.field}>
+    {/* <div className={styles.field}>
       <label htmlFor="tipo_micro_territorio">Tipo micro-Territorio</label>
       <select
         id="tipo_micro_territorioo"
@@ -163,9 +176,9 @@ const ReportFields = ({
         <option value="urbano">Urbano</option>
         <option value="rural">Rural</option>
       </select>
-    </div>
+    </div> */}
 
-    <div className={styles.field}>
+    {/* <div className={styles.field}>
       <label htmlFor="numero_micro_territorio">numero micro-Territorios</label>
       <input
         type="text"
@@ -175,7 +188,7 @@ const ReportFields = ({
         onChange={handleChange}
         required
       />
-    </div>
+    </div> */}
 
     <div className={styles.field}>
       <label htmlFor="numero_hogares">Número de Hogares</label>

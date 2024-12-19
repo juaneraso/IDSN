@@ -54,3 +54,46 @@
 .removeButton:hover {
   background-color: #c0392b;
 }
+
+.activityDetails ul li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.activityDetails ul li strong {
+  flex: 1; /* El título ocupa el espacio disponible */
+}
+
+.activityDetails ul li input {
+  flex: 2; /* Ajusta la proporción del campo de entrada */
+  margin-right: 0.5rem;
+}
+
+.buttonMain {
+  width: 100%;
+  padding: 12px;
+  background-color: #1abc9c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  grid-column: span 2;
+  margin-bottom: 5px;
+}
+.buttonMain:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.buttonMain:hover:not(:disabled) {
+  background-color: #16a085;
+}
+
+/* .removeButton {
+  flex: 0; 
+  margin-left: 0.5rem; 
+} */

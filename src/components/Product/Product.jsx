@@ -411,6 +411,9 @@ const Product = ({
       descripcion_producto: "",
       indicador_de_producto: "",
       indicador_Linea_Base: "",
+      nombre_entidad: "",
+      descripcion_operador: "",
+      cantidad: "",
     };
     const updatedProducts = [...(productData.producto || []), newProduct];
     setProductData({ ...productData, producto: updatedProducts });
@@ -448,6 +451,7 @@ const Product = ({
           </div>
           {expandedIndex === index && (
             <div className={styles.content}>
+              <h4>Indicador Producto</h4>
               <div className={styles.field}>
                 <label>Descripción del Producto</label>
                 <input
@@ -464,12 +468,12 @@ const Product = ({
                 />
               </div>
               <div className={styles.field}>
-                <label htmlFor={`indicador_de_producto_${index}`}>
-                  Indicador de Producto
+                <label htmlFor={`indicador_de_producto${index}`}>
+                  Meta Producto Esperada(Indicador de Producto)
                 </label>
                 <input
                   type="text"
-                  id={`indicador_de_producto_${index}`}
+                  id={`indicador_de_producto${index}`}
                   value={product.indicador_de_producto}
                   onChange={(e) =>
                     handleInputChange(
@@ -481,17 +485,58 @@ const Product = ({
                 />
               </div>
               <div className={styles.field}>
-                <label htmlFor={`indicador_Linea_Base_${index}`}>
+                <label htmlFor={`indicador_Linea_Base${index}`}>
                   Indicador Línea Base
                 </label>
                 <input
                   type="text"
-                  id={`indicador_Linea_Base_${index}`}
+                  id={`indicador_Linea_Base${index}`}
                   value={product.indicador_Linea_Base}
                   onChange={(e) =>
                     handleInputChange(
                       index,
                       "indicador_Linea_Base",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+              <div className={styles.field}>
+                <label htmlFor={`cantidad${index}`}>Cantidad</label>
+                <input
+                  type="text"
+                  id={`cantidad${index}`}
+                  value={product.cantidad}
+                  onChange={(e) =>
+                    handleInputChange(index, "cantidad", e.target.value)
+                  }
+                />
+              </div>
+              <h3>Operador PIC</h3>
+
+              <div className={styles.field}>
+                <label htmlFor={`nombre_entidad${index}`}>Nombre Entidad</label>
+                <input
+                  type="text"
+                  id={`nombre_entidad${index}`}
+                  value={product.nombre_entidad}
+                  onChange={(e) =>
+                    handleInputChange(index, "nombre_entidad", e.target.value)
+                  }
+                />
+              </div>
+              <div className={styles.field}>
+                <label htmlFor={`descripcion_operador${index}`}>
+                  Descripcion Operador
+                </label>
+                <input
+                  type="text"
+                  id={`descripcion_operador${index}`}
+                  value={product.descripcion_operador}
+                  onChange={(e) =>
+                    handleInputChange(
+                      index,
+                      "descripcion_operador",
                       e.target.value
                     )
                   }
