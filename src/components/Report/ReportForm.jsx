@@ -74,12 +74,12 @@ const ReportForm = () => {
   const [events, setEvents] = useState([
     {
       description_event: "",
-      indicator_name: "",
+      //indicator_name: "",
       //description_indicator: "",
-      meta_indicator: "",
+      //meta_indicator: "",
       eje_estrategico: "",
       linea_operativa: "",
-      nombre_entidad: "",
+      //nombre_entidad: "",
       proyecto: "",
       //municipio: "",
       //descripcion_operador: "",
@@ -88,9 +88,12 @@ const ReportForm = () => {
         producto: [
           {
             descripcion_producto: "",
-            indicador_de_producto: "",
-            indicador_Linea_Base: "",
-            cantidad: "",
+            indicadores: [],
+            // indicador_de_producto: "",
+            // indicador_Linea_Base: "",
+            // cantidad: "",
+            nombre_entidad: "",
+            descripcion_operador: "",
           },
           // Otros productos
         ],
@@ -186,7 +189,7 @@ const ReportForm = () => {
   console.log("subregiones", subregions);
   console.log("Datos eventos", events);
   //console.log("Datos completos", eventData);
-  console.log("ACVITY DATA", events[0].activities[1]);
+  console.log("ACVITY DATA", events[0].eje_estrategico[0]);
 
   console.log("reportdata", reportData);
 
@@ -209,115 +212,108 @@ const ReportForm = () => {
       const transformedData = {
         data: {
           territorializacion: {
-            numero_microterritorios: reportData.numero_micro_territorio || null,
             numero_hogares: parseInt(reportData.numero_hogares, 10),
-            ubicacion: {
-              municipio: {
-                connect: [{ documentId: reportData.municipio }], // Ajusta según IDs reales
-              },
-              subregion: {
-                connect: [{ documentId: reportData.subregion }], // Ajusta según IDs reales
-              },
-            },
-            territorio: [
-              {
-                id_territorio: reportData.codigo_territorio,
-                tipo: reportData.tipo_territorio, // Ejemplo de transformación
-              },
-            ],
-            microterritorio: [
-              {
-                id_microterritorio: reportData.codigo_micro_territorio,
-                tipo: reportData.tipo_micro_territorio,
-                nombre: reportData.nombre_micro_territorio,
-              },
-            ],
+            municipio: reportData.municipio,
+            territorio: reportData.codigo_territorio,
+            microterritorio: reportData.codigo_micro_territorio || null,
           },
           eventos: events.map((event) => ({
             descripcion: event.description_event,
-            indicadores: [
-              {
-                nombre: event.indicator_name,
-                descripcion: event.description_indicator,
-                meta_resultado: event.meta_indicator,
-              },
-            ],
-            ejes_estrategicos: [
-              {
-                nombre: event.eje_estrategico,
-              },
-            ],
-            lineas_operativa: {
-              nombre: event.linea_operativa,
-            },
-            operador_pic: {
-              nombre_entidad: event.nombre_entidad,
-              municipio: {
-                connect: [{ documentId: event.municipio }],
-              },
-              descripcion: event.descripcion_operador,
-            },
-            contenido_producto: {
-              descripcion: "Descripción general del contenido de productos", // Si hay una descripción común
-              productos: event.productData.producto.map((producto, index) => ({
-                //descripcion: producto.descripcion_producto,
-                indicador: producto.indicador_de_producto,
-                indicador_linea_base: producto.indicador_Linea_Base,
-                actividades: (event.activities[index] || []).map(
-                  (activity) => ({
-                    descripcion: activity.descripcion_Actividad,
-                    cantidad_a_ejecutar: activity.cantidad,
-                    valor_unitario: activity.valorUnitario,
-                    valor_total: activity.valorTotal,
-                    Observaciones: activity.observacionEjecucion,
-                    porcentaje_cumplimiento: activity.porcentajeCumplimiento,
-                    observaciones_seguimiento: activity.observacionSeguimiento,
-                    unidad_medida: {
-                      nombre: activity.unidadMedida,
-                    },
-                    entornos: [
-                      {
-                        nombre: activity.entorno,
-                      },
-                    ],
-                    tecnologias: [
-                      {
-                        nombre: activity.tecnologia,
-                      },
-                    ],
-                    poblaciones: [
-                      {
-                        nombre: activity.poblacionSujeto,
-                      },
-                    ],
-                    soportes: [
-                      {
-                        tipo: activity.Tipo_soporte,
-                        descripcion: activity.Descripcion_Soporte,
-                        valor_porcentual: activity.Valor_Porcentual,
-                        municipio: {
-                          connect: [{ documentId: activity.municipioSoporte }],
-                        },
-                      },
-                    ],
-                    equipos: [
-                      {
-                        nombre: activity.equipo,
-                      },
-                    ],
-                    perfiles_profesionales: [
-                      {
-                        nombre: activity.perfilProfesional,
-                      },
-                    ],
-                    cups: [
-                      {
-                        codigo: activity.codigoCups,
-                      },
-                    ],
-                  })
-                ),
+
+            ejes_estrategicos: (event.eje_estrategico || []).map((eje) => ({
+              nombre: eje,
+            })),
+            lineas_operativa: (event.linea_operativa || []).map((linea) => ({
+              nombre: linea,
+            })),
+
+            productos: event.productData.producto.map((producto, index) => ({
+              descripcion: producto.descripcion_producto,
+
+              actividades: (event.activities[index] || []).map((activity) => ({
+                descripcion: activity.descripcion_Actividad,
+                cantidad_a_ejecutar: activity.cantidad,
+                unidad_medida: {
+                  nombre: activity.unidadMedida,
+                },
+                entornos: activity.entorno.map((entorno) => ({
+                  nombre: entorno,
+                })),
+
+                // entornos: [
+                //   {
+                //     nombre: "activity.entorno",
+                //   },
+                // ],
+                tecnologias: activity.tecnologia.map((tecno) => ({
+                  nombre: tecno,
+                })),
+                // tecnologias: [
+                //   {
+                //     nombre: "activity.tecnologia",
+                //   },
+                // ],
+                poblaciones: activity.poblacionSujeto.map((poblacion) => ({
+                  nombre: poblacion,
+                })),
+                // poblaciones: [
+                //   {
+                //     nombre: "activity.poblacionSujeto",
+                //   },
+                // ],
+                soportes: [
+                  {
+                    tipo: activity.Tipo_soporte,
+                    descripcion: activity.Descripcion_Soporte,
+                  },
+                ],
+                equipo: {
+                  nombre: activity.equipo,
+                },
+                perfiles_profesional: {
+                  nombre: activity.perfilProfesional,
+                },
+                cups: activity.codigoCups.map((cup) => ({
+                  codigo: cup,
+                })),
+                // cups: [
+                //   {
+                //     codigo: "activity.codigoCups",
+                //   },
+                // ],
+                perfil_operativo: {
+                  descripcion: activity.perfilOperativo,
+                },
+
+                // valor_unitario: activity.valorUnitario,
+                // valor_total: activity.valorTotal,
+                // Observaciones: activity.observacionEjecucion,
+                // porcentaje_cumplimiento: activity.porcentajeCumplimiento,
+                // observaciones_seguimiento: activity.observacionSeguimiento,
               })),
+
+              operador_pic: {
+                nombre_entidad: producto.nombre_entidad,
+                descripcion: producto.descripcion_operador,
+              },
+              indicadores: (producto.indicadores || []).map((indicador) => ({
+                nombre: "quitar",
+                meta_resultado: indicador.meta_producto,
+                cantidad: indicador.cantidad,
+                indicador_linea_base: indicador.indicador_linea_base,
+              })),
+
+              // indicadores: [
+              //   {
+              //     nombre: "quitar",
+              //     meta_resultado: producto.indicador_de_producto,
+              //     cantidad: producto.cantidad,
+              //     indicador_linea_base: producto.indicador_Linea_Base,
+              //   },
+              // ],
+            })),
+            proyecto_idsn: {
+              proyecto: event.proyecto,
             },
           })),
         },

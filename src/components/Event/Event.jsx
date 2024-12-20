@@ -429,12 +429,12 @@ const Event = ({ events, setEvents }) => {
       {
         proyecto: "",
         description_event: "",
-        indicator_name: "",
+        //indicator_name: "",
         //description_indicator: "",
-        meta_indicator: "",
+        //meta_indicator: "",
         eje_estrategico: [],
         linea_operativa: [],
-        nombre_entidad: "",
+        //nombre_entidad: "",
         //municipio: "",
         //descripcion_operador: "",
         activities: [],
@@ -520,9 +520,8 @@ const Event = ({ events, setEvents }) => {
                   handleEventChange(index, "description_event", e.target.value)
                 }
               />
-              <h4>Indicador Evento</h4>
 
-              <label htmlFor={`indicator_name${index}`}>
+              {/* <label htmlFor={`indicator_name${index}`}>
                 Nombre del Indicador Resultado
               </label>
               <input
@@ -532,9 +531,9 @@ const Event = ({ events, setEvents }) => {
                 onChange={(e) =>
                   handleEventChange(index, "indicator_name", e.target.value)
                 }
-              />
+              /> */}
 
-              <label htmlFor={`meta_indicator${index}`}>
+              {/* <label htmlFor={`meta_indicator${index}`}>
                 Meta del Indicador
               </label>
               <input
@@ -544,7 +543,7 @@ const Event = ({ events, setEvents }) => {
                 onChange={(e) =>
                   handleEventChange(index, "meta_indicator", e.target.value)
                 }
-              />
+              /> */}
 
               <div>
                 <label>Ejes Estratégicos</label>

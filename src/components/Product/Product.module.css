@@ -74,6 +74,9 @@
   cursor: pointer;
   margin-left: auto;
 }
+.removeButton:hover {
+  background-color: #e74c3c;
+}
 
 .content {
   padding: 10px;
@@ -120,4 +123,26 @@
 
 .buttonMain:hover:not(:disabled) {
   background-color: #16a085;
+}
+
+.indicator {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.indicatorHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.indicatorHeader h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  flex: 1;
+  text-align: left;
 }

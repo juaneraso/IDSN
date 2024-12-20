@@ -387,6 +387,191 @@
 
 // export default Product;
 
+// import React, { useState } from "react";
+// import styles from "./Product.module.css";
+// import ActivityList from "../Activities/ActivityList";
+
+// const Product = ({
+//   productData,
+//   setProductData,
+//   activities,
+//   setActivities,
+//   subregions,
+// }) => {
+//   const [expandedIndex, setExpandedIndex] = useState(null); // Estado para controlar qué producto está expandido
+
+//   const handleInputChange = (productIndex, field, value) => {
+//     const updatedProducts = [...productData.producto];
+//     updatedProducts[productIndex][field] = value;
+//     setProductData({ ...productData, producto: updatedProducts });
+//   };
+
+//   const handleAddProduct = () => {
+//     const newProduct = {
+//       descripcion_producto: "",
+//       indicador_de_producto: "",
+//       indicador_Linea_Base: "",
+//       nombre_entidad: "",
+//       descripcion_operador: "",
+//       cantidad: "",
+//     };
+//     const updatedProducts = [...(productData.producto || []), newProduct];
+//     setProductData({ ...productData, producto: updatedProducts });
+//     const updatedActivities = [...activities, []];
+//     setActivities(updatedActivities);
+//   };
+
+//   const handleRemoveProduct = (productIndex) => {
+//     const updatedProducts = productData.producto.filter(
+//       (_, index) => index !== productIndex
+//     );
+//     setProductData({ ...productData, producto: updatedProducts });
+//   };
+
+//   const toggleExpand = (index) => {
+//     setExpandedIndex(expandedIndex === index ? null : index); // Alterna entre expandir y contraer
+//   };
+
+//   return (
+//     <div className={styles.productContainer}>
+//       {(productData.producto || []).map((product, index) => (
+//         <div key={index} className={styles.section}>
+//           <div className={styles.header} onClick={() => toggleExpand(index)}>
+//             <h3>Producto {index + 1}</h3>
+//             <button
+//               type="button"
+//               onClick={(e) => {
+//                 e.stopPropagation(); // Evita que el click cierre el acordeón
+//                 handleRemoveProduct(index);
+//               }}
+//               className={styles.removeButton}
+//             >
+//               Eliminar
+//             </button>
+//           </div>
+//           {expandedIndex === index && (
+//             <div className={styles.content}>
+//               <div className={styles.field}>
+//                 <label>Descripción del Producto</label>
+//                 <input
+//                   id={`descripcion_producto${index}`}
+//                   type="text"
+//                   value={product.descripcion_producto}
+//                   onChange={(e) =>
+//                     handleInputChange(
+//                       index,
+//                       "descripcion_producto",
+//                       e.target.value
+//                     )
+//                   }
+//                 />
+//               </div>
+//               <h4>Indicador Producto</h4>
+//               <div className={styles.field}>
+//                 <label htmlFor={`cantidad${index}`}>Cantidad</label>
+//                 <input
+//                   type="text"
+//                   id={`cantidad${index}`}
+//                   value={product.cantidad}
+//                   onChange={(e) =>
+//                     handleInputChange(index, "cantidad", e.target.value)
+//                   }
+//                 />
+//               </div>
+
+//               <div className={styles.field}>
+//                 <label htmlFor={`indicador_de_producto${index}`}>
+//                   Meta Producto Esperada(Indicador de Producto)
+//                 </label>
+//                 <input
+//                   type="text"
+//                   id={`indicador_de_producto${index}`}
+//                   value={product.indicador_de_producto}
+//                   onChange={(e) =>
+//                     handleInputChange(
+//                       index,
+//                       "indicador_de_producto",
+//                       e.target.value
+//                     )
+//                   }
+//                 />
+//               </div>
+//               <div className={styles.field}>
+//                 <label htmlFor={`indicador_Linea_Base${index}`}>
+//                   Indicador Línea Base
+//                 </label>
+//                 <input
+//                   type="text"
+//                   id={`indicador_Linea_Base${index}`}
+//                   value={product.indicador_Linea_Base}
+//                   onChange={(e) =>
+//                     handleInputChange(
+//                       index,
+//                       "indicador_Linea_Base",
+//                       e.target.value
+//                     )
+//                   }
+//                 />
+//               </div>
+
+//               <h3>Operador PIC</h3>
+
+//               <div className={styles.field}>
+//                 <label htmlFor={`nombre_entidad${index}`}>Nombre Entidad</label>
+//                 <input
+//                   type="text"
+//                   id={`nombre_entidad${index}`}
+//                   value={product.nombre_entidad}
+//                   onChange={(e) =>
+//                     handleInputChange(index, "nombre_entidad", e.target.value)
+//                   }
+//                 />
+//               </div>
+//               <div className={styles.field}>
+//                 <label htmlFor={`descripcion_operador${index}`}>
+//                   Descripcion Operador
+//                 </label>
+//                 <input
+//                   type="text"
+//                   id={`descripcion_operador${index}`}
+//                   value={product.descripcion_operador}
+//                   onChange={(e) =>
+//                     handleInputChange(
+//                       index,
+//                       "descripcion_operador",
+//                       e.target.value
+//                     )
+//                   }
+//                 />
+//               </div>
+//               <div className={styles.section}>
+//                 <ActivityList
+//                   activities={activities[index] || []}
+//                   setActivities={(updatedActivities) => {
+//                     const newActivities = [...activities];
+//                     newActivities[index] = updatedActivities;
+//                     setActivities(newActivities);
+//                   }}
+//                   subregions={subregions}
+//                 />
+//               </div>
+//             </div>
+//           )}
+//         </div>
+//       ))}
+//       <button
+//         type="button"
+//         onClick={handleAddProduct}
+//         className={styles.buttonMain}
+//       >
+//         Agregar Otro Producto
+//       </button>
+//     </div>
+//   );
+// };
+
+// export default Product;
+
 import React, { useState } from "react";
 import styles from "./Product.module.css";
 import ActivityList from "../Activities/ActivityList";
@@ -398,7 +583,7 @@ const Product = ({
   setActivities,
   subregions,
 }) => {
-  const [expandedIndex, setExpandedIndex] = useState(null); // Estado para controlar qué producto está expandido
+  const [expandedIndex, setExpandedIndex] = useState(null);
 
   const handleInputChange = (productIndex, field, value) => {
     const updatedProducts = [...productData.producto];
@@ -406,14 +591,47 @@ const Product = ({
     setProductData({ ...productData, producto: updatedProducts });
   };
 
+  const handleAddIndicator = (productIndex) => {
+    const newIndicator = {
+      cantidad: "",
+      meta_producto: "",
+      indicador_linea_base: "",
+    };
+    const updatedProducts = [...productData.producto];
+    updatedProducts[productIndex].indicadores = [
+      ...(updatedProducts[productIndex].indicadores || []),
+      newIndicator,
+    ];
+    setProductData({ ...productData, producto: updatedProducts });
+  };
+
+  const handleUpdateIndicator = (
+    productIndex,
+    indicatorIndex,
+    field,
+    value
+  ) => {
+    const updatedProducts = [...productData.producto];
+    const indicators = updatedProducts[productIndex].indicadores || [];
+    indicators[indicatorIndex][field] = value;
+    updatedProducts[productIndex].indicadores = indicators;
+    setProductData({ ...productData, producto: updatedProducts });
+  };
+
+  const handleRemoveIndicator = (productIndex, indicatorIndex) => {
+    const updatedProducts = [...productData.producto];
+    const indicators = updatedProducts[productIndex].indicadores || [];
+    indicators.splice(indicatorIndex, 1);
+    updatedProducts[productIndex].indicadores = indicators;
+    setProductData({ ...productData, producto: updatedProducts });
+  };
+
   const handleAddProduct = () => {
     const newProduct = {
       descripcion_producto: "",
-      indicador_de_producto: "",
-      indicador_Linea_Base: "",
+      indicadores: [],
       nombre_entidad: "",
       descripcion_operador: "",
-      cantidad: "",
     };
     const updatedProducts = [...(productData.producto || []), newProduct];
     setProductData({ ...productData, producto: updatedProducts });
@@ -429,113 +647,198 @@ const Product = ({
   };
 
   const toggleExpand = (index) => {
-    setExpandedIndex(expandedIndex === index ? null : index); // Alterna entre expandir y contraer
+    setExpandedIndex(expandedIndex === index ? null : index);
   };
 
   return (
     <div className={styles.productContainer}>
-      {(productData.producto || []).map((product, index) => (
-        <div key={index} className={styles.section}>
-          <div className={styles.header} onClick={() => toggleExpand(index)}>
-            <h3>Producto {index + 1}</h3>
+      {(productData.producto || []).map((product, productIndex) => (
+        <div key={productIndex} className={styles.section}>
+          <div
+            className={styles.header}
+            onClick={() => toggleExpand(productIndex)}
+          >
+            <h3>Producto {productIndex + 1}</h3>
             <button
               type="button"
               onClick={(e) => {
-                e.stopPropagation(); // Evita que el click cierre el acordeón
-                handleRemoveProduct(index);
+                e.stopPropagation();
+                handleRemoveProduct(productIndex);
               }}
               className={styles.removeButton}
             >
               Eliminar
             </button>
           </div>
-          {expandedIndex === index && (
+          {expandedIndex === productIndex && (
             <div className={styles.content}>
-              <h4>Indicador Producto</h4>
               <div className={styles.field}>
                 <label>Descripción del Producto</label>
                 <input
-                  id={`descripcion_producto${index}`}
                   type="text"
                   value={product.descripcion_producto}
                   onChange={(e) =>
                     handleInputChange(
-                      index,
+                      productIndex,
                       "descripcion_producto",
                       e.target.value
                     )
                   }
                 />
               </div>
-              <div className={styles.field}>
-                <label htmlFor={`indicador_de_producto${index}`}>
-                  Meta Producto Esperada(Indicador de Producto)
-                </label>
-                <input
-                  type="text"
-                  id={`indicador_de_producto${index}`}
-                  value={product.indicador_de_producto}
-                  onChange={(e) =>
-                    handleInputChange(
-                      index,
-                      "indicador_de_producto",
-                      e.target.value
-                    )
-                  }
-                />
-              </div>
-              <div className={styles.field}>
-                <label htmlFor={`indicador_Linea_Base${index}`}>
-                  Indicador Línea Base
-                </label>
-                <input
-                  type="text"
-                  id={`indicador_Linea_Base${index}`}
-                  value={product.indicador_Linea_Base}
-                  onChange={(e) =>
-                    handleInputChange(
-                      index,
-                      "indicador_Linea_Base",
-                      e.target.value
-                    )
-                  }
-                />
-              </div>
-              <div className={styles.field}>
-                <label htmlFor={`cantidad${index}`}>Cantidad</label>
-                <input
-                  type="text"
-                  id={`cantidad${index}`}
-                  value={product.cantidad}
-                  onChange={(e) =>
-                    handleInputChange(index, "cantidad", e.target.value)
-                  }
-                />
-              </div>
-              <h3>Operador PIC</h3>
 
+              {/* {(product.indicadores || []).map((indicator, indicatorIndex) => (
+                <div key={indicatorIndex} className={styles.indicator}>
+                  <h3>Indicador Producto {indicatorIndex + 1}</h3>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleRemoveIndicator(productIndex, indicatorIndex)
+                    }
+                    className={styles.removeButton}
+                  >
+                    Eliminar Indicador
+                  </button>
+                  <div className={styles.field}>
+                    <label>Cantidad</label>
+                    <input
+                      type="text"
+                      value={indicator.cantidad}
+                      onChange={(e) =>
+                        handleUpdateIndicator(
+                          productIndex,
+                          indicatorIndex,
+                          "cantidad",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label>Meta Producto</label>
+                    <input
+                      type="text"
+                      value={indicator.meta_producto}
+                      onChange={(e) =>
+                        handleUpdateIndicator(
+                          productIndex,
+                          indicatorIndex,
+                          "meta_producto",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label>Indicador Línea Base</label>
+                    <input
+                      type="text"
+                      value={indicator.indicador_linea_base}
+                      onChange={(e) =>
+                        handleUpdateIndicator(
+                          productIndex,
+                          indicatorIndex,
+                          "indicador_linea_base",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              ))} */}
+              <h4>Indicadores del Producto</h4>
+              {(product.indicadores || []).map((indicator, indicatorIndex) => (
+                <div key={indicatorIndex} className={styles.indicator}>
+                  <div className={styles.indicatorHeader}>
+                    <h3>Indicador Producto {indicatorIndex + 1}</h3>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleRemoveIndicator(productIndex, indicatorIndex)
+                      }
+                      className={styles.removeButton}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                  <div className={styles.field}>
+                    <label>Cantidad</label>
+                    <input
+                      type="text"
+                      value={indicator.cantidad}
+                      onChange={(e) =>
+                        handleUpdateIndicator(
+                          productIndex,
+                          indicatorIndex,
+                          "cantidad",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label>Meta Producto</label>
+                    <input
+                      type="text"
+                      value={indicator.meta_producto}
+                      onChange={(e) =>
+                        handleUpdateIndicator(
+                          productIndex,
+                          indicatorIndex,
+                          "meta_producto",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label>Indicador Línea Base</label>
+                    <input
+                      type="text"
+                      value={indicator.indicador_linea_base}
+                      onChange={(e) =>
+                        handleUpdateIndicator(
+                          productIndex,
+                          indicatorIndex,
+                          "indicador_linea_base",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              ))}
+
+              <button
+                type="button"
+                onClick={() => handleAddIndicator(productIndex)}
+                className={styles.buttonMain}
+              >
+                Agregar Indicador
+              </button>
+              <h3>Operador PIC</h3>
               <div className={styles.field}>
-                <label htmlFor={`nombre_entidad${index}`}>Nombre Entidad</label>
+                <label>Nombre Entidad</label>
                 <input
                   type="text"
-                  id={`nombre_entidad${index}`}
                   value={product.nombre_entidad}
                   onChange={(e) =>
-                    handleInputChange(index, "nombre_entidad", e.target.value)
+                    handleInputChange(
+                      productIndex,
+                      "nombre_entidad",
+                      e.target.value
+                    )
                   }
                 />
               </div>
               <div className={styles.field}>
-                <label htmlFor={`descripcion_operador${index}`}>
-                  Descripcion Operador
-                </label>
+                <label>Descripción Operador</label>
                 <input
                   type="text"
-                  id={`descripcion_operador${index}`}
                   value={product.descripcion_operador}
                   onChange={(e) =>
                     handleInputChange(
-                      index,
+                      productIndex,
                       "descripcion_operador",
                       e.target.value
                     )
@@ -544,10 +847,10 @@ const Product = ({
               </div>
               <div className={styles.section}>
                 <ActivityList
-                  activities={activities[index] || []}
+                  activities={activities[productIndex] || []}
                   setActivities={(updatedActivities) => {
                     const newActivities = [...activities];
-                    newActivities[index] = updatedActivities;
+                    newActivities[productIndex] = updatedActivities;
                     setActivities(newActivities);
                   }}
                   subregions={subregions}
@@ -562,7 +865,7 @@ const Product = ({
         onClick={handleAddProduct}
         className={styles.buttonMain}
       >
-        Agregar Otro Producto
+        Agregar Producto
       </button>
     </div>
   );
