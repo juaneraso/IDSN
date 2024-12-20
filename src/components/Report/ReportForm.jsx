@@ -189,7 +189,7 @@ const ReportForm = () => {
   console.log("subregiones", subregions);
   console.log("Datos eventos", events);
   //console.log("Datos completos", eventData);
-  console.log("ACVITY DATA", events[0].eje_estrategico[0]);
+  //console.log("ACVITY DATA", events[0].eje_estrategico[0]);
 
   console.log("reportdata", reportData);
 
