@@ -674,6 +674,10 @@ const Product = ({
             <div className={styles.content}>
               <div className={styles.field}>
                 <label>Descripción del Producto</label>
+                <p>
+                  Estrategia de intervencion o procesos previos a contratar
+                  durante la vigencia
+                </p>
                 <input
                   type="text"
                   value={product.descripcion_producto}
@@ -777,7 +781,7 @@ const Product = ({
                     />
                   </div>
                   <div className={styles.field}>
-                    <label>Meta Producto</label>
+                    <label>Descripción Meta Producto</label>
                     <input
                       type="text"
                       value={indicator.meta_producto}
@@ -818,7 +822,7 @@ const Product = ({
               </button>
               <h3>Operador PIC</h3>
               <div className={styles.field}>
-                <label>Nombre Entidad</label>
+                <label>Nombre del Operador PIC</label>
                 <input
                   type="text"
                   value={product.nombre_entidad}

@@ -23,7 +23,7 @@ const url = `http://localhost:1337/api/subregions?${queryString}`;
 
 const ReportForm = () => {
   const [reportData, setReportData] = useState({
-    //subregion: "",
+    subregion: "",
     municipio: "",
     fechaRegistro: "",
     codigo_territorio: "",
@@ -74,9 +74,9 @@ const ReportForm = () => {
   const [events, setEvents] = useState([
     {
       description_event: "",
-      //indicator_name: "",
+      indicator_name: "",
       //description_indicator: "",
-      //meta_indicator: "",
+      meta_indicator: "",
       eje_estrategico: "",
       linea_operativa: "",
       //nombre_entidad: "",
@@ -219,6 +219,8 @@ const ReportForm = () => {
           },
           eventos: events.map((event) => ({
             descripcion: event.description_event,
+            indicador_evento: event.indicator_name,
+            meta_indicador_evento: event.meta_indicator,
 
             ejes_estrategicos: (event.eje_estrategico || []).map((eje) => ({
               nombre: eje,
@@ -297,7 +299,6 @@ const ReportForm = () => {
                 descripcion: producto.descripcion_operador,
               },
               indicadores: (producto.indicadores || []).map((indicador) => ({
-                nombre: "quitar",
                 meta_resultado: indicador.meta_producto,
                 cantidad: indicador.cantidad,
                 indicador_linea_base: indicador.indicador_linea_base,

@@ -23,26 +23,26 @@ const ActivityList = ({ activities, setActivities, subregions }) => {
 
   const handleAddActivity = () => {
     const newActivity = {
-      descripcion_Actividad: "",
+      Descripcion_Actividad: "",
       cantidad: "",
       unidadMedida: "",
       entorno: [],
-      tecnologia: [],
+      Tecnología_PIC: [],
       poblacionSujeto: [],
       Tipo_soporte: "",
       Descripcion_Soporte: "",
       //municipioSoporte: "",
-      equipo: "",
-      perfilProfesional: "",
-      perfilOperativo: "",
+      Equipo_Operativo: "",
+      perfil_Profesional: "",
+      perfil_Operativo: "",
       codigoCups: [],
       valorUnitario: "",
       valorTotal: "",
       cronograma: "",
-      observacionEjecucion: "",
-      porcentajeCumplimiento: "",
-      observacionSeguimiento: "",
-      estadoAvance: "",
+      //observacionEjecucion: "",
+      //porcentajeCumplimiento: "",
+      //observacionSeguimiento: "",
+      //estadoAvance: "",
     };
     setActivities([...activities, newActivity]);
     setExpandedIndex(activities.length); // Expande la nueva actividad automáticamente
@@ -50,7 +50,7 @@ const ActivityList = ({ activities, setActivities, subregions }) => {
 
   return (
     <div>
-      <h3>Actividades</h3>
+      <h3>Actividades de Producto</h3>
       <button
         type="button"
         onClick={handleAddActivity}

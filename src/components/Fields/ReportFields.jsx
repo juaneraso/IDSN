@@ -10,7 +10,7 @@ const ReportFields = ({
   handleFileChange,
 }) => (
   <div className={styles.fieldsContainer}>
-    <div className={styles.field}>
+    {/* <div className={styles.field}>
       <label htmlFor="fechaRegistro">Fecha de Registro</label>
       <input
         type="date"
@@ -20,7 +20,7 @@ const ReportFields = ({
         onChange={handleChange}
         required
       />
-    </div>
+    </div> */}
 
     {/* <div className={styles.field}>
       <label htmlFor="subregion">Subregión</label>
@@ -73,9 +73,20 @@ const ReportFields = ({
         required
       />
     </div> */}
-
     <div className={styles.field}>
-      <label htmlFor="municipio">Municipio</label>
+      <label htmlFor="subregion">Subregion</label>
+      <p>Registre la o las regiones donde se desarrollaran las accciones PIC</p>
+      <input
+        type="text"
+        id="subregion"
+        name="subregion"
+        value={reportData.subregion}
+        onChange={handleChange}
+        required
+      />
+    </div>
+    <div className={styles.field}>
+      <label htmlFor="municipio">Municipio priorizado</label>
       <input
         type="text"
         id="municipio"
@@ -109,10 +120,12 @@ const ReportFields = ({
         required
       />
     </div> */}
-
-    <h3>Seccion Territorio</h3>
+    {/* 
+    <h3>Seccion Territorio</h3> */}
     <div className={styles.field}>
-      <label htmlFor="codigo_territorio">Código Territorio</label>
+      <label htmlFor="codigo_territorio">
+        Código - Nombre de Territorio APS
+      </label>
       <input
         type="text"
         id="codigo_territorio"
@@ -138,7 +151,7 @@ const ReportFields = ({
       </select>
     </div> */}
 
-    <h3>Seccion MicroTerritorio</h3>
+    {/* <h3>Seccion MicroTerritorio</h3> */}
 
     {/* <div className={styles.field}>
       <label htmlFor="nombre_micro_territorio">Nombre micro-Territorio</label>
@@ -191,7 +204,9 @@ const ReportFields = ({
     </div> */}
 
     <div className={styles.field}>
-      <label htmlFor="numero_hogares">Número de Hogares</label>
+      <label htmlFor="numero_hogares">
+        Total número de Hogares Beneficiarios
+      </label>
       <input
         type="text"
         id="numero_hogares"
