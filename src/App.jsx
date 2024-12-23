@@ -12,11 +12,11 @@ import ReportView from "./components/ReportView/ReportView.jsx";
 function App() {
   return (
     <Routes>
-      <Route path="/rep" element={<Prueba />} />
+      <Route path="/" element={<Prueba />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<RegistroUsuario />} />
       <Route path="/dashbo" element={<Dashbo />} />
-      <Route path="/" element={<ReportForm />} />
+      <Route path="/reportes" element={<ReportForm />} />
       <Route path="/view" element={<ReportView />} />
     </Routes>
   );

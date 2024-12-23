@@ -277,7 +277,7 @@ const ActivityItem = ({
                 key === "entorno"
                   ? "Entorno"
                   : key === "tecnologia"
-                  ? "Tecnología"
+                  ? "Tecnología PIC"
                   : key === "poblacionSujeto"
                   ? "Población Sujeto"
                   : "Código CUPS"

@@ -216,6 +216,7 @@ const ReportForm = () => {
             municipio: reportData.municipio,
             territorio: reportData.codigo_territorio,
             microterritorio: reportData.codigo_micro_territorio || null,
+            subregion: reportData.subregion,
           },
           eventos: events.map((event) => ({
             descripcion: event.description_event,
@@ -233,62 +234,73 @@ const ReportForm = () => {
               descripcion: producto.descripcion_producto,
 
               actividades: (event.activities[index] || []).map((activity) => ({
-                descripcion: activity.descripcion_Actividad,
+                descripcion: activity.Descripcion_Actividad,
                 cantidad_a_ejecutar: activity.cantidad,
-                unidad_medida: {
-                  nombre: activity.unidadMedida,
-                },
+                unidad_medida: activity.unidadMedida,
+                equipo: activity.Equipo_Operativo,
+                perfiles_profesional: activity.perfilProfesional,
+                perfil_operativo: activity.perfilOperativo,
+                valor_unitario: activity.valorUnitario,
+                valor_total: activity.valorTotal,
                 entornos: activity.entorno.map((entorno) => ({
                   nombre: entorno,
                 })),
 
-                // entornos: [
-                //   {
-                //     nombre: "activity.entorno",
-                //   },
-                // ],
                 tecnologias: activity.tecnologia.map((tecno) => ({
                   nombre: tecno,
                 })),
-                // tecnologias: [
-                //   {
-                //     nombre: "activity.tecnologia",
-                //   },
-                // ],
+
                 poblaciones: activity.poblacionSujeto.map((poblacion) => ({
                   nombre: poblacion,
                 })),
-                // poblaciones: [
-                //   {
-                //     nombre: "activity.poblacionSujeto",
-                //   },
-                // ],
+                cups: activity.codigoCups.map((cup) => ({
+                  codigo: cup,
+                })),
                 soportes: [
                   {
                     tipo: activity.Tipo_soporte,
                     descripcion: activity.Descripcion_Soporte,
                   },
                 ],
-                equipo: {
-                  nombre: activity.equipo,
-                },
-                perfiles_profesional: {
-                  nombre: activity.perfilProfesional,
-                },
-                cups: activity.codigoCups.map((cup) => ({
-                  codigo: cup,
-                })),
-                // cups: [
-                //   {
-                //     codigo: "activity.codigoCups",
-                //   },
-                // ],
-                perfil_operativo: {
-                  descripcion: activity.perfilOperativo,
-                },
+                cronograma: [
+                  {
+                    enero: 10,
+                  },
+                  {
+                    febrero: 0,
+                  },
+                  {
+                    marzo: 0,
+                  },
+                  {
+                    abril: 0,
+                  },
+                  {
+                    mayo: 0,
+                  },
+                  {
+                    junio: 0,
+                  },
+                  {
+                    julio: 0,
+                  },
+                  {
+                    agosto: 0,
+                  },
+                  {
+                    septiembre: 0,
+                  },
+                  {
+                    octubre: 0,
+                  },
+                  {
+                    noviembre: 0,
+                  },
+                  {
+                    diciembre: 0,
+                  },
+                ],
 
-                // valor_unitario: activity.valorUnitario,
-                // valor_total: activity.valorTotal,
                 // Observaciones: activity.observacionEjecucion,
                 // porcentaje_cumplimiento: activity.porcentajeCumplimiento,
                 // observaciones_seguimiento: activity.observacionSeguimiento,
@@ -299,7 +311,7 @@ const ReportForm = () => {
                 descripcion: producto.descripcion_operador,
               },
               indicadores: (producto.indicadores || []).map((indicador) => ({
-                meta_resultado: indicador.meta_producto,
+                meta_producto: indicador.meta_producto,
                 cantidad: indicador.cantidad,
                 indicador_linea_base: indicador.indicador_linea_base,
               })),
