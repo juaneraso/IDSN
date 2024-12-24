@@ -338,18 +338,18 @@ const ActivityItem = ({
     codigoCups: ["001", "002", "003"],
     tipoSoporte: ["Digital", "Físico", "Mixto"],
     meses: [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre",
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Sept",
+      "Oct",
+      "Nov",
+      "Dic",
     ],
   };
 
@@ -406,7 +406,8 @@ const ActivityItem = ({
         <div className={styles.cronogramaGrid}>
           {cronograma.map((item, itemIndex) => (
             <div
-              key={`cronograma-${itemIndex}`}
+              // key={`cronograma-${itemIndex}`}
+              key={item.mes}
               className={styles.cronogramaItem}
             >
               <strong>{item.mes}</strong>
@@ -438,7 +439,8 @@ const ActivityItem = ({
         <label>{label}</label>
         <ul>
           {selectedValues.map((item, itemIndex) => (
-            <li key={itemIndex}>
+            <li key={`${key}-${item}-${itemIndex}`}>
+              {/* <li key={`array-${key}-${itemIndex}`}> */}
               <strong>{`${label} ${itemIndex + 1}`}</strong>
               <select
                 value={item}
@@ -449,7 +451,9 @@ const ActivityItem = ({
                 <option value="">Seleccionar {label}</option>
                 {options[key].map((option, idx) => (
                   <option
-                    key={idx}
+                    // key={idx}
+                    // key={`option-${key}-${idx}`}
+                    key={option}
                     value={option}
                     disabled={
                       selectedValues.includes(option) && option !== item

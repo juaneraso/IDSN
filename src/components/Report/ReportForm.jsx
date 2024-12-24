@@ -262,44 +262,47 @@ const ReportForm = () => {
                     descripcion: activity.Descripcion_Soporte,
                   },
                 ],
-                cronograma: [
-                  {
-                    enero: 10,
-                  },
-                  {
-                    febrero: 0,
-                  },
-                  {
-                    marzo: 0,
-                  },
-                  {
-                    abril: 0,
-                  },
-                  {
-                    mayo: 0,
-                  },
-                  {
-                    junio: 0,
-                  },
-                  {
-                    julio: 0,
-                  },
-                  {
-                    agosto: 0,
-                  },
-                  {
-                    septiembre: 0,
-                  },
-                  {
-                    octubre: 0,
-                  },
-                  {
-                    noviembre: 0,
-                  },
-                  {
-                    diciembre: 0,
-                  },
-                ],
+                cronograma: activity.cronograma.map((item) => ({
+                  [item.mes]: parseInt(item.peso, 10),
+                })),
+                // cronograma: [
+                //   {
+                //     enero: 10,
+                //   },
+                //   {
+                //     febrero: 0,
+                //   },
+                //   {
+                //     marzo: 0,
+                //   },
+                //   {
+                //     abril: 0,
+                //   },
+                //   {
+                //     mayo: 0,
+                //   },
+                //   {
+                //     junio: 0,
+                //   },
+                //   {
+                //     julio: 0,
+                //   },
+                //   {
+                //     agosto: 0,
+                //   },
+                //   {
+                //     septiembre: 0,
+                //   },
+                //   {
+                //     octubre: 0,
+                //   },
+                //   {
+                //     noviembre: 0,
+                //   },
+                //   {
+                //     diciembre: 0,
+                //   },
+                // ],
 
                 // Observaciones: activity.observacionEjecucion,
                 // porcentaje_cumplimiento: activity.porcentajeCumplimiento,
