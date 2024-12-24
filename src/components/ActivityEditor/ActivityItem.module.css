@@ -23,51 +23,38 @@
   padding: 0.5rem;
 }
 
-.field {
-  margin-bottom: 0.5rem;
-}
-
-.field label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 0.25rem;
-}
-
-.field input {
-  width: 100%;
-  padding: 0.25rem;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-
-.removeButton {
-  padding: 10px 20px; /* Ajusta el espacio interno del botón */
-  font-size: 14px; /* Ajusta el tamaño del texto */
-  width: auto; /* Puedes usar 'width' para especificar un ancho fijo o 'auto' para que se ajuste al contenido */
-  height: auto; /* Similar a width, ajusta la altura */
-  border-radius: 4px; /* Opcional: para bordes redondeados */
-  background-color: #ff6347; /* Opcional: color de fondo */
-  color: white; /* Opcional: color del texto */
-  cursor: pointer; /* Cambia el cursor cuando el mouse pasa sobre el botón */
-}
-
-.removeButton:hover {
-  background-color: #c0392b;
-}
-
 .activityDetails ul li {
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
+  gap: 1rem; /* Espaciado entre elementos */
 }
 
-.activityDetails ul li strong {
-  flex: 1; /* El título ocupa el espacio disponible */
+.activityDetails ul li select {
+  flex: 2; /* Mayor espacio para el selector */
+  min-width: 120px;
 }
 
 .activityDetails ul li input {
-  flex: 2; /* Ajusta la proporción del campo de entrada */
-  margin-right: 0.5rem;
+  flex: 1; /* Ajusta el espacio del input */
+  min-width: 80px;
+}
+
+.activityDetails ul li button {
+  margin-left: 0.5rem; /* Separación del botón */
+}
+
+.removeButton {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: #ff6347;
+  color: white;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  background-color: #c0392b;
 }
 
 .buttonMain {
@@ -81,9 +68,9 @@
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
-  grid-column: span 2;
   margin-bottom: 5px;
 }
+
 .buttonMain:disabled {
   background-color: #95a5a6;
   cursor: not-allowed;
@@ -93,7 +80,28 @@
   background-color: #16a085;
 }
 
-/* .removeButton {
-  flex: 0; 
-  margin-left: 0.5rem; 
-} */
+.cronogramaGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+  gap: 1rem; /* Espaciado entre los elementos */
+}
+
+.cronogramaItem {
+  display: flex;
+  width: 85%;
+  flex-direction: column;
+  align-items: center; /* Centra el texto y el input */
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.cronogramaItem strong {
+  margin-bottom: 0.5rem; /* Espaciado entre el mes y el input */
+  font-size: 14px;
+}
+
+.cronogramaItem input {
+  width: 80%; /* Asegura que el input tenga buen tamaño */
+}
