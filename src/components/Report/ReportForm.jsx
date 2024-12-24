@@ -19,6 +19,7 @@ const queryParameters = {
 
 const queryString = qs.stringify(queryParameters, { encodeValuesOnly: true });
 
+// URL PARA PETICION BACK
 const url = `http://localhost:1337/api/subregions?${queryString}`;
 
 const ReportForm = () => {
@@ -30,9 +31,7 @@ const ReportForm = () => {
     codigo_micro_territorio: "",
     numero_micro_territorio: "",
     numero_hogares: "",
-    //proyecto: "",
-    // actividad_pas: "",
-    //descripcion: "",
+
     tipo_territorio: "",
     tipo_micro_territorio: "",
     nombre_micro_territorio: "",
@@ -54,74 +53,32 @@ const ReportForm = () => {
       indicador_de_producto: "",
       indicador_Linea_Base: "",
     },
-    // soporte: {
-    //   tipo_soporte: "",
-    //   descripcion: "",
-    //   archivos: null,
-    //   valor_porcentual: "",
-    // },
-    // cups: {
-    //   codigo: "",
-    //   subcodigo: "",
-    //   descripcion: "",
-    //   valor: "",
-    // },
   });
 
   const [eventData, setEventData] = useState(null); // Recibirá datos finales del componente Event
-  //const [events, setEvents] = useState([]);
 
   const [events, setEvents] = useState([
     {
       description_event: "",
       indicator_name: "",
-      //description_indicator: "",
       meta_indicator: "",
       eje_estrategico: "",
       linea_operativa: "",
-      //nombre_entidad: "",
       proyecto: "",
-      //municipio: "",
-      //descripcion_operador: "",
+
       activities: [],
       productData: {
         producto: [
           {
             descripcion_producto: "",
             indicadores: [],
-            // indicador_de_producto: "",
-            // indicador_Linea_Base: "",
-            // cantidad: "",
             nombre_entidad: "",
             descripcion_operador: "",
           },
-          // Otros productos
         ],
       },
-
-      // productData: {
-      //   producto: {
-      //     descripcion_producto: "",
-      //     indicador_de_producto: "",
-      //     indicador_Linea_Base: "",
-      //   },
-      // },
     },
   ]);
-
-  // const addEvent = () => {
-  //   setEvents([
-  //     ...events,
-  //     {
-  //       Descripcion_Evento: "",
-  //       Eje_estrategico: "",
-  //       Linea_operativa: "",
-  //       indicadores: [],
-  //       operador_pic: {},
-  //       contenido_producto: {},
-  //     },
-  //   ]);
-  // };
 
   const resetForm = () => {
     // Reiniciar los datos del formulario principal
@@ -141,21 +98,8 @@ const ReportForm = () => {
       nombre_micro_territorio: "",
     });
 
-    // Reiniciar el archivo seleccionado
-    setFile(null);
-
     // Reiniciar las actividades
     setActivities([]);
-
-    // Reiniciar los datos del producto
-    // setProductData({
-    //   producto: {
-    //     descripcion_producto: "",
-    //     indicador_de_producto: "",
-    //     indicador_Linea_Base: "",
-    //   },
-    //   // Puedes reiniciar otras secciones según sea necesario
-    // });
 
     // Reiniciar los datos del evento
     setEventData(null);
@@ -164,32 +108,7 @@ const ReportForm = () => {
     setSuccess(null);
   };
 
-  // useEffect(() => {
-  //   const fetchSubregions = async () => {
-  //     try {
-  //       const response = await fetch(`${url}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-  //       if (!response.ok) throw new Error("Error al obtener subregiones.");
-  //       const data = await response.json();
-  //       setSubregions(data.data); // Guardar subregiones con municipios
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error("Error fetching subregions:", error);
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchSubregions();
-  // }, [token]);
-
-  //console.log("municipios", municipalities);
-  //console.log("subregiones", subregions);
   console.log("Datos eventos", events);
-  //console.log("Datos completos", eventData);
-  //console.log("ACVITY DATA", events[0].eje_estrategico[0]);
 
   console.log("reportdata", reportData);
 
@@ -265,48 +184,6 @@ const ReportForm = () => {
                 cronograma: activity.cronograma.map((item) => ({
                   [item.mes]: parseInt(item.peso, 10),
                 })),
-                // cronograma: [
-                //   {
-                //     enero: 10,
-                //   },
-                //   {
-                //     febrero: 0,
-                //   },
-                //   {
-                //     marzo: 0,
-                //   },
-                //   {
-                //     abril: 0,
-                //   },
-                //   {
-                //     mayo: 0,
-                //   },
-                //   {
-                //     junio: 0,
-                //   },
-                //   {
-                //     julio: 0,
-                //   },
-                //   {
-                //     agosto: 0,
-                //   },
-                //   {
-                //     septiembre: 0,
-                //   },
-                //   {
-                //     octubre: 0,
-                //   },
-                //   {
-                //     noviembre: 0,
-                //   },
-                //   {
-                //     diciembre: 0,
-                //   },
-                // ],
-
-                // Observaciones: activity.observacionEjecucion,
-                // porcentaje_cumplimiento: activity.porcentajeCumplimiento,
-                // observaciones_seguimiento: activity.observacionSeguimiento,
               })),
 
               operador_pic: {
@@ -318,15 +195,6 @@ const ReportForm = () => {
                 cantidad: indicador.cantidad,
                 indicador_linea_base: indicador.indicador_linea_base,
               })),
-
-              // indicadores: [
-              //   {
-              //     nombre: "quitar",
-              //     meta_resultado: producto.indicador_de_producto,
-              //     cantidad: producto.cantidad,
-              //     indicador_linea_base: producto.indicador_Linea_Base,
-              //   },
-              // ],
             })),
             proyecto_idsn: {
               proyecto: event.proyecto,
@@ -351,7 +219,7 @@ const ReportForm = () => {
 
       setSuccess(true);
       // Reiniciar el formulario
-      // resetForm();
+      resetForm();
     } catch (error) {
       console.error(error);
       setSuccess(false);
@@ -370,19 +238,11 @@ const ReportForm = () => {
           <ReportFields
             reportData={reportData}
             handleChange={handleChange}
-            // subregions={subregions}
-            // municipalities={municipalities}
             file={file}
             handleFileChange={handleFileChange}
           />
-          {/* 
-          <Event setEventData={setEventData} subregions={subregions} /> */}
 
-          <Event
-            events={events}
-            setEvents={setEvents}
-            //subregions={subregions}
-          />
+          <Event events={events} setEvents={setEvents} />
 
           {success === true && (
             <p className={styles.success}>¡Reporte enviado con éxito!</p>
