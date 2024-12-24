@@ -39,7 +39,7 @@ const ActivityList = ({ activities, setActivities, subregions }) => {
       codigoCups: [],
       valorUnitario: "",
       valorTotal: "",
-      cronograma: "",
+      cronograma: [],
       //observacionEjecucion: "",
       //porcentajeCumplimiento: "",
       //observacionSeguimiento: "",
