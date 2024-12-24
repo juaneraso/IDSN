@@ -381,31 +381,6 @@ const ReportForm = () => {
             //subregions={subregions}
           />
 
-          {/* {events.map((_, index) => (
-            <Event
-              key={index}
-              index={index}
-              events={events}
-              setEvents={setEvents}
-              subregions={subregions}
-            />
-          ))} */}
-
-          {/* <button
-            type="button"
-            onClick={addEvent}
-            className={styles.buttonSecondary}
-          >
-            Agregar Evento
-          </button> */}
-
-          {/* <Product productData={productData} setProductData={setProductData} />
-          <ActivityList
-            activities={activities}
-            setActivities={setActivities}
-            subregions={subregions}
-          /> */}
-
           {success === true && (
             <p className={styles.success}>¡Reporte enviado con éxito!</p>
           )}
