@@ -2,7 +2,17 @@ import React, { useState } from "react";
 import Product from "../Product/Product";
 import styles from "./Event.module.css";
 
-const Event = ({ events, setEvents }) => {
+const Event = ({
+  events,
+  setEvents,
+  ejes,
+  lineas,
+  entornos,
+  tecnologias,
+  poblaciones,
+  soportes,
+  cups,
+}) => {
   const [expandedIndices, setExpandedIndices] = useState([]);
 
   const toggleAccordion = (index) => {
@@ -85,24 +95,6 @@ const Event = ({ events, setEvents }) => {
     setEvents(updatedEvents);
   };
 
-  //const municipios = subregions.flatMap((subregions) => subregions.municipios);
-
-  const strategicAxesOptions = [
-    "Innovación",
-    "Sostenibilidad",
-    "Educación",
-    "Salud",
-    "Desarrollo Social",
-  ];
-
-  const lineasOperativas = [
-    "Gestion operativa",
-    "Gestion de riesgo",
-    "Auditoria Interna",
-    "Supervision",
-    "Gestion desarrollo Social",
-  ];
-
   const handleAddEvent = () => {
     setEvents([
       ...events,
@@ -126,6 +118,7 @@ const Event = ({ events, setEvents }) => {
     setEvents(updatedEvents);
   };
 
+  console.log("lineas", lineas);
   return (
     <div>
       <h2>Eventos de Salud Pública Priorizados</h2>
@@ -218,7 +211,8 @@ const Event = ({ events, setEvents }) => {
                       className={styles.axisInput}
                     >
                       <option value="">Seleccionar un eje</option>
-                      {strategicAxesOptions.map((option, optionIndex) => (
+
+                      {ejes.map((option, optionIndex) => (
                         <option
                           key={optionIndex}
                           value={option}
@@ -267,7 +261,7 @@ const Event = ({ events, setEvents }) => {
                       className={styles.axisInput}
                     >
                       <option value="">Seleccionar una linea operativa</option>
-                      {lineasOperativas.map((option, optionIndex) => (
+                      {lineas.map((option, optionIndex) => (
                         <option
                           key={optionIndex}
                           value={option}
@@ -311,6 +305,11 @@ const Event = ({ events, setEvents }) => {
               </h2>
               <Product
                 productData={event.productData}
+                entornos={entornos}
+                tecnologias={tecnologias}
+                poblaciones={poblaciones}
+                soportes={soportes}
+                cups={cups}
                 setProductData={(updatedProductData) => {
                   const updatedEvents = [...events];
                   updatedEvents[index].productData = updatedProductData;

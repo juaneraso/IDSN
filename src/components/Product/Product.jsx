@@ -8,6 +8,11 @@ const Product = ({
   activities,
   setActivities,
   subregions,
+  entornos,
+  tecnologias,
+  poblaciones,
+  soportes,
+  cups,
 }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
 
@@ -75,6 +80,8 @@ const Product = ({
   const toggleExpand = (index) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
+
+  // console.log("ejes producto", ejes);
 
   return (
     <div className={styles.productContainer}>
@@ -218,6 +225,11 @@ const Product = ({
               </div>
               <div className={styles.section}>
                 <ActivityList
+                  entornos={entornos}
+                  tecnologias={tecnologias}
+                  poblaciones={poblaciones}
+                  soportes={soportes}
+                  cups={cups}
                   activities={activities[productIndex] || []}
                   setActivities={(updatedActivities) => {
                     const newActivities = [...activities];

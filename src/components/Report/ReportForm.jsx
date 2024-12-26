@@ -45,7 +45,13 @@ const ReportForm = () => {
   const [success, setSuccess] = useState(null);
   const [activities, setActivities] = useState([]);
 
-  const [subregions, setSubregions] = useState([]);
+  const [ejes, setEjes] = useState([]);
+  const [lineas, setLineas] = useState([]);
+  const [entornos, setEntornos] = useState([]);
+  const [tecnologias, setTecnologias] = useState([]);
+  const [poblaciones, setPoblacion] = useState([]);
+  const [soportes, setSoportes] = useState([]);
+  const [cups, setCups] = useState([]);
 
   const [labels, setLabels] = useState([]);
 
@@ -121,7 +127,14 @@ const ReportForm = () => {
         if (!response.ok) throw new Error("Error al obtener subregiones.");
         const data = await response.json();
         //setSubregions(data.data);
-        setLabels(data.cups);
+        setLabels(data);
+        setEjes(data.ejes);
+        setLineas(data.lineas_operativas);
+        setEntornos(data.entornos);
+        setTecnologias(data.tecnologias);
+        setPoblacion(data.poblacion_sujeto);
+        setSoportes(data.soportes);
+        setCups(data.cups);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching subregions:", error);
@@ -267,7 +280,17 @@ const ReportForm = () => {
             handleFileChange={handleFileChange}
           />
 
-          <Event events={events} setEvents={setEvents} />
+          <Event
+            events={events}
+            setEvents={setEvents}
+            ejes={ejes}
+            lineas={lineas}
+            entornos={entornos}
+            tecnologias={tecnologias}
+            poblaciones={poblaciones}
+            soportes={soportes}
+            cups={cups}
+          />
 
           {success === true && (
             <p className={styles.success}>¡Reporte enviado con éxito!</p>

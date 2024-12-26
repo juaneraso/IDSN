@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import ActivityItem from "../ActivityEditor/ActivityItem";
 import styles from "./ActivityList.module.css";
 
-const ActivityList = ({ activities, setActivities, subregions }) => {
+const ActivityList = ({
+  activities,
+  setActivities,
+  subregions,
+  entornos,
+  tecnologias,
+  poblaciones,
+  soportes,
+  cups,
+}) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
 
   const handleActivityChange = (event, index) => {
@@ -30,13 +39,19 @@ const ActivityList = ({ activities, setActivities, subregions }) => {
       tecnologia: [],
       poblacionSujeto: [],
       Tipo_soporte: "",
-      Descripcion_Soporte: "",
+      //Descripcion_Soporte: "",
       Equipo_Operativo: "",
       perfilProfesional: "",
       perfilOperativo: "",
       codigoCups: [],
       valorUnitario: "",
       valorTotal: "",
+      Arraysoportes: [
+        {
+          Tipo_soporte: "",
+          Descripcion_Soporte: "",
+        },
+      ],
       cronograma: [
         { mes: "Ene", peso: "0" },
         { mes: "Feb", peso: "0" },
@@ -78,6 +93,11 @@ const ActivityList = ({ activities, setActivities, subregions }) => {
             handleActivityChange={handleActivityChange}
             handleRemoveActivity={handleRemoveActivity}
             subregions={subregions}
+            entornos={entornos}
+            tecnologias={tecnologias}
+            poblaciones={poblaciones}
+            soportes={soportes}
+            cups={cups}
           />
         ))}
       </ul>
