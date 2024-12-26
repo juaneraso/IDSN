@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   MDBBtn,
   MDBContainer,
@@ -7,18 +7,18 @@ import {
   MDBCardImage,
   MDBRow,
   MDBCol,
-  MDBInput
-} from 'mdb-react-ui-kit';
-import imagen from '../../assets/Logo2.jpg';
-import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert';
+  MDBInput,
+} from "mdb-react-ui-kit";
+import imagen from "../../assets/Logo2.jpg";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert";
 
 function Register() {
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState({
@@ -58,11 +58,11 @@ function Register() {
     }
   };
 
-  const formIsDisabled = 
-    !form.username || 
-    !form.email || 
-    !isEmailValid(form.email) || 
-    !form.password || 
+  const formIsDisabled =
+    !form.username ||
+    !form.email ||
+    !isEmailValid(form.email) ||
+    !form.password ||
     form.password !== form.confirmPassword;
 
   const submitHandler = async (event) => {
@@ -87,17 +87,20 @@ function Register() {
     }
 
     try {
-      const response = await fetch("http://localhost:1337/api/auth/local/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          username: form.username, 
-          email: form.email, 
-          password: form.password 
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:1337/api/auth/local/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: form.username,
+            email: form.email,
+            password: form.password,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -112,8 +115,7 @@ function Register() {
         icon: "success",
       });
 
-      navigate('/login'); // Redirigir a la página de login después del registro exitoso
-
+      navigate("/login"); // Redirigir a la página de login después del registro exitoso
     } catch (error) {
       console.error("Fetch POST Error:", error.message);
       Swal({
@@ -124,75 +126,82 @@ function Register() {
     }
   };
 
-  console.log("Form",form);
+  console.log("Form", form);
 
   return (
-    <MDBContainer fluid className="d-flex justify-content-center align-items-center vh-100">
-      <MDBRow className='d-flex justify-content-center align-items-center w-100'>
-        <MDBCol lg='6' md='8' sm='10' className="d-flex justify-content-center">
-          <MDBCard className='my-5 rounded-3' style={{ maxWidth: '600px' }}>
+    <MDBContainer
+      fluid
+      className="d-flex justify-content-center align-items-center vh-100"
+    >
+      <MDBRow className="d-flex justify-content-center align-items-center w-100">
+        <MDBCol lg="6" md="8" sm="10" className="d-flex justify-content-center">
+          <MDBCard className="my-5 rounded-3" style={{ maxWidth: "600px" }}>
             <MDBCardImage
               src={imagen}
-              className='w-100 rounded-top'
+              className="w-100 rounded-top"
               alt="Sample photo"
-              style={{ width: '100%', height: '400px', objectFit: 'cover' }}
+              style={{ width: "100%", height: "400px", objectFit: "cover" }}
             />
 
-            <MDBCardBody className='px-5'>
-              <h3 className="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2 text-center">Registro Usuario</h3>
-              
+            <MDBCardBody className="px-5">
+              <h3 className="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2 text-center">
+                Registro Usuario
+              </h3>
+
               {/* Campo de Nombre */}
-              <MDBInput 
-                wrapperClass='mb-4' 
-                label='UserName' 
-                id='form1' 
-                type='text' 
-                value={form.username} 
-                onChange={changeHandler} 
-                name="username" 
+              <MDBInput
+                wrapperClass="mb-4"
+                label="UserName"
+                id="form1"
+                type="text"
+                value={form.username}
+                onChange={changeHandler}
+                name="username"
               />
 
               {/* Campo de Email */}
-              <MDBInput 
-                wrapperClass='mb-3' 
-                label='Email' 
-                id='form2' 
-                type='email' 
-                value={form.email} 
-                onChange={changeHandler} 
-                name="email" 
+              <MDBInput
+                wrapperClass="mb-3"
+                label="Email"
+                id="form2"
+                type="email"
+                value={form.email}
+                onChange={changeHandler}
+                name="email"
               />
               {errors.email && <p className="text-danger">{errors.email}</p>}
 
               {/* Campo de Contraseña */}
-              <MDBInput 
-                wrapperClass='mb-3' 
-                label='Password' 
-                id='form3' 
-                type='password' 
-                value={form.password} 
-                onChange={changeHandler} 
-                name="password" 
+              <MDBInput
+                wrapperClass="mb-3"
+                label="Password"
+                id="form3"
+                type="password"
+                value={form.password}
+                onChange={changeHandler}
+                name="password"
               />
 
               {/* Campo de Confirmar Contraseña */}
-              <MDBInput 
-                wrapperClass='mb-3' 
-                label='Confirm Password' 
-                id='form4' 
-                type='password' 
-                value={form.confirmPassword} 
-                onChange={changeHandler} 
-                name="confirmPassword" 
+              <MDBInput
+                wrapperClass="mb-3"
+                label="Confirm Password"
+                id="form4"
+                type="password"
+                value={form.confirmPassword}
+                onChange={changeHandler}
+                name="confirmPassword"
               />
-              {errors.password && <p className="text-danger">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-danger">{errors.password}</p>
+              )}
 
               {/* Botón de Enviar */}
-              <MDBBtn 
-                color='success' 
-                className='mb-4 w-100' 
-                size='lg' 
-                disabled={formIsDisabled} 
+              <MDBBtn
+                color="success"
+                className="mb-4 w-100"
+                size="lg"
+                disabled={formIsDisabled}
                 onClick={submitHandler}
               >
                 Submit
