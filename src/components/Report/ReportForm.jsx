@@ -20,7 +20,7 @@ const queryParameters = {
 const queryString = qs.stringify(queryParameters, { encodeValuesOnly: true });
 
 // URL PARA PETICION BACK
-const url = `http://localhost:1337/api/subregions?${queryString}`;
+const url = `http://localhost:1337/api/labels`;
 
 const ReportForm = () => {
   const [reportData, setReportData] = useState({
@@ -46,6 +46,8 @@ const ReportForm = () => {
   const [activities, setActivities] = useState([]);
 
   const [subregions, setSubregions] = useState([]);
+
+  const [labels, setLabels] = useState([]);
 
   const [productData, setProductData] = useState({
     producto: {
@@ -108,7 +110,30 @@ const ReportForm = () => {
     setSuccess(null);
   };
 
+  useEffect(() => {
+    const fetchSubregions = async () => {
+      try {
+        const response = await fetch(`${url}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error("Error al obtener subregiones.");
+        const data = await response.json();
+        //setSubregions(data.data);
+        setLabels(data.cups);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching subregions:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchSubregions();
+  }, [token]);
+
   console.log("Datos eventos", events);
+  console.log("datos", labels);
 
   console.log("reportdata", reportData);
 
