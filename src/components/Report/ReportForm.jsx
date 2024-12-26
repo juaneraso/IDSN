@@ -109,6 +109,7 @@ const ReportForm = () => {
   };
 
   console.log("Datos eventos", events);
+  console.log("datos", activities);
 
   console.log("reportdata", reportData);
 
