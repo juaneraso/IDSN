@@ -88,20 +88,16 @@ const Event = ({ events, setEvents }) => {
   //const municipios = subregions.flatMap((subregions) => subregions.municipios);
 
   const strategicAxesOptions = [
-    "Innovación",
-    "Sostenibilidad",
-    "Educación",
-    "Salud",
-    "Desarrollo Social",
+    "Gobernabilidad y gobernanza de la salud pública ",
+    "Pueblos y comunidades étnicas y campesinas, mujeres, sectores LGBTIQ+ y otras poblaciones por condición y/o situación.",
+    "Determinantes Sociales de la Salud",
+    "Atención Primaria en Salud",
+    "Cambio climático, emergencias, desastres y pandemias",
+    "Conocimiento en salud pública y Soberanía Sanitaria",
+    "Personal de salud",
   ];
 
-  const lineasOperativas = [
-    "Gestion operativa",
-    "Gestion de riesgo",
-    "Auditoria Interna",
-    "Supervision",
-    "Gestion desarrollo Social",
-  ];
+  const lineasOperativas = ["Cuidado de la salud en el territorio"];
 
   const handleAddEvent = () => {
     setEvents([
