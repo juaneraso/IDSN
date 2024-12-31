@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ReportForm.module.css";
 import Header from "../Header/Header";
-import ActivityList from "../Activities/ActivityList";
 import ReportFields from "../Fields/ReportFields";
 import Product from "../Product/Product";
 import Event from "../Event/Event";
@@ -67,6 +66,7 @@ const ReportForm = () => {
 
   const [events, setEvents] = useState([
     {
+      subregion: "",
       description_event: "",
       indicator_name: "",
       meta_indicator: "",
@@ -213,12 +213,10 @@ const ReportForm = () => {
                 cups: activity.codigoCups.map((cup) => ({
                   codigo: cup,
                 })),
-                soportes: [
-                  {
-                    tipo: activity.Tipo_soporte,
-                    descripcion: activity.Descripcion_Soporte,
-                  },
-                ],
+                soportes: activity.Arraysoportes.map((soporte) => ({
+                  tipo: soporte.Tipo_soporte,
+                  descripcion: soporte.Descripcion_Soporte,
+                })),
                 cronograma: activity.cronograma.map((item) => ({
                   [item.mes]: parseInt(item.peso, 10),
                 })),
@@ -269,28 +267,31 @@ const ReportForm = () => {
   return (
     <>
       <Header />
+      {/* <h2>Anexo Técnico</h2> */}
       <div className={styles.formContainer}>
-        <h2>Anexo Técnico</h2>
-
         <form onSubmit={handleSubmit} className={styles.formGrid}>
-          <ReportFields
-            reportData={reportData}
-            handleChange={handleChange}
-            file={file}
-            handleFileChange={handleFileChange}
-          />
+          <div className={styles.field}>
+            <ReportFields
+              reportData={reportData}
+              handleChange={handleChange}
+              file={file}
+              handleFileChange={handleFileChange}
+            />
+          </div>
 
-          <Event
-            events={events}
-            setEvents={setEvents}
-            ejes={ejes}
-            lineas={lineas}
-            entornos={entornos}
-            tecnologias={tecnologias}
-            poblaciones={poblaciones}
-            soportes={soportes}
-            cups={cups}
-          />
+          <div className={styles.field}>
+            <Event
+              events={events}
+              setEvents={setEvents}
+              ejes={ejes}
+              lineas={lineas}
+              entornos={entornos}
+              tecnologias={tecnologias}
+              poblaciones={poblaciones}
+              soportes={soportes}
+              cups={cups}
+            />
+          </div>
 
           {success === true && (
             <p className={styles.success}>¡Reporte enviado con éxito!</p>
@@ -298,14 +299,10 @@ const ReportForm = () => {
           {success === false && (
             <p className={styles.error}>Error al enviar el reporte.</p>
           )}
-          <button
-            className={styles.buttonMain}
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? "Enviando..." : "Enviar Reporte"}
-          </button>
         </form>
+        <button className={styles.buttonMain} type="submit" disabled={loading}>
+          {loading ? "Enviando..." : "Enviar Reporte"}
+        </button>
       </div>
     </>
   );

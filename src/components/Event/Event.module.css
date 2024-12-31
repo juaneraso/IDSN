@@ -1,4 +1,4 @@
-.eventContainer {
+/* .eventContainer {
   margin: 20px;
   padding: 10px;
   border: 1px solid #ddd;
@@ -88,5 +88,60 @@
 }
 
 .removeButton:hover {
+  background-color: #c0392b;
+} */
+
+/* .eventContainer {
+  margin: 0px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+} */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  /* margin: 20px 0; */
+  font-size: 1rem;
+  text-align: left;
+  max-width: 100%;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  vertical-align: top;
+}
+
+.table th {
+  background-color: #079486;
+  color: rgb(243, 243, 243);
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* .input {
+  color: #7c9407;
+} */
+
+.deleteButton {
+  padding: 5px 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
   background-color: #c0392b;
 }

@@ -9,7 +9,7 @@ const Sidebar = () => {
         <ul>
           <li>
             <NavLink
-              to="/"
+              to="/dashbo"
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
               Inicio
@@ -17,7 +17,7 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink
-              to="/reportes"
+              to="/"
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
               Reportes

@@ -1,316 +1,42 @@
-/* .formContainer {
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  max-width: 1000px;
-  margin: 20px auto;
-  font-family: "Roboto", sans-serif;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 1.8rem;
-  color: #2c3e50;
-}
-
-.formGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-}
-
-label {
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #34495e;
-}
-
-input,
-textarea,
-select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #1abc9c;
-  outline: none;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  background-color: #1abc9c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  grid-column: span 2;
-}
-
-button:disabled {
-  background-color: #95a5a6;
-  cursor: not-allowed;
-}
-
-button:hover:not(:disabled) {
-  background-color: #16a085;
-}
-
-.success,
-.error {
-  text-align: center;
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.success {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.error {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-.toggleButton {
-  background-color: #3498db;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  grid-column: span 2;
-}
-
-.toggleButton:hover {
-  background-color: #2980b9;
-}
-
-@media (max-width: 600px) {
-  .formContainer {
-    padding: 15px;
-  }
-
-  button {
-    font-size: 1rem;
-  }
-}
-
-.activity {
-  cursor: pointer;
-  padding: 10px;
-  background-color: #f4f4f4;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
-.activity:hover {
-  background-color: #e0e0e0;
-}
-
-.activityList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.activityItem {
-  margin-bottom: 15px;
-  padding: 10px;
-  background-color: #f4f4f4;
-  border-radius: 5px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.activityHeader {
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.activityHeader:hover {
-  background-color: #e0e0e0;
-}
-
-.editingFields {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #ffffff;
-  border-radius: 5px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-} */
-
-/* .formContainer {
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  max-width: 1000px;
-  margin: 20px auto;
-  font-family: "Roboto", sans-serif;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 1.8rem;
-  color: #2c3e50;
-}
-
-.formGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.formGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-}
-
-.buttonMain {
-  width: 100%;
-  padding: 12px;
-  background-color: #1abc9c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  grid-column: span 2;
-}
-
-.buttonMain:disabled {
-  background-color: #95a5a6;
-  cursor: not-allowed;
-}
-
-.buttonMain:hover:not(:disabled) {
-  background-color: #16a085;
-}
-
-label {
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #34495e;
-}
-
-input,
-textarea,
-select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #1abc9c;
-  outline: none;
-}
-
-.success,
-.error {
-  text-align: center;
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.success {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.error {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-.toggleButton {
-  background-color: #3498db;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 20px;
-}
-
-.toggleButton:hover {
-  background-color: #2980b9;
-} */
-
 .formContainer {
   background-color: #ffffff;
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  max-width: 600px; /* Ajusta el ancho máximo del formulario */
-  margin: 20px auto; /* Centra el formulario horizontalmente */
+  margin: 20px auto;
   font-family: "Roboto", sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+  overflow-x: auto;
 }
 
 h2 {
   text-align: center;
+  margin-top: 10px;
   margin-bottom: 20px;
   font-size: 1.8rem;
-  color: #2c3e50;
+  color: #262525;
 }
 
 .formGrid {
-  display: flex;
-  flex-direction: column; /* Coloca los elementos en un flujo vertical */
-  gap: 20px; /* Espaciado entre los elementos */
-  align-items: stretch; /* Asegura que los elementos llenen el ancho del contenedor */
+  display: flex; /* Flexbox para alinear en fila */
+  flex-wrap: wrap;
+  /* gap: 100px; */
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .field {
-  display: flex;
-  flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
 .buttonMain {
-  align-self: center; /* Centra el botón horizontalmente */
-  padding: 10px 20px; /* Ajusta el tamaño del botón */
+  align-self: center;
+  padding: 10px 20px;
   background-color: #1abc9c;
   color: white;
   border: none;
@@ -319,7 +45,7 @@ h2 {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
-  width: auto; /* Evita que ocupe todo el ancho */
+  width: auto;
 }
 
 .buttonMain:disabled {
@@ -340,13 +66,13 @@ label {
 input,
 textarea,
 select {
-  width: 100%; /* Ocupa todo el ancho disponible */
+  width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
   transition: border-color 0.3s;
-  box-sizing: border-box; /* Asegura que padding no rompa el diseño */
+  box-sizing: border-box;
 }
 
 input:focus,
