@@ -130,3 +130,7 @@
 .arraysoporteItemHeader .removeButton {
   margin-right: auto;
 }
+
+td {
+  width: 5000px;
+}

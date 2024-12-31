@@ -70,8 +70,8 @@ const ReportForm = () => {
       description_event: "",
       indicator_name: "",
       meta_indicator: "",
-      eje_estrategico: "",
-      linea_operativa: "",
+      eje_estrategico: [],
+      linea_operativa: [],
       proyecto: "",
 
       activities: [],

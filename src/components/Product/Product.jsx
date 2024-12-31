@@ -335,7 +335,7 @@ const Product = ({
 
   return (
     <div className={styles.productContainer}>
-      <h2>Productos Asociados</h2>
+      {/* <h2>Productos Asociados</h2> */}
       <table className={styles.table}>
         <thead>
           <tr>

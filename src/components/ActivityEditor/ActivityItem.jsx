@@ -462,17 +462,6 @@ const ActivityItem = ({
                 </td> */}
 
                 <td>
-                  {/* <Select
-                    isMulti
-                    name="entorno"
-                    options={options.entorno}
-                    value={options.entorno.filter((option) =>
-                      activity.entorno.includes(option.value)
-                    )}
-                    onChange={handleEntornosChange}
-                    placeholder="Seleccionar Entornos"
-                  /> */}
-
                   <Select
                     isMulti
                     name="entorno"

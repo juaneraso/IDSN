@@ -145,3 +145,26 @@
 .deleteButton:hover {
   background-color: #c0392b;
 }
+
+.buttonAdd {
+  align-self: center;
+  padding: 10px 20px;
+  background-color: #1abc9c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: auto;
+}
+
+.buttonAdd:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.buttonAdd:hover:not(:disabled) {
+  background-color: #16a085;
+}

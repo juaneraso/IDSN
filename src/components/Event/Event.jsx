@@ -342,6 +342,7 @@
 import React, { useState } from "react";
 import Product from "../Product/Product";
 import styles from "./Event.module.css";
+import Select from "react-select"; // Importamos React Select
 
 const Event = ({
   events,
@@ -354,16 +355,32 @@ const Event = ({
   soportes,
   cups,
 }) => {
-  const handleStrategicAxisChange = (eventIndex, axisIndex, value) => {
+  // const handleStrategicAxisChange = (eventIndex, axisIndex, value) => {
+  //   const updatedEvents = [...events];
+  //   const currentAxes = updatedEvents[eventIndex].eje_estrategico;
+
+  //   if (currentAxes.includes(value)) {
+  //     alert("Este eje estratégico ya ha sido seleccionado.");
+  //     return; // Evita duplicados
+  //   }
+
+  //   updatedEvents[eventIndex].eje_estrategico[axisIndex] = value;
+  //   setEvents(updatedEvents);
+  // };
+
+  const handleStrategicAxisChange = (eventIndex, selectedOptions) => {
     const updatedEvents = [...events];
-    const currentAxes = updatedEvents[eventIndex].eje_estrategico;
+    updatedEvents[eventIndex].eje_estrategico = selectedOptions.map(
+      (option) => option.value
+    ); // Almacenar solo los valores seleccionados
+    setEvents(updatedEvents);
+  };
 
-    if (currentAxes.includes(value)) {
-      alert("Este eje estratégico ya ha sido seleccionado.");
-      return; // Evita duplicados
-    }
-
-    updatedEvents[eventIndex].eje_estrategico[axisIndex] = value;
+  const handleLineaChange = (eventIndex, selectedOptions) => {
+    const updatedEvents = [...events];
+    updatedEvents[eventIndex].linea_operativa = selectedOptions.map(
+      (option) => option.value
+    ); // Almacenar solo los valores seleccionados
     setEvents(updatedEvents);
   };
 
@@ -450,389 +467,191 @@ const Event = ({
     setEvents(updatedEvents);
   };
 
-  // return (
-  //   <div className={styles.eventContainer}>
-  //     {/* <h2>Eventos de Salud Pública Priorizados</h2> */}
-  //     <table className={styles.table}>
-  //       <thead>
-  //         <tr>
-  //           <th>Proyecto IDSN Responsable</th>
-  //           <th>Descripción Evento</th>
-  //           <th>Nombre del Indicador</th>
-  //           <th>Meta Indicador</th>
-  //           <th>Ejes Estratégicos</th>
-  //           <th>Lineas Operativas</th>
-  //           <th>Producto</th>
-  //           <th>Acciones</th>
-  //         </tr>
-  //       </thead>
-  //       <tbody>
-  //         {events.map((event, index) => (
-  //           <tr key={index}>
-  //             <td>
-  //               <input
-  //                 type="text"
-  //                 value={event.proyecto}
-  //                 onChange={(e) =>
-  //                   handleEventChange(index, "proyecto", e.target.value)
-  //                 }
-  //               />
-  //             </td>
-  //             <td>
-  //               <input
-  //                 type="text"
-  //                 value={event.description_event}
-  //                 onChange={(e) =>
-  //                   handleEventChange(
-  //                     index,
-  //                     "description_event",
-  //                     e.target.value
-  //                   )
-  //                 }
-  //               />
-  //             </td>
-  //             <td>
-  //               <input
-  //                 type="text"
-  //                 value={event.indicator_name}
-  //                 onChange={(e) =>
-  //                   handleEventChange(index, "indicator_name", e.target.value)
-  //                 }
-  //               />
-  //             </td>
-  //             <td>
-  //               <input
-  //                 type="text"
-  //                 value={event.meta_indicator}
-  //                 onChange={(e) =>
-  //                   handleEventChange(index, "meta_indicator", e.target.value)
-  //                 }
-  //               />
-  //             </td>
-
-  //             <td>
-  //               {(event.eje_estrategico || []).map((axis, axisIndex) => (
-  //                 <div key={axisIndex} className={styles.axisContainer}>
-  //                   <select
-  //                     value={axis}
-  //                     onChange={(e) =>
-  //                       handleStrategicAxisChange(
-  //                         index,
-  //                         axisIndex,
-  //                         e.target.value
-  //                       )
-  //                     }
-  //                   >
-  //                     <option value="">Seleccionar un eje</option>
-  //                     {ejes.map((option, optionIndex) => (
-  //                       <option
-  //                         key={optionIndex}
-  //                         value={option}
-  //                         disabled={
-  //                           event.eje_estrategico.includes(option) &&
-  //                           option !== axis
-  //                         }
-  //                       >
-  //                         {option}
-  //                       </option>
-  //                     ))}
-  //                   </select>
-  //                   <button
-  //                     type="button"
-  //                     onClick={() =>
-  //                       handleRemoveStrategicAxis(index, axisIndex)
-  //                     }
-  //                     className={styles.removeButton}
-  //                   >
-  //                     Eliminar
-  //                   </button>
-  //                 </div>
-  //               ))}
-  //               <button
-  //                 type="button"
-  //                 onClick={() => handleAddStrategicAxis(index)}
-  //                 className={styles.buttonMain}
-  //               >
-  //                 Añadir Eje
-  //               </button>
-  //             </td>
-  //             <td>
-  //               {(event.linea_operativa || []).map((line, lineIndex) => (
-  //                 <div key={lineIndex} className={styles.axisContainer}>
-  //                   <select
-  //                     value={line}
-  //                     onChange={(e) =>
-  //                       handleChangeLineaOperativa(
-  //                         index,
-  //                         lineIndex,
-  //                         e.target.value
-  //                       )
-  //                     }
-  //                   >
-  //                     <option value="">Seleccionar una línea</option>
-  //                     {lineas.map((option, optionIndex) => (
-  //                       <option
-  //                         key={optionIndex}
-  //                         value={option}
-  //                         disabled={
-  //                           event.linea_operativa.includes(option) &&
-  //                           option !== line
-  //                         }
-  //                       >
-  //                         {option}
-  //                       </option>
-  //                     ))}
-  //                   </select>
-  //                   <button
-  //                     type="button"
-  //                     onClick={() =>
-  //                       handleRemoveLineaOperativa(index, lineIndex)
-  //                     }
-  //                     className={styles.removeButton}
-  //                   >
-  //                     Eliminar
-  //                   </button>
-  //                 </div>
-  //               ))}
-  //               <button
-  //                 type="button"
-  //                 onClick={() => handleAddLineaOperativa(index)}
-  //                 className={styles.buttonMain}
-  //               >
-  //                 Añadir Línea
-  //               </button>
-  //             </td>
-  //             <td>
-  //               <Product
-  //                 productData={event.productData}
-  //                 entornos={entornos}
-  //                 tecnologias={tecnologias}
-  //                 poblaciones={poblaciones}
-  //                 soportes={soportes}
-  //                 cups={cups}
-  //                 setProductData={(updatedProductData) => {
-  //                   const updatedEvents = [...events];
-  //                   updatedEvents[index].productData = updatedProductData;
-  //                   setEvents(updatedEvents);
-  //                 }}
-  //                 activities={event.activities}
-  //                 setActivities={(activities) => {
-  //                   const updatedEvents = [...events];
-  //                   updatedEvents[index].activities = activities;
-  //                   setEvents(updatedEvents);
-  //                 }}
-  //               />
-  //             </td>
-
-  //             <td>
-  //               <button
-  //                 type="button"
-  //                 className={styles.deleteButton}
-  //                 onClick={() => handleRemoveEvent(index)}
-  //               >
-  //                 Eliminar
-  //               </button>
-  //             </td>
-  //           </tr>
-  //         ))}
-  //       </tbody>
-  //     </table>
-  //     <button
-  //       className={styles.buttonMain}
-  //       type="button"
-  //       onClick={handleAddEvent}
-  //     >
-  //       Añadir Otro Evento
-  //     </button>
-  //   </div>
-  // );
-
   return (
     <div className={styles.eventContainer}>
       {events.map((event, index) => (
-        <table key={index} className={styles.table}>
-          <thead>
-            <tr>
-              <th>Proyecto IDSN Responsable</th>
-              <th>Descripción Evento</th>
-              <th>Nombre del Indicador</th>
-              <th>Meta Indicador</th>
-              <th>Ejes Estratégicos</th>
-              <th>Lineas Operativas</th>
-              <th>Producto</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <input
-                  type="text"
-                  value={event.proyecto}
-                  onChange={(e) =>
-                    handleEventChange(index, "proyecto", e.target.value)
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={event.description_event}
-                  onChange={(e) =>
-                    handleEventChange(
-                      index,
-                      "description_event",
-                      e.target.value
-                    )
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={event.indicator_name}
-                  onChange={(e) =>
-                    handleEventChange(index, "indicator_name", e.target.value)
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={event.meta_indicator}
-                  onChange={(e) =>
-                    handleEventChange(index, "meta_indicator", e.target.value)
-                  }
-                />
-              </td>
-              <td>
-                {(event.eje_estrategico || []).map((axis, axisIndex) => (
-                  <div key={axisIndex} className={styles.axisContainer}>
-                    <select
-                      value={axis}
-                      onChange={(e) =>
-                        handleStrategicAxisChange(
-                          index,
-                          axisIndex,
-                          e.target.value
-                        )
-                      }
-                    >
-                      <option value="">Seleccionar un eje</option>
-                      {ejes.map((option, optionIndex) => (
-                        <option
-                          key={optionIndex}
-                          value={option}
-                          disabled={
-                            event.eje_estrategico.includes(option) &&
-                            option !== axis
-                          }
-                        >
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleRemoveStrategicAxis(index, axisIndex)
-                      }
-                      className={styles.removeButton}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => handleAddStrategicAxis(index)}
-                  className={styles.buttonMain}
-                >
-                  Añadir Eje
-                </button>
-              </td>
-              <td>
-                {(event.linea_operativa || []).map((line, lineIndex) => (
-                  <div key={lineIndex} className={styles.axisContainer}>
-                    <select
-                      value={line}
-                      onChange={(e) =>
-                        handleChangeLineaOperativa(
-                          index,
-                          lineIndex,
-                          e.target.value
-                        )
-                      }
-                    >
-                      <option value="">Seleccionar una línea</option>
-                      {lineas.map((option, optionIndex) => (
-                        <option
-                          key={optionIndex}
-                          value={option}
-                          disabled={
-                            event.linea_operativa.includes(option) &&
-                            option !== line
-                          }
-                        >
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleRemoveLineaOperativa(index, lineIndex)
-                      }
-                      className={styles.removeButton}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => handleAddLineaOperativa(index)}
-                  className={styles.buttonMain}
-                >
-                  Añadir Línea
-                </button>
-              </td>
-              <td>
-                <Product
-                  productData={event.productData}
-                  entornos={entornos}
-                  tecnologias={tecnologias}
-                  poblaciones={poblaciones}
-                  soportes={soportes}
-                  cups={cups}
-                  setProductData={(updatedProductData) => {
-                    const updatedEvents = [...events];
-                    updatedEvents[index].productData = updatedProductData;
-                    setEvents(updatedEvents);
-                  }}
-                  activities={event.activities}
-                  setActivities={(activities) => {
-                    const updatedEvents = [...events];
-                    updatedEvents[index].activities = activities;
-                    setEvents(updatedEvents);
-                  }}
-                />
-              </td>
-              <td>
-                <button
-                  type="button"
-                  className={styles.deleteButton}
-                  onClick={() => handleRemoveEvent(index)}
-                >
-                  Eliminar
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div key={index} className={styles.eventWrapper}>
+          {index > 0 && (
+            <h3 className={styles.eventTitle}>Evento {index + 1}</h3>
+          )}
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Proyecto IDSN Responsable</th>
+                <th>Descripción Evento</th>
+                <th>Nombre del Indicador</th>
+                <th>Meta Indicador</th>
+                <th>Ejes Estratégicos</th>
+                <th>Lineas Operativas</th>
+                <th>Producto</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input
+                    type="text"
+                    value={event.proyecto}
+                    onChange={(e) =>
+                      handleEventChange(index, "proyecto", e.target.value)
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={event.description_event}
+                    onChange={(e) =>
+                      handleEventChange(
+                        index,
+                        "description_event",
+                        e.target.value
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={event.indicator_name}
+                    onChange={(e) =>
+                      handleEventChange(index, "indicator_name", e.target.value)
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={event.meta_indicator}
+                    onChange={(e) =>
+                      handleEventChange(index, "meta_indicator", e.target.value)
+                    }
+                  />
+                </td>
+
+                <td>
+                  <Select
+                    isMulti
+                    value={event.eje_estrategico.map((axis) => ({
+                      value: axis,
+                      label: axis,
+                    }))}
+                    options={ejes.map((eje) => ({
+                      value: eje,
+                      label: eje,
+                    }))}
+                    onChange={(selectedOptions) =>
+                      handleStrategicAxisChange(index, selectedOptions)
+                    }
+                    placeholder="Seleccionar ejes..."
+                    className={styles.select}
+                  />
+                </td>
+
+                <td>
+                  <Select
+                    isMulti
+                    value={event.linea_operativa.map((axis) => ({
+                      value: axis,
+                      label: axis,
+                    }))}
+                    options={lineas.map((linea) => ({
+                      value: linea,
+                      label: linea,
+                    }))}
+                    onChange={(selectedOptions) =>
+                      handleLineaChange(index, selectedOptions)
+                    }
+                    placeholder="Seleccionar Lineas..."
+                    className={styles.select}
+                  />
+                </td>
+
+                {/* <td>
+                  {(event.linea_operativa || []).map((line, lineIndex) => (
+                    <div key={lineIndex} className={styles.axisContainer}>
+                      <select
+                        value={line}
+                        onChange={(e) =>
+                          handleChangeLineaOperativa(
+                            index,
+                            lineIndex,
+                            e.target.value
+                          )
+                        }
+                      >
+                        <option value="">Seleccionar una línea</option>
+                        {lineas.map((option, optionIndex) => (
+                          <option
+                            key={optionIndex}
+                            value={option}
+                            disabled={
+                              event.linea_operativa.includes(option) &&
+                              option !== line
+                            }
+                          >
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleRemoveLineaOperativa(index, lineIndex)
+                        }
+                        className={styles.removeButton}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => handleAddLineaOperativa(index)}
+                    className={styles.buttonMain}
+                  >
+                    Añadir Línea
+                  </button>
+                </td> */}
+                <td>
+                  <Product
+                    productData={event.productData}
+                    entornos={entornos}
+                    tecnologias={tecnologias}
+                    poblaciones={poblaciones}
+                    soportes={soportes}
+                    cups={cups}
+                    setProductData={(updatedProductData) => {
+                      const updatedEvents = [...events];
+                      updatedEvents[index].productData = updatedProductData;
+                      setEvents(updatedEvents);
+                    }}
+                    activities={event.activities}
+                    setActivities={(activities) => {
+                      const updatedEvents = [...events];
+                      updatedEvents[index].activities = activities;
+                      setEvents(updatedEvents);
+                    }}
+                  />
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    className={styles.deleteButton}
+                    onClick={() => handleRemoveEvent(index)}
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       ))}
+
       <button
-        className={styles.buttonMain}
+        className={styles.buttonAdd}
         type="button"
         onClick={handleAddEvent}
       >
