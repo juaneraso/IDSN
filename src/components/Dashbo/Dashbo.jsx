@@ -1,8 +1,7 @@
-import React from 'react';
-import Header from '../Header/Header';
-import Sidebar from '../Sidebar/Sidebar';
-import styles from './Dashboard.module.css';
-
+import React from "react";
+import Header from "../Header/Header";
+import Sidebar from "../Sidebar/Sidebar";
+import styles from "./Dashboard.module.css";
 
 const Dashbo = () => {
   return (
@@ -12,7 +11,6 @@ const Dashbo = () => {
         <Sidebar />
         <div className={styles.content}>
           <h2>Bienvenido al Dashboard</h2>
-        
         </div>
       </div>
     </div>

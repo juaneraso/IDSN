@@ -273,8 +273,7 @@
 // };
 
 // export default ActivityItem;
-
-import React from "react";
+import React, { useState } from "react";
 import styles from "./ActivityItem.module.css";
 import Select from "react-select";
 
@@ -295,9 +294,9 @@ const ActivityItem = ({
     // entorno: entornos.map((option) => ({ value: option, label: option })),
     entornos: entornos,
     //tecnologia: tecnologias,
-    poblacionSujeto: poblaciones,
-    codigoCups: cups,
-    tipoSoporte: soportes,
+    poblacion_sujeto: poblaciones,
+    codigo_cups: cups,
+    tipo_soporte: soportes,
     meses: [
       "Ene",
       "Feb",
@@ -312,6 +311,46 @@ const ActivityItem = ({
       "Nov",
       "Dic",
     ],
+  };
+
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      minWidth: "200px", // Ajusta el ancho mínimo
+      //maxWidth: "400px", // Opcional, limita el ancho máximo
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 5, // Asegura que el menú no se superponga
+    }),
+    option: (base) => ({
+      ...base,
+      whiteSpace: "nowrap", // Evita que el texto se parta
+    }),
+    multiValueLabel: (base) => ({
+      ...base,
+      whiteSpace: "normal", // Permite que las etiquetas ocupen más espacio
+    }),
+  };
+
+  const customStyles_cups = {
+    control: (base) => ({
+      ...base,
+      minWidth: "500px", // Ajusta el ancho mínimo
+      //maxWidth: "400px", // Opcional, limita el ancho máximo
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 5, // Asegura que el menú no se superponga
+    }),
+    option: (base) => ({
+      ...base,
+      whiteSpace: "nowrap", // Evita que el texto se parta
+    }),
+    multiValueLabel: (base) => ({
+      ...base,
+      whiteSpace: "normal", // Permite que las etiquetas ocupen más espacio
+    }),
   };
 
   const handleCronogramaChange = (value, key, itemIndex) => {
@@ -382,7 +421,7 @@ const ActivityItem = ({
         onClick={() => toggleExpanded(index)}
       >
         <strong>
-          {activity.Descripcion_Actividad || `Actividad ${index + 1}`}
+          {activity.descripcion_actividad || `Actividad ${index + 1}`}
         </strong>
         <button
           type="button"
@@ -392,7 +431,7 @@ const ActivityItem = ({
             handleRemoveActivity(index);
           }}
         >
-          Eliminar
+          -
         </button>
       </div>
       {expanded && (
@@ -400,18 +439,18 @@ const ActivityItem = ({
           <table className={styles.activityTable}>
             <thead>
               <tr>
-                <th>Descripcion Actividad</th>
+                <th>Descripción Actividad</th>
                 <th>Cantidad</th>
-                <th>Unidad Medida</th>
+                <th>Unidad de Medida</th>
                 <th>Entornos</th>
                 <th>Tecnologías</th>
-                <th>Poblacion Sujeto</th>
+                <th>Población Sujeto</th>
                 <th>Tipo Soporte</th>
-                <th>Descripcion Soporte</th>
+                <th>Descripción Soporte</th>
                 <th>Equipo Operativo</th>
                 <th>Perfil Profesional</th>
                 <th>Perfil Operativo</th>
-                <th>Codigo Cups</th>
+                <th>Código Cups</th>
                 <th>Valor Unitario</th>
                 <th>Valor Total</th>
                 <th>Cronograma</th>
@@ -422,8 +461,8 @@ const ActivityItem = ({
                 <td>
                   <input
                     type="text"
-                    name="Descripcion_Actividad"
-                    value={activity.Descripcion_Actividad}
+                    name="descripcion_actividad"
+                    value={activity.descripcion_actividad}
                     onChange={(e) => handleActivityChange(e, index)}
                   />
                 </td>
@@ -440,26 +479,11 @@ const ActivityItem = ({
                 <td>
                   <input
                     type="text"
-                    name="unidadMedida"
-                    value={activity.unidadMedida}
+                    name="unidad_medida"
+                    value={activity.unidad_medida}
                     onChange={(e) => handleActivityChange(e, index)}
                   />
                 </td>
-
-                {/* <td>
-                  <select
-                    name="entorno"
-                    value={activity.entorno}
-                    onChange={(e) => handleActivityChange(e, index)}
-                  >
-                    <option value="">Seleccionar Entorno</option>
-                    {options.entorno.map((option, idx) => (
-                      <option key={idx} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </td> */}
 
                 <td>
                   <Select
@@ -488,23 +512,11 @@ const ActivityItem = ({
                       )
                     }
                     placeholder="Seleccionar Entornos"
+                    styles={customStyles}
                   />
                 </td>
 
                 <td>
-                  {/* <select
-                    name="tecnologia"
-                    value={activity.tecnologia}
-                    onChange={(e) => handleActivityChange(e, index)}
-                  >
-                    <option value="">Seleccionar Tecnología</option>
-                    {options.tecnologia.map((option, idx) => (
-                      <option key={idx} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select> */}
-
                   <Select
                     isMulti
                     name="tecnologia"
@@ -531,32 +543,49 @@ const ActivityItem = ({
                       )
                     }
                     placeholder="Seleccionar Tecnologia"
+                    styles={customStyles_cups}
+                  />
+                </td>
+
+                <td>
+                  <Select
+                    isMulti
+                    name="poblacion_sujeto"
+                    options={poblaciones.map((option) => ({
+                      value: option,
+                      label: option,
+                    }))}
+                    value={poblaciones
+                      .map((option) => ({ value: option, label: option }))
+                      .filter((option) =>
+                        activity.poblacion_sujeto.includes(option.value)
+                      )}
+                    onChange={(selectedOptions) =>
+                      handleActivityChange(
+                        {
+                          target: {
+                            name: "poblacion_sujeto",
+                            value: selectedOptions.map(
+                              (option) => option.value
+                            ),
+                          },
+                        },
+                        index
+                      )
+                    }
+                    placeholder="Seleccionar Poblacion"
+                    styles={customStyles}
                   />
                 </td>
 
                 <td>
                   <select
-                    name="poblacionSujeto"
-                    value={activity.poblacionSujeto}
-                    onChange={(e) => handleActivityChange(e, index)}
-                  >
-                    <option value="">Seleccionar Poblacion</option>
-                    {options.poblacionSujeto.map((option, idx) => (
-                      <option key={idx} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-
-                <td>
-                  <select
-                    name="tipoSoporte"
-                    value={activity.Arraysoportes.Tipo_soporte}
+                    name="tipo_soporte"
+                    value={activity.array_soportes.tipo_soporte}
                     onChange={(e) => handleActivityChange(e, index)}
                   >
                     <option value="">Seleccionar Soporte</option>
-                    {options.tipoSoporte.map((option, idx) => (
+                    {options.tipo_soporte.map((option, idx) => (
                       <option key={idx} value={option}>
                         {option}
                       </option>
@@ -566,16 +595,16 @@ const ActivityItem = ({
                 <td>
                   <input
                     type="text"
-                    name="Descripcion_Soporte"
-                    value={activity.Arraysoportes.Descripcion_Soporte}
+                    name="descripcion_soporte"
+                    value={activity.array_soportes.descripcion_soporte}
                     onChange={(e) => handleActivityChange(e, index)}
                   />
                 </td>
                 <td>
                   <input
                     type="text"
-                    name="Equipo_Operativo"
-                    value={activity.Equipo_Operativo}
+                    name="equipo_operativo"
+                    value={activity.equipo_operativo}
                     onChange={(e) => handleActivityChange(e, index)}
                   />
                 </td>
@@ -583,8 +612,8 @@ const ActivityItem = ({
                 <td>
                   <input
                     type="text"
-                    name="perfilProfesional"
-                    value={activity.perfilProfesional}
+                    name="perfil_profesional"
+                    value={activity.perfil_profesional}
                     onChange={(e) => handleActivityChange(e, index)}
                   />
                 </td>
@@ -592,37 +621,60 @@ const ActivityItem = ({
                 <td>
                   <input
                     type="text"
-                    name="perfilOperativo"
-                    value={activity.perfilOperativo}
+                    name="perfil_operativo"
+                    value={activity.perfil_operativo}
                     onChange={(e) => handleActivityChange(e, index)}
+                  />
+                </td>
+
+                <td>
+                  <Select
+                    name="codigo_cups"
+                    options={cups.map((option) => ({
+                      value: option,
+                      label: option,
+                    }))}
+                    value={
+                      activity.codigo_cups
+                        ? {
+                            value: activity.codigo_cups,
+                            label: activity.codigo_cups,
+                          }
+                        : null
+                    }
+                    onChange={(selectedOption) =>
+                      handleActivityChange(
+                        {
+                          target: {
+                            name: "codigo_cups",
+                            value: selectedOption ? selectedOption.value : null,
+                          },
+                        },
+                        index
+                      )
+                    }
+                    placeholder="Seleccionar Cups"
+                    styles={customStyles_cups}
                   />
                 </td>
 
                 <td>
                   <input
                     type="text"
-                    name="CodigoCups"
-                    value={activity.codigoCups}
+                    name="valor_unitario"
+                    value={activity.valor_unitario}
+                    onChange={(e) => handleActivityChange(e, index)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="valor_total"
+                    value={activity.valor_total}
                     onChange={(e) => handleActivityChange(e, index)}
                   />
                 </td>
 
-                <td>
-                  <input
-                    type="text"
-                    name="valorUnitario"
-                    value={activity.valorUnitario}
-                    onChange={(e) => handleActivityChange(e, index)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    name="valorTotal"
-                    value={activity.valorTotal}
-                    onChange={(e) => handleActivityChange(e, index)}
-                  />
-                </td>
                 <td>{renderCronogramaField()}</td>
               </tr>
             </tbody>

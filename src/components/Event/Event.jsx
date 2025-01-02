@@ -355,19 +355,6 @@ const Event = ({
   soportes,
   cups,
 }) => {
-  // const handleStrategicAxisChange = (eventIndex, axisIndex, value) => {
-  //   const updatedEvents = [...events];
-  //   const currentAxes = updatedEvents[eventIndex].eje_estrategico;
-
-  //   if (currentAxes.includes(value)) {
-  //     alert("Este eje estratégico ya ha sido seleccionado.");
-  //     return; // Evita duplicados
-  //   }
-
-  //   updatedEvents[eventIndex].eje_estrategico[axisIndex] = value;
-  //   setEvents(updatedEvents);
-  // };
-
   const handleStrategicAxisChange = (eventIndex, selectedOptions) => {
     const updatedEvents = [...events];
     updatedEvents[eventIndex].eje_estrategico = selectedOptions.map(
@@ -395,14 +382,6 @@ const Event = ({
       updatedEvents[eventIndex].eje_estrategico.push(""); // Añade un eje vacío
       setEvents(updatedEvents);
     }
-  };
-
-  const handleRemoveStrategicAxis = (eventIndex, axisIndex) => {
-    const updatedEvents = [...events];
-    updatedEvents[eventIndex].eje_estrategico = updatedEvents[
-      eventIndex
-    ].eje_estrategico.filter((_, i) => i !== axisIndex);
-    setEvents(updatedEvents);
   };
 
   const handleChangeLineaOperativa = (eventIndex, axisIndex, value) => {
@@ -448,6 +427,11 @@ const Event = ({
     setEvents([
       ...events,
       {
+        subregion: "",
+        municipio_priorizado: "",
+        codigo_nombre_territorio: "",
+        codigo_micro_territorio: "",
+        total_hogares: "",
         proyecto: "",
         description_event: "",
         indicator_name: "",
@@ -455,7 +439,7 @@ const Event = ({
         eje_estrategico: [],
         linea_operativa: [],
         activities: [],
-        productData: {
+        product_data: {
           producto: [],
         },
       },
@@ -477,6 +461,11 @@ const Event = ({
           <table className={styles.table}>
             <thead>
               <tr>
+                <th>Subregión</th>
+                <th>Municipio Priorizado</th>
+                <th>Código - Nombre de Territorio APS</th>
+                <th>Código Micro-Territorio</th>
+                <th>Total número de Hogares Beneficiarios</th>
                 <th>Proyecto IDSN Responsable</th>
                 <th>Descripción Evento</th>
                 <th>Nombre del Indicador</th>
@@ -489,6 +478,63 @@ const Event = ({
             </thead>
             <tbody>
               <tr>
+                <td>
+                  <input
+                    type="text"
+                    value={event.subregion}
+                    onChange={(e) =>
+                      handleEventChange(index, "subregion", e.target.value)
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={event.municipio_priorizado}
+                    onChange={(e) =>
+                      handleEventChange(
+                        index,
+                        "municipio_priorizado",
+                        e.target.value
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={event.codigo_nombre_territorio}
+                    onChange={(e) =>
+                      handleEventChange(
+                        index,
+                        "codigo_nombre_territorio",
+                        e.target.value
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={event.codigo_micro_territorio}
+                    onChange={(e) =>
+                      handleEventChange(
+                        index,
+                        "codigo_micro_territorio",
+                        e.target.value
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={event.total_hogares}
+                    onChange={(e) =>
+                      handleEventChange(index, "total_hogares", e.target.value)
+                    }
+                  />
+                </td>
                 <td>
                   <input
                     type="text"
@@ -568,55 +614,9 @@ const Event = ({
                   />
                 </td>
 
-                {/* <td>
-                  {(event.linea_operativa || []).map((line, lineIndex) => (
-                    <div key={lineIndex} className={styles.axisContainer}>
-                      <select
-                        value={line}
-                        onChange={(e) =>
-                          handleChangeLineaOperativa(
-                            index,
-                            lineIndex,
-                            e.target.value
-                          )
-                        }
-                      >
-                        <option value="">Seleccionar una línea</option>
-                        {lineas.map((option, optionIndex) => (
-                          <option
-                            key={optionIndex}
-                            value={option}
-                            disabled={
-                              event.linea_operativa.includes(option) &&
-                              option !== line
-                            }
-                          >
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleRemoveLineaOperativa(index, lineIndex)
-                        }
-                        className={styles.removeButton}
-                      >
-                        Eliminar
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => handleAddLineaOperativa(index)}
-                    className={styles.buttonMain}
-                  >
-                    Añadir Línea
-                  </button>
-                </td> */}
                 <td>
                   <Product
-                    productData={event.productData}
+                    product_data={event.product_data}
                     entornos={entornos}
                     tecnologias={tecnologias}
                     poblaciones={poblaciones}
@@ -624,7 +624,7 @@ const Event = ({
                     cups={cups}
                     setProductData={(updatedProductData) => {
                       const updatedEvents = [...events];
-                      updatedEvents[index].productData = updatedProductData;
+                      updatedEvents[index].product_data = updatedProductData;
                       setEvents(updatedEvents);
                     }}
                     activities={event.activities}

@@ -23,7 +23,9 @@ h2 {
 
 .formGrid {
   display: flex; /* Flexbox para alinear en fila */
+  flex-direction: column;
   flex-wrap: wrap;
+  gap: 20px;
   /* gap: 100px; */
   align-items: flex-start;
   justify-content: center;
@@ -35,7 +37,7 @@ h2 {
 }
 
 .buttonMain {
-  align-self: center;
+  margin-top: auto;
   padding: 10px 20px;
   background-color: #1abc9c;
   color: white;

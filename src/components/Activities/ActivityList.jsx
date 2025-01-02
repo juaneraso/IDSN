@@ -32,24 +32,22 @@ const ActivityList = ({
 
   const handleAddActivity = () => {
     const newActivity = {
-      Descripcion_Actividad: "",
+      descripcion_actividad: "",
       cantidad: "",
-      unidadMedida: "",
+      unidad_medida: "",
       entorno: [],
       tecnologia: [],
-      poblacionSujeto: [],
-      // Tipo_soporte: "",
-      // Descripcion_Soporte: "",
-      Equipo_Operativo: "",
-      perfilProfesional: "",
-      perfilOperativo: "",
-      codigoCups: [],
-      valorUnitario: "",
-      valorTotal: "",
-      Arraysoportes: [
+      poblacion_sujeto: [],
+      equipo_operativo: "",
+      perfil_profesional: "",
+      perfil_operativo: "",
+      codigo_cups: "",
+      valor_unitario: "",
+      valor_total: "",
+      array_soportes: [
         {
-          Tipo_soporte: "",
-          Descripcion_Soporte: "",
+          tipo_soporte: "",
+          descripcion_soporte: "",
         },
       ],
       cronograma: [
@@ -73,7 +71,6 @@ const ActivityList = ({
 
   return (
     <div>
-      <h3>Actividades de Producto</h3>
       <button
         type="button"
         onClick={handleAddActivity}

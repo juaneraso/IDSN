@@ -32,7 +32,8 @@
 
 .activityDetails ul li select {
   flex: 2; /* Mayor espacio para el selector */
-  min-width: 120px;
+  min-width: 200px;
+  width: auto;
 }
 
 .activityDetails ul li input {
@@ -44,17 +45,34 @@
   margin-left: 0.5rem; /* Separación del botón */
 }
 
-.removeButton {
+/* .removeButton {
   padding: 10px 20px;
   font-size: 14px;
   border-radius: 4px;
   background-color: #ff6347;
   color: white;
   cursor: pointer;
-}
+  margin-left: 1rem;
+} */
 
 .removeButton:hover {
   background-color: #c0392b;
+}
+
+.removeButton {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 30%;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
 }
 
 .buttonMain {
@@ -131,6 +149,6 @@
   margin-right: auto;
 }
 
-td {
+/* td {
   width: 5000px;
-}
+} */

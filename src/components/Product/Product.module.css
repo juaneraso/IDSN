@@ -42,6 +42,26 @@
   background-color: #e74c3c;
 }
 
+.removeButton_añadir {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 30%;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+.buttonMain:hover,
+.removeButton:hover {
+  opacity: 0.8;
+}
+
 .content {
   padding: 10px;
   background-color: #f9f9f9;
@@ -80,6 +100,21 @@
   grid-column: span 2;
   margin-bottom: 5px;
 }
+
+.buttonMain_añadir {
+  background-color: #4caf50; /* Verde para añadir */
+  color: white;
+  border: none;
+  border-radius: 30%;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
 .buttonMain:disabled {
   background-color: #95a5a6;
   cursor: not-allowed;
@@ -104,9 +139,21 @@
   margin-bottom: 10px;
 }
 
-.indicatorHeader h3 {
+.indicatorHeader h5 {
   margin: 0;
   font-size: 1.2rem;
   flex: 1;
   text-align: left;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+}
+
+.accordeonTitle {
+  cursor: pointer;
+  /* font-weight: bold;
+  color: #333; */
 }

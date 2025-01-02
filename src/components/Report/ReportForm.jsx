@@ -30,7 +30,6 @@ const ReportForm = () => {
     codigo_micro_territorio: "",
     numero_micro_territorio: "",
     numero_hogares: "",
-
     tipo_territorio: "",
     tipo_micro_territorio: "",
     nombre_micro_territorio: "",
@@ -67,15 +66,18 @@ const ReportForm = () => {
   const [events, setEvents] = useState([
     {
       subregion: "",
+      municipio_priorizado: "",
+      codigo_nombre_territorio: "",
+      codigo_micro_territorio: "",
+      total_hogares: "",
+      proyecto: "",
       description_event: "",
       indicator_name: "",
       meta_indicator: "",
       eje_estrategico: [],
       linea_operativa: [],
-      proyecto: "",
-
       activities: [],
-      productData: {
+      product_data: {
         producto: [
           {
             descripcion_producto: "",
@@ -146,9 +148,6 @@ const ReportForm = () => {
   }, [token]);
 
   console.log("Datos eventos", events);
-  console.log("datos", labels);
-
-  console.log("reportdata", reportData);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -169,11 +168,11 @@ const ReportForm = () => {
       const transformedData = {
         data: {
           territorializacion: {
-            numero_hogares: parseInt(reportData.numero_hogares, 10),
-            municipio: reportData.municipio,
-            territorio: reportData.codigo_territorio,
-            microterritorio: reportData.codigo_micro_territorio || null,
-            subregion: reportData.subregion,
+            numero_hogares: parseInt(event.total_hogares, 10),
+            municipio: event.municipio_priorizado,
+            territorio: event.codigo_nombre_territorio,
+            microterritorio: event.codigo_micro_territorio || null,
+            subregion: event.subregion,
           },
           eventos: events.map((event) => ({
             descripcion: event.description_event,
@@ -187,18 +186,18 @@ const ReportForm = () => {
               nombre: linea,
             })),
 
-            productos: event.productData.producto.map((producto, index) => ({
+            productos: event.product_data.producto.map((producto, index) => ({
               descripcion: producto.descripcion_producto,
 
               actividades: (event.activities[index] || []).map((activity) => ({
-                descripcion: activity.Descripcion_Actividad,
+                descripcion: activity.descripcion_actividad,
                 cantidad_a_ejecutar: activity.cantidad,
-                unidad_medida: activity.unidadMedida,
-                equipo: activity.Equipo_Operativo,
-                perfiles_profesional: activity.perfilProfesional,
-                perfil_operativo: activity.perfilOperativo,
-                valor_unitario: activity.valorUnitario,
-                valor_total: activity.valorTotal,
+                unidad_medida: activity.unidad_medida,
+                equipo: activity.equipo_operativo,
+                perfiles_profesional: activity.perfil_profesional,
+                perfil_operativo: activity.perfil_operativo,
+                valor_unitario: activity.valor_unitario,
+                valor_total: activity.valor_total,
                 entornos: activity.entorno.map((entorno) => ({
                   nombre: entorno,
                 })),
@@ -207,15 +206,13 @@ const ReportForm = () => {
                   nombre: tecno,
                 })),
 
-                poblaciones: activity.poblacionSujeto.map((poblacion) => ({
+                poblaciones: activity.poblacion_sujeto.map((poblacion) => ({
                   nombre: poblacion,
                 })),
-                cups: activity.codigoCups.map((cup) => ({
-                  codigo: cup,
-                })),
-                soportes: activity.Arraysoportes.map((soporte) => ({
-                  tipo: soporte.Tipo_soporte,
-                  descripcion: soporte.Descripcion_Soporte,
+                cups: [{ codigo: activity.codigo_cups }],
+                soportes: activity.array_soportes.map((soporte) => ({
+                  tipo: soporte.tipo_soporte,
+                  descripcion: soporte.descripcion_soporte,
                 })),
                 cronograma: activity.cronograma.map((item) => ({
                   [item.mes]: parseInt(item.peso, 10),
@@ -267,17 +264,17 @@ const ReportForm = () => {
   return (
     <>
       <Header />
-      {/* <h2>Anexo Técnico</h2> */}
+
       <div className={styles.formContainer}>
         <form onSubmit={handleSubmit} className={styles.formGrid}>
-          <div className={styles.field}>
+          {/* <div className={styles.field}>
             <ReportFields
               reportData={reportData}
               handleChange={handleChange}
               file={file}
               handleFileChange={handleFileChange}
             />
-          </div>
+          </div> */}
 
           <div className={styles.field}>
             <Event
@@ -299,10 +296,14 @@ const ReportForm = () => {
           {success === false && (
             <p className={styles.error}>Error al enviar el reporte.</p>
           )}
+          <button
+            className={styles.buttonMain}
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Enviando..." : "Enviar Reporte"}
+          </button>
         </form>
-        <button className={styles.buttonMain} type="submit" disabled={loading}>
-          {loading ? "Enviando..." : "Enviar Reporte"}
-        </button>
       </div>
     </>
   );
