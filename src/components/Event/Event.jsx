@@ -347,14 +347,26 @@ import Select from "react-select"; // Importamos React Select
 const Event = ({
   events,
   setEvents,
-  ejes,
-  lineas,
+  //ejes,
+  //lineas,
   entornos,
   tecnologias,
   poblaciones,
   soportes,
   cups,
 }) => {
+  const ejes = [
+    "Gobernabilidad y gobernanza de la salud pública ",
+    "Pueblos y comunidades étnicas y campesinas, mujeres, sectores LGBTIQ+ y otras poblaciones por condición y/o situación.",
+    "Determinantes Sociales de la Salud",
+    "Atención Primaria en Salud",
+    "Cambio climático, emergencias, desastres y pandemias",
+    "Conocimiento en salud pública y Soberanía Sanitaria",
+    "Personal de salud",
+  ];
+
+  const lineas = ["Cuidado de la salud en el territorio"];
+
   const handleStrategicAxisChange = (eventIndex, selectedOptions) => {
     const updatedEvents = [...events];
     updatedEvents[eventIndex].eje_estrategico = selectedOptions.map(

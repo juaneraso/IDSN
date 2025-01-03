@@ -125,20 +125,21 @@
 }
 
 .indicator {
-  margin-bottom: 20px;
+  margin-top: 20px;
   padding: 10px;
   border: 1px solid #dddddd;
   border-radius: 5px;
-  background-color: #f9f9f9;
+  background-color: #fdfdfd;
 }
 
 .indicatorHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  padding: 0.5rem;
+  /* margin-bottom: 20px; */
   gap: 3px;
-  /* border: 1px solid #dddddd;
+  /* border: 1px solid #b03d3d;
   border-radius: 5px; */
 }
 
