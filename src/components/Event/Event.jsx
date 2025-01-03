@@ -432,6 +432,9 @@ const Event = ({
         codigo_nombre_territorio: "",
         codigo_micro_territorio: "",
         total_hogares: "",
+        equipo_operativo: "",
+        perfil_profesional: "",
+        perfil_operativo: "",
         proyecto: "",
         description_event: "",
         indicator_name: "",
@@ -466,6 +469,9 @@ const Event = ({
                 <th>Código - Nombre de Territorio APS</th>
                 <th>Código Micro-Territorio</th>
                 <th>Total número de Hogares Beneficiarios</th>
+                <th>Equipo Operativo</th>
+                <th>Perfil Profesional</th>
+                <th>Perfil Operativo</th>
                 <th>Proyecto IDSN Responsable</th>
                 <th>Descripción Evento</th>
                 <th>Nombre del Indicador</th>
@@ -532,6 +538,45 @@ const Event = ({
                     value={event.total_hogares}
                     onChange={(e) =>
                       handleEventChange(index, "total_hogares", e.target.value)
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={event.equipo_operativo}
+                    onChange={(e) =>
+                      handleEventChange(
+                        index,
+                        "equipo_operativo",
+                        e.target.value
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={event.perfil_profesional}
+                    onChange={(e) =>
+                      handleEventChange(
+                        index,
+                        "perfil_profesional",
+                        e.target.value
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={event.perfil_operativo}
+                    onChange={(e) =>
+                      handleEventChange(
+                        index,
+                        "perfil_operativo",
+                        e.target.value
+                      )
                     }
                   />
                 </td>

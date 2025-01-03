@@ -127,7 +127,7 @@
 .indicator {
   margin-bottom: 20px;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
   border-radius: 5px;
   background-color: #f9f9f9;
 }
@@ -137,13 +137,17 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  gap: 3px;
+  /* border: 1px solid #dddddd;
+  border-radius: 5px; */
 }
 
 .indicatorHeader h5 {
-  margin: 0;
-  font-size: 1.2rem;
-  flex: 1;
-  text-align: left;
+  /* margin: 0; */
+  font-size: 1.1rem;
+  text-align: start;
+  width: 100px;
+  /* flex: 1; */
 }
 
 .buttonContainer {

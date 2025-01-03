@@ -5,6 +5,10 @@
   padding: 0.5rem;
 }
 
+table {
+  text-align: center;
+}
+
 .activityHeader {
   cursor: pointer;
   background-color: #f5f5f5;
@@ -12,7 +16,9 @@
   border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
+  gap: 4px; /* Espaciado entre elementos */
   align-items: center;
+  width: 170px;
 }
 
 .activityHeader:hover {
@@ -43,36 +49,6 @@
 
 .activityDetails ul li button {
   margin-left: 0.5rem; /* Separación del botón */
-}
-
-/* .removeButton {
-  padding: 10px 20px;
-  font-size: 14px;
-  border-radius: 4px;
-  background-color: #ff6347;
-  color: white;
-  cursor: pointer;
-  margin-left: 1rem;
-} */
-
-.removeButton:hover {
-  background-color: #c0392b;
-}
-
-.removeButton {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 30%;
-  width: 30px;
-  height: 30px;
-  font-size: 18px;
-  text-align: center;
-  cursor: pointer;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 10px;
 }
 
 .buttonMain {
@@ -149,6 +125,51 @@
   margin-right: auto;
 }
 
-/* td {
-  width: 5000px;
-} */
+.soporte_input {
+  width: 300px; /* Define el ancho específico */
+}
+
+.soporte_select {
+  width: 300px; /* Define el ancho específico */
+}
+
+.buttonMain_añadir {
+  background-color: #07b93a;
+  color: white;
+  border: none;
+  border-radius: 30%;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-top: 5px; */
+  /* margin-right: 10px; */
+}
+
+.buttonMain_añadir:hover {
+  background-color: #088542;
+}
+.removeButton:hover {
+  background-color: #c0392b;
+}
+
+.removeButton {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 30%;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  /* margin-left: 5px; */
+}

@@ -252,7 +252,7 @@
 
 // export default Product;
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Product.module.css";
 import ActivityList from "../Activities/ActivityList";
 
@@ -270,7 +270,33 @@ const Product = ({
 }) => {
   const [isIndicatorOpen, setIsIndicatorOpen] = useState({}); // Estado para gestionar los acordeones
 
+  // useEffect(() => {
+  //   const updatedProducts = product_data.producto.map((product) => {
+  //     if (!product.indicadores || product.indicadores.length === 0) {
+  //       return {
+  //         ...product,
+  //         indicadores: [
+  //           {
+  //             cantidad: "",
+  //             meta_producto: "",
+  //             indicador_linea_base: "",
+  //           },
+  //         ],
+  //       };
+  //     }
+  //     return product;
+  //   });
+
+  //   if (
+  //     JSON.stringify(updatedProducts) !== JSON.stringify(product_data.producto)
+  //   ) {
+  //     setProductData({ ...product_data, producto: updatedProducts });
+  //   }
+  // }, [product_data, setProductData]);
+
   const toggleIndicator = (productIndex, indicatorIndex) => {
+    console.log("productIndex", productIndex);
+
     setIsIndicatorOpen((prevState) => ({
       ...prevState,
       [`${productIndex}-${indicatorIndex}`]:
@@ -322,7 +348,13 @@ const Product = ({
   const handleAddProduct = () => {
     const newProduct = {
       descripcion_producto: "",
-      indicadores: [],
+      indicadores: [
+        {
+          cantidad: "",
+          meta_producto: "",
+          indicador_linea_base: "",
+        },
+      ],
       nombre_entidad: "",
       descripcion_operador: "",
     };
@@ -381,19 +413,28 @@ const Product = ({
                             }
                             className={styles.accordeonTitle}
                           >
-                            Indicador-{indicatorIndex + 1}
+                            Indicador {indicatorIndex + 1}
                           </h5>
+                          {indicatorIndex > 0 && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleRemoveIndicator(
+                                  productIndex,
+                                  indicatorIndex
+                                )
+                              }
+                              className={styles.removeButton_añadir}
+                            >
+                              -
+                            </button>
+                          )}
                           <button
                             type="button"
-                            onClick={() =>
-                              handleRemoveIndicator(
-                                productIndex,
-                                indicatorIndex
-                              )
-                            }
-                            className={styles.removeButton_añadir}
+                            onClick={() => handleAddIndicator(productIndex)}
+                            className={styles.buttonMain_añadir}
                           >
-                            -
+                            +
                           </button>
                         </div>
                         {isIndicatorOpen[
@@ -444,15 +485,6 @@ const Product = ({
                       </div>
                     )
                   )}
-                  <div className={styles.buttonContainer}>
-                    <button
-                      type="button"
-                      onClick={() => handleAddIndicator(productIndex)}
-                      className={styles.buttonMain_añadir}
-                    >
-                      +
-                    </button>
-                  </div>
                 </td>
                 <td>
                   <div>
