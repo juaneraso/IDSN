@@ -12,7 +12,7 @@ const ActivityItem = ({
   handleAddActivity,
   //entornos,
   //tecnologias,
-  poblaciones,
+  //poblaciones,
   //soportes,
   //cups,
 }) => {
@@ -22,6 +22,19 @@ const ActivityItem = ({
     "Educativo",
     "Laboral-informal",
     "Institucional",
+  ];
+
+  const poblaciones = [
+    "Familias",
+    "Comunidad",
+    "Personas",
+    "Estudiantes",
+    "Comunidad educativa",
+    "Trabajadores",
+    "Instituciones prestadoras de servicios de salud",
+    "Instituciones que prestan servicios sociales o protección integral",
+    "Establecimientos que concentran o aglomeran individuos ",
+    "Poblaciones vulnerables",
   ];
 
   const tecnologias = [
