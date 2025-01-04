@@ -365,7 +365,29 @@ const Event = ({
     "Personal de salud",
   ];
 
+  const equipos = ["Equipos básicos en salud", "Equipo complementario"];
+
   const lineas = ["Cuidado de la salud en el territorio"];
+
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      minWidth: "300px", // Ajusta el ancho mínimo
+      //maxWidth: "400px", // Opcional, limita el ancho máximo
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 5, // Asegura que el menú no se superponga
+    }),
+    option: (base) => ({
+      ...base,
+      whiteSpace: "nowrap", // Evita que el texto se parta
+    }),
+    multiValueLabel: (base) => ({
+      ...base,
+      whiteSpace: "normal", // Permite que las etiquetas ocupen más espacio
+    }),
+  };
 
   const handleStrategicAxisChange = (eventIndex, selectedOptions) => {
     const updatedEvents = [...events];
@@ -383,52 +405,22 @@ const Event = ({
     setEvents(updatedEvents);
   };
 
-  const handleAddStrategicAxis = (eventIndex) => {
+  const handleEquipoChange = (eventIndex, selectedOption) => {
     const updatedEvents = [...events];
-    updatedEvents[eventIndex].eje_estrategico =
-      updatedEvents[eventIndex].eje_estrategico || [];
-
-    if (
-      !updatedEvents[eventIndex].eje_estrategico.some((axis) => axis === "")
-    ) {
-      updatedEvents[eventIndex].eje_estrategico.push(""); // Añade un eje vacío
-      setEvents(updatedEvents);
-    }
-  };
-
-  const handleChangeLineaOperativa = (eventIndex, axisIndex, value) => {
-    const updatedEvents = [...events];
-    const currentLines = updatedEvents[eventIndex].linea_operativa;
-
-    if (currentLines.includes(value)) {
-      alert("Esta línea operativa ya ha sido seleccionada.");
-      return; // Evita duplicados
-    }
-
-    updatedEvents[eventIndex].linea_operativa[axisIndex] = value;
+    updatedEvents[eventIndex].equipo_operativo = selectedOption
+      ? selectedOption.value
+      : ""; // Guarda el valor seleccionado o una cadena vacía si no hay selección
     setEvents(updatedEvents);
   };
 
-  const handleAddLineaOperativa = (eventIndex) => {
-    const updatedEvents = [...events];
-    updatedEvents[eventIndex].linea_operativa =
-      updatedEvents[eventIndex].linea_operativa || [];
+  // const handleEquipoChange = (eventIndex, selectedOptions) => {
+  //   const updatedEvents = [...events];
+  //   updatedEvents[eventIndex].equipo_operativo = selectedOptions.map(
+  //     (option) => option.value
+  //   ); // Almacenar solo los valores seleccionados
+  //   setEvents(updatedEvents);
+  // };
 
-    if (
-      !updatedEvents[eventIndex].linea_operativa.some((line) => line === "")
-    ) {
-      updatedEvents[eventIndex].linea_operativa.push(""); // Añade una línea vacía
-      setEvents(updatedEvents);
-    }
-  };
-
-  const handleRemoveLineaOperativa = (eventIndex, axisIndex) => {
-    const updatedEvents = [...events];
-    updatedEvents[eventIndex].linea_operativa = updatedEvents[
-      eventIndex
-    ].linea_operativa.filter((_, i) => i !== axisIndex);
-    setEvents(updatedEvents);
-  };
   const handleEventChange = (index, field, value) => {
     const updatedEvents = [...events];
     updatedEvents[index][field] = value;
@@ -455,8 +447,24 @@ const Event = ({
         linea_operativa: [],
         activities: [],
         product_data: {
-          producto: [],
+          producto: [
+            {
+              descripcion_producto: "",
+              indicadores: [
+                {
+                  cantidad: "",
+                  indicador_linea_base: "",
+                  meta_producto: "",
+                },
+              ],
+              nombre_entidad: "",
+              descripcion_operador: "",
+            },
+          ],
         },
+        // product_data: {
+        //   producto: [],
+        // },
       },
     ]);
   };
@@ -554,6 +562,57 @@ const Event = ({
                   />
                 </td>
                 <td>
+                  {/* <Select
+                    name="equipo_operativo"
+                    options={equipos.map((option) => ({
+                      value: option,
+                      label: option,
+                    }))}
+                    value={
+                      event.equipo_operativo
+                        ? {
+                            value: event.equipo_operativo,
+                            label: event.equipo_operativo,
+                          }
+                        : null
+                    }
+                    onChange={(selectedOption) =>
+                      handleEquipoChange(
+                        {
+                          target: {
+                            name: "equipo_operativo",
+                            value: selectedOption ? selectedOption.value : null,
+                          },
+                        },
+                        index
+                      )
+                    }
+                    placeholder="Seleccionar Equipo"
+                    // styles={customStyles_cups}
+                  /> */}
+
+                  <Select
+                    name="equipo_operativo"
+                    options={equipos.map((option) => ({
+                      value: option,
+                      label: option,
+                    }))}
+                    value={
+                      event.equipo_operativo
+                        ? {
+                            value: event.equipo_operativo,
+                            label: event.equipo_operativo,
+                          }
+                        : null
+                    }
+                    onChange={(selectedOption) =>
+                      handleEquipoChange(index, selectedOption)
+                    }
+                    placeholder="Seleccionar Equipo"
+                    styles={customStyles}
+                  />
+                </td>
+                {/* <td>
                   <input
                     type="text"
                     value={event.equipo_operativo}
@@ -565,7 +624,7 @@ const Event = ({
                       )
                     }
                   />
-                </td>
+                </td> */}
                 <td>
                   <input
                     type="text"

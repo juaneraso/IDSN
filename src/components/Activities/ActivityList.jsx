@@ -144,6 +144,7 @@ const ActivityList = ({
       {
         tipo_soporte: "",
         descripcion_soporte: "",
+        cantidad_soporte: "",
       },
     ],
     cronograma: [

@@ -506,6 +506,7 @@ const ActivityItem = ({
                     <tr>
                       <th>Tipo Soporte</th>
                       <th>Descripción Soporte</th>
+                      <th>Cantidad</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -549,6 +550,18 @@ const ActivityItem = ({
                               handleSoporteChange(e, soporteIndex)
                             }
                             placeholder="Descripción Soporte"
+                            className={styles.soporte_input}
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            name="cantidad_soporte"
+                            value={soporte.cantidad_soporte}
+                            onChange={(e) =>
+                              handleSoporteChange(e, soporteIndex)
+                            }
+                            placeholder="Cantidad"
                             className={styles.soporte_input}
                           />
                         </td>
