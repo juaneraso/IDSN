@@ -555,7 +555,7 @@ const ActivityItem = ({
                         </td>
                         <td>
                           <input
-                            type="text"
+                            type="number"
                             name="cantidad_soporte"
                             value={soporte.cantidad_soporte}
                             onChange={(e) =>
