@@ -14,6 +14,11 @@ const Event = ({
   soportes,
   cups,
 }) => {
+  const [expandedEvents, setExpandedEvents] = useState(
+    // events.map(() => true) // Inicializamos todos como colapsados
+    events.map((_, index) => index === 0)
+  );
+
   const ejes = [
     "Gobernabilidad y gobernanza de la salud pública ",
     "Pueblos y comunidades étnicas y campesinas, mujeres, sectores LGBTIQ+ y otras poblaciones por condición y/o situación.",
@@ -118,30 +123,54 @@ const Event = ({
         // },
       },
     ]);
+    setExpandedEvents([...expandedEvents, false]);
+  };
+
+  const handleToggleAccordion = (index) => {
+    const updatedExpandedEvents = [...expandedEvents];
+    updatedExpandedEvents[index] = !updatedExpandedEvents[index]; // Cambiamos el estado de ese acordeón
+    setExpandedEvents(updatedExpandedEvents);
+    // Condicion si queremos que el evento uno no se expanda
+    // se puede aplicar o no
+    // if (index == 0) {
+    //   setExpandedEvents([...expandedEvents, false]);
+    // }
   };
 
   const handleRemoveEvent = (index) => {
     const updatedEvents = events.filter((_, i) => i !== index);
     setEvents(updatedEvents);
+    setExpandedEvents(updatedExpandedEvents);
   };
-
   return (
     <div className={styles.eventContainer}>
       {events.map((event, index) => (
         <div key={index} className={styles.eventWrapper}>
           <div className={styles.contenedor_titulo_evento}>
             {index > 0 ? (
-              <strong className={styles.eventTitle}>Evento {index + 1}</strong>
+              <strong
+                className={styles.eventTitle}
+                onClick={() => handleToggleAccordion(index)}
+              >
+                Evento {index + 1}
+              </strong>
             ) : (
-              <strong className={styles.eventTitle}>Evento </strong>
+              <strong
+                className={styles.eventTitle}
+                onClick={() => handleToggleAccordion(index)}
+              >
+                Evento{" "}
+              </strong>
             )}
-            <button
-              type="button"
-              className={styles.removeButton_añadir}
-              onClick={() => handleRemoveEvent(index)}
-            >
-              -
-            </button>
+            {index > 0 && (
+              <button
+                type="button"
+                className={styles.removeButton_añadir}
+                onClick={() => handleRemoveEvent(index)}
+              >
+                -
+              </button>
+            )}
 
             <button
               className={styles.buttonMain_añadir}
@@ -153,270 +182,285 @@ const Event = ({
           </div>
 
           {/* <h3 className={styles.eventTitle}>Evento {index + 1}</h3> */}
-
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Subregión</th>
-                <th>Municipio Priorizado</th>
-                <th>Código - Nombre de Territorio APS</th>
-                <th>Código Micro-Territorio</th>
-                <th>Total número de Hogares Beneficiarios</th>
-                <th>Equipo Operativo</th>
-                <th>Perfil Profesional</th>
-                <th>Perfil Operativo</th>
-                <th>Proyecto IDSN Responsable</th>
-                <th>Descripción Evento</th>
-                <th>Nombre del Indicador</th>
-                <th>Meta Indicador</th>
-                <th>Ejes Estratégicos</th>
-                <th>Lineas Operativas</th>
-                <th>Productos</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div className={styles.cellWrapper}>
-                    <textarea
+          {expandedEvents[index] && (
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Subregión</th>
+                  <th>Municipio Priorizado</th>
+                  <th>Código - Nombre de Territorio APS</th>
+                  <th>Código Micro-Territorio</th>
+                  <th>Total número de Hogares Beneficiarios</th>
+                  <th>Equipo Operativo</th>
+                  <th>Perfil Profesional</th>
+                  <th>Perfil Operativo</th>
+                  <th>Proyecto IDSN Responsable</th>
+                  <th>Descripción Evento</th>
+                  <th>Nombre del Indicador</th>
+                  <th>Meta Indicador</th>
+                  <th>Ejes Estratégicos</th>
+                  <th>Lineas Operativas</th>
+                  <th>Productos</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div className={styles.cellWrapper}>
+                      <textarea
+                        type="text"
+                        className={styles.textarea}
+                        value={event.subregion}
+                        onChange={(e) =>
+                          handleEventChange(index, "subregion", e.target.value)
+                        }
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <div className={styles.cellWrapper}>
+                      <textarea
+                        type="text"
+                        className={styles.textarea}
+                        value={event.municipio_priorizado}
+                        onChange={(e) =>
+                          handleEventChange(
+                            index,
+                            "municipio_priorizado",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <div className={styles.cellWrapper}>
+                      <textarea
+                        className={styles.textarea}
+                        type="text"
+                        value={event.codigo_nombre_territorio}
+                        onChange={(e) =>
+                          handleEventChange(
+                            index,
+                            "codigo_nombre_territorio",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <div className={styles.cellWrapper}>
+                      <textarea
+                        className={styles.textarea}
+                        type="text"
+                        value={event.codigo_micro_territorio}
+                        onChange={(e) =>
+                          handleEventChange(
+                            index,
+                            "codigo_micro_territorio",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <input
                       type="text"
-                      className={styles.textarea}
-                      value={event.subregion}
-                      onChange={(e) =>
-                        handleEventChange(index, "subregion", e.target.value)
-                      }
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div className={styles.cellWrapper}>
-                    <textarea
-                      type="text"
-                      className={styles.textarea}
-                      value={event.municipio_priorizado}
+                      value={event.total_hogares}
                       onChange={(e) =>
                         handleEventChange(
                           index,
-                          "municipio_priorizado",
+                          "total_hogares",
                           e.target.value
                         )
                       }
                     />
-                  </div>
-                </td>
-                <td>
-                  <div className={styles.cellWrapper}>
-                    <textarea
-                      className={styles.textarea}
+                  </td>
+                  <td>
+                    <Select
+                      name="equipo_operativo"
+                      options={equipos.map((option) => ({
+                        value: option,
+                        label: option,
+                      }))}
+                      value={
+                        event.equipo_operativo
+                          ? {
+                              value: event.equipo_operativo,
+                              label: event.equipo_operativo,
+                            }
+                          : null
+                      }
+                      onChange={(selectedOption) =>
+                        handleEquipoChange(index, selectedOption)
+                      }
+                      placeholder="Seleccionar Equipo"
+                      styles={customStyles}
+                    />
+                  </td>
+
+                  <td>
+                    <input
                       type="text"
-                      value={event.codigo_nombre_territorio}
+                      value={event.perfil_profesional}
                       onChange={(e) =>
                         handleEventChange(
                           index,
-                          "codigo_nombre_territorio",
+                          "perfil_profesional",
                           e.target.value
                         )
                       }
                     />
-                  </div>
-                </td>
-                <td>
-                  <div className={styles.cellWrapper}>
-                    <textarea
-                      className={styles.textarea}
+                  </td>
+                  <td>
+                    <input
                       type="text"
-                      value={event.codigo_micro_territorio}
+                      value={event.perfil_operativo}
                       onChange={(e) =>
                         handleEventChange(
                           index,
-                          "codigo_micro_territorio",
+                          "perfil_operativo",
                           e.target.value
                         )
                       }
                     />
-                  </div>
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={event.total_hogares}
-                    onChange={(e) =>
-                      handleEventChange(index, "total_hogares", e.target.value)
-                    }
-                  />
-                </td>
-                <td>
-                  <Select
-                    name="equipo_operativo"
-                    options={equipos.map((option) => ({
-                      value: option,
-                      label: option,
-                    }))}
-                    value={
-                      event.equipo_operativo
-                        ? {
-                            value: event.equipo_operativo,
-                            label: event.equipo_operativo,
-                          }
-                        : null
-                    }
-                    onChange={(selectedOption) =>
-                      handleEquipoChange(index, selectedOption)
-                    }
-                    placeholder="Seleccionar Equipo"
-                    styles={customStyles}
-                  />
-                </td>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={event.proyecto}
+                      onChange={(e) =>
+                        handleEventChange(index, "proyecto", e.target.value)
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={event.description_event}
+                      onChange={(e) =>
+                        handleEventChange(
+                          index,
+                          "description_event",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={event.indicator_name}
+                      onChange={(e) =>
+                        handleEventChange(
+                          index,
+                          "indicator_name",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={event.meta_indicator}
+                      onChange={(e) =>
+                        handleEventChange(
+                          index,
+                          "meta_indicator",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </td>
 
-                <td>
-                  <input
-                    type="text"
-                    value={event.perfil_profesional}
-                    onChange={(e) =>
-                      handleEventChange(
-                        index,
-                        "perfil_profesional",
-                        e.target.value
-                      )
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={event.perfil_operativo}
-                    onChange={(e) =>
-                      handleEventChange(
-                        index,
-                        "perfil_operativo",
-                        e.target.value
-                      )
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={event.proyecto}
-                    onChange={(e) =>
-                      handleEventChange(index, "proyecto", e.target.value)
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={event.description_event}
-                    onChange={(e) =>
-                      handleEventChange(
-                        index,
-                        "description_event",
-                        e.target.value
-                      )
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={event.indicator_name}
-                    onChange={(e) =>
-                      handleEventChange(index, "indicator_name", e.target.value)
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={event.meta_indicator}
-                    onChange={(e) =>
-                      handleEventChange(index, "meta_indicator", e.target.value)
-                    }
-                  />
-                </td>
+                  <td>
+                    <Select
+                      isMulti
+                      value={event.eje_estrategico.map((axis) => ({
+                        value: axis,
+                        label: axis,
+                      }))}
+                      options={ejes.map((eje) => ({
+                        value: eje,
+                        label: eje,
+                      }))}
+                      onChange={(selectedOptions) =>
+                        handleStrategicAxisChange(index, selectedOptions)
+                      }
+                      placeholder="Seleccionar ejes..."
+                      className={styles.select}
+                    />
+                  </td>
 
-                <td>
-                  <Select
-                    isMulti
-                    value={event.eje_estrategico.map((axis) => ({
-                      value: axis,
-                      label: axis,
-                    }))}
-                    options={ejes.map((eje) => ({
-                      value: eje,
-                      label: eje,
-                    }))}
-                    onChange={(selectedOptions) =>
-                      handleStrategicAxisChange(index, selectedOptions)
-                    }
-                    placeholder="Seleccionar ejes..."
-                    className={styles.select}
-                  />
-                </td>
+                  <td>
+                    <Select
+                      isMulti
+                      value={event.linea_operativa.map((axis) => ({
+                        value: axis,
+                        label: axis,
+                      }))}
+                      options={lineas.map((linea) => ({
+                        value: linea,
+                        label: linea,
+                      }))}
+                      onChange={(selectedOptions) =>
+                        handleLineaChange(index, selectedOptions)
+                      }
+                      placeholder="Seleccionar Lineas..."
+                      className={styles.select}
+                    />
+                  </td>
 
-                <td>
-                  <Select
-                    isMulti
-                    value={event.linea_operativa.map((axis) => ({
-                      value: axis,
-                      label: axis,
-                    }))}
-                    options={lineas.map((linea) => ({
-                      value: linea,
-                      label: linea,
-                    }))}
-                    onChange={(selectedOptions) =>
-                      handleLineaChange(index, selectedOptions)
-                    }
-                    placeholder="Seleccionar Lineas..."
-                    className={styles.select}
-                  />
-                </td>
-
-                <td>
-                  <Product
-                    product_data={event.product_data}
-                    entornos={entornos}
-                    tecnologias={tecnologias}
-                    poblaciones={poblaciones}
-                    soportes={soportes}
-                    cups={cups}
-                    setProductData={(updatedProductData) => {
-                      const updatedEvents = [...events];
-                      updatedEvents[index].product_data = updatedProductData;
-                      setEvents(updatedEvents);
-                    }}
-                    activities={event.activities}
-                    setActivities={(activities) => {
-                      const updatedEvents = [...events];
-                      updatedEvents[index].activities = activities;
-                      setEvents(updatedEvents);
-                    }}
-                  />
-                </td>
-                <td>
-                  <button
-                    type="button"
-                    className={styles.deleteButton}
-                    onClick={() => handleRemoveEvent(index)}
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <td>
+                    <Product
+                      product_data={event.product_data}
+                      entornos={entornos}
+                      tecnologias={tecnologias}
+                      poblaciones={poblaciones}
+                      soportes={soportes}
+                      cups={cups}
+                      setProductData={(updatedProductData) => {
+                        const updatedEvents = [...events];
+                        updatedEvents[index].product_data = updatedProductData;
+                        setEvents(updatedEvents);
+                      }}
+                      activities={event.activities}
+                      setActivities={(activities) => {
+                        const updatedEvents = [...events];
+                        updatedEvents[index].activities = activities;
+                        setEvents(updatedEvents);
+                      }}
+                    />
+                  </td>
+                  <td>
+                    {index > 0 && (
+                      <button
+                        type="button"
+                        className={styles.deleteButton}
+                        onClick={() => handleRemoveEvent(index)}
+                      >
+                        Eliminar
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          )}
         </div>
       ))}
 
-      <button
+      {/* <button
         className={styles.buttonAdd}
         type="button"
         onClick={handleAddEvent}
       >
         Añadir Otro Evento
-      </button>
+      </button> */}
     </div>
   );
 };

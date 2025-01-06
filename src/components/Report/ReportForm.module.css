@@ -47,7 +47,7 @@ h2 {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
-  width: auto;
+  width: 600px;
 }
 
 .buttonMain:disabled {
@@ -117,4 +117,11 @@ textarea:focus {
 
 .toggleButton:hover {
   background-color: #2980b9;
+}
+
+.contedor_boton {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }

@@ -333,9 +333,7 @@ const ActivityItem = ({
         className={styles.activityHeader}
         onClick={() => toggleExpanded(index)}
       >
-        <strong>
-          {activity.descripcion_actividad || `Actividad ${index + 1}`}
-        </strong>
+        <strong>Actividad {index + 1}</strong>
 
         {index > 0 && (
           <button

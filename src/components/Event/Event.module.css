@@ -119,6 +119,9 @@
   /* flex: 1; */
 }
 
+.contenedor_titulo_evento strong:hover {
+  text-decoration: underline;
+}
 .buttonMain_añadir {
   background-color: #4caf50; /* Verde para añadir */
   color: white;

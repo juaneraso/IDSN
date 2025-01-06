@@ -41,7 +41,6 @@ const ReportForm = () => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
-  // const [activities, setActivities] = useState([]);
 
   const [ejes, setEjes] = useState([]);
   const [lineas, setLineas] = useState([]);
@@ -52,16 +51,6 @@ const ReportForm = () => {
   const [cups, setCups] = useState([]);
 
   const [labels, setLabels] = useState([]);
-
-  const [productData, setProductData] = useState({
-    producto: {
-      descripcion_producto: "",
-      indicador_de_producto: "",
-      indicador_Linea_Base: "",
-    },
-  });
-
-  const [eventData, setEventData] = useState(null); // Recibirá datos finales del componente Event
 
   const [events, setEvents] = useState([
     {
@@ -79,39 +68,7 @@ const ReportForm = () => {
       meta_indicator: "",
       eje_estrategico: [],
       linea_operativa: [],
-      activities: [
-        // {
-        //   descripcion_actividad: "",
-        //   cantidad: "",
-        //   unidad_medida: "",
-        //   entorno: [],
-        //   tecnologia: [],
-        //   poblacion_sujeto: [],
-        //   codigo_cups: "",
-        //   valor_unitario: "",
-        //   valor_total: "",
-        //   array_soportes: [
-        //     {
-        //       tipo_soporte: "",
-        //       descripcion_soporte: "",
-        //     },
-        //   ],
-        //   cronograma: [
-        //     { mes: "Ene", peso: "0" },
-        //     { mes: "Feb", peso: "0" },
-        //     { mes: "Mar", peso: "0" },
-        //     { mes: "Abr", peso: "0" },
-        //     { mes: "May", peso: "0" },
-        //     { mes: "Jun", peso: "0" },
-        //     { mes: "Jul", peso: "0" },
-        //     { mes: "Ago", peso: "0" },
-        //     { mes: "Sept", peso: "0" },
-        //     { mes: "Oct", peso: "0" },
-        //     { mes: "Nov", peso: "0" },
-        //     { mes: "Dic", peso: "0" },
-        //   ],
-        // },
-      ],
+      activities: [],
       product_data: {
         producto: [
           {
@@ -130,74 +87,6 @@ const ReportForm = () => {
       },
     },
   ]);
-
-  // const [events, setEvents] = useState([
-  //   {
-  //     subregion: "",
-  //     municipio_priorizado: "",
-  //     codigo_nombre_territorio: "",
-  //     codigo_micro_territorio: "",
-  //     total_hogares: "",
-  //     equipo_operativo: "",
-  //     perfil_profesional: "",
-  //     perfil_operativo: "",
-  //     proyecto: "",
-  //     description_event: "",
-  //     indicator_name: "",
-  //     meta_indicator: "",
-  //     eje_estrategico: [],
-  //     linea_operativa: [],
-  //     activities: [
-  //       {
-  //         descripcion_actividad: "Actividad inicial",
-  //         cantidad: "10",
-  //         unidad_medida: "Unidades",
-  //         entorno: ["Entorno 1"],
-  //         tecnologia: ["Tecnología 1"],
-  //         poblacion_sujeto: ["Población 1"],
-  //         codigo_cups: "CUPS001",
-  //         valor_unitario: "100",
-  //         valor_total: "1000",
-  //         array_soportes: [
-  //           {
-  //             tipo_soporte: "Soporte 1",
-  //             descripcion_soporte: "Descripción del soporte 1",
-  //           },
-  //         ],
-  //         cronograma: [
-  //           { mes: "Ene", peso: "10" },
-  //           { mes: "Feb", peso: "20" },
-  //           { mes: "Mar", peso: "30" },
-  //           { mes: "Abr", peso: "40" },
-  //           { mes: "May", peso: "50" },
-  //           { mes: "Jun", peso: "60" },
-  //           { mes: "Jul", peso: "70" },
-  //           { mes: "Ago", peso: "80" },
-  //           { mes: "Sept", peso: "90" },
-  //           { mes: "Oct", peso: "100" },
-  //           { mes: "Nov", peso: "110" },
-  //           { mes: "Dic", peso: "120" },
-  //         ],
-  //       },
-  //     ],
-  //     product_data: {
-  //       producto: [
-  //         {
-  //           descripcion_producto: "",
-  //           indicadores: [
-  //             {
-  //               cantidad: "",
-  //               indicador_linea_base: "",
-  //               meta_producto: "",
-  //             },
-  //           ],
-  //           nombre_entidad: "",
-  //           descripcion_operador: "",
-  //         },
-  //       ],
-  //     },
-  //   },
-  // ]);
 
   const resetForm = () => {
     // Reiniciar los datos del formulario principal
@@ -221,7 +110,41 @@ const ReportForm = () => {
     // setActivities([]);
 
     // Reiniciar los datos del evento
-    setEventData(null);
+    setEvents([
+      {
+        subregion: "",
+        municipio_priorizado: "",
+        codigo_nombre_territorio: "",
+        codigo_micro_territorio: "",
+        total_hogares: "",
+        equipo_operativo: "",
+        perfil_profesional: "",
+        perfil_operativo: "",
+        proyecto: "",
+        description_event: "",
+        indicator_name: "",
+        meta_indicator: "",
+        eje_estrategico: [],
+        linea_operativa: [],
+        activities: [],
+        product_data: {
+          producto: [
+            {
+              descripcion_producto: "",
+              indicadores: [
+                {
+                  cantidad: "",
+                  indicador_linea_base: "",
+                  meta_producto: "",
+                },
+              ],
+              nombre_entidad: "",
+              descripcion_operador: "",
+            },
+          ],
+        },
+      },
+    ]);
 
     // Reiniciar el estado de éxito
     setSuccess(null);
@@ -408,13 +331,15 @@ const ReportForm = () => {
           {success === false && (
             <p className={styles.error}>Error al enviar el reporte.</p>
           )}
-          <button
-            className={styles.buttonMain}
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? "Enviando..." : "Enviar Reporte"}
-          </button>
+          <div className={styles.contedor_boton}>
+            <button
+              className={styles.buttonMain}
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Enviando..." : "Enviar Reporte"}
+            </button>
+          </div>
         </form>
       </div>
     </>
