@@ -92,3 +92,63 @@
   width: 150px; /* Tamaño específico para el contenedor */
   overflow: hidden;
 }
+
+.contenedor_titulo_evento {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  gap: 2px;
+  /* width: 240px; */
+  /* justify-content: space-between; */
+  border-radius: 5px;
+  margin-top: 5px;
+  /* 
+  background-color: #16a085; */
+}
+
+.contenedor_titulo_evento strong {
+  /* margin: 0; */
+  font-size: 2rem;
+  text-align: start;
+  width: 200px;
+  cursor: pointer;
+
+  /* flex: 1; */
+}
+
+.buttonMain_añadir {
+  background-color: #4caf50; /* Verde para añadir */
+  color: white;
+  border: none;
+  border-radius: 30%;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.removeButton_añadir {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 30%;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.removeButton_añadir:hover {
+  background-color: #e74c3c;
+}

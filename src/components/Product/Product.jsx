@@ -109,7 +109,7 @@ const Product = ({
           <div className={styles.contenedor_title_product}>
             <h4
               onClick={() => toggleProduct(productIndex)}
-              className={styles.productTitle}
+              // className={styles.productTitle}
             >
               Producto {productIndex + 1}
             </h4>
@@ -293,13 +293,15 @@ const Product = ({
                       />
                     </td>
                     <td>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveProduct(productIndex)}
-                        className={styles.removeButton}
-                      >
-                        Eliminar
-                      </button>
+                      {productIndex > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveProduct(productIndex)}
+                          className={styles.removeButton}
+                        >
+                          Eliminar
+                        </button>
+                      )}
                     </td>
                   </tr>
                 </tbody>
