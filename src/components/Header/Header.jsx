@@ -22,7 +22,7 @@ const Header = () => {
 
   const handleLogout = () => {
     console.log("Cerrar sesión");
-    navigate("/login"); // Redirigir al login
+    navigate("/repo"); // Redirigir al login
   };
 
   return (

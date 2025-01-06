@@ -306,7 +306,7 @@ const ActivityItem = ({
             <div key={item.mes} className={styles.cronogramaItem}>
               <strong>{item.mes}</strong>
               <input
-                type="text"
+                type="number"
                 placeholder="%"
                 value={item.peso === "0" ? "" : item.peso}
                 onChange={(e) =>
@@ -363,7 +363,7 @@ const ActivityItem = ({
       </div>
       {expanded && (
         <div className={styles.activityDetails}>
-          <table className={styles.activityTable}>
+          <table>
             <thead>
               <tr>
                 <th>Descripción Actividad</th>
@@ -382,30 +382,41 @@ const ActivityItem = ({
             <tbody>
               <tr>
                 <td>
-                  <input
-                    type="text"
-                    name="descripcion_actividad"
-                    value={activity.descripcion_actividad}
-                    onChange={(e) => handleActivityChange(e, index)}
-                  />
+                  <div className={styles.contenedor_actividad}>
+                    <textarea
+                      type="text"
+                      name="descripcion_actividad"
+                      value={activity.descripcion_actividad}
+                      onChange={(e) => handleActivityChange(e, index)}
+                      //className={styles.input_estilo}
+                      className={styles.textarea_actividad}
+                    />
+                  </div>
                 </td>
 
                 <td>
-                  <input
-                    type="text"
-                    name="cantidad"
-                    value={activity.cantidad}
-                    onChange={(e) => handleActivityChange(e, index)}
-                  />
+                  <div className={styles.inputContainer}>
+                    <input
+                      type="number"
+                      name="cantidad"
+                      value={activity.cantidad}
+                      onChange={(e) => handleActivityChange(e, index)}
+                      className={styles.inputGlobal}
+                      min="0"
+                    />
+                  </div>
                 </td>
 
                 <td>
-                  <input
-                    type="text"
-                    name="unidad_medida"
-                    value={activity.unidad_medida}
-                    onChange={(e) => handleActivityChange(e, index)}
-                  />
+                  <div className={styles.inputContainer}>
+                    <input
+                      type="text"
+                      name="unidad_medida"
+                      value={activity.unidad_medida}
+                      onChange={(e) => handleActivityChange(e, index)}
+                      className={styles.inputGlobal}
+                    />
+                  </div>
                 </td>
 
                 <td>
@@ -620,20 +631,28 @@ const ActivityItem = ({
                 </td>
 
                 <td>
-                  <input
-                    type="text"
-                    name="valor_unitario"
-                    value={activity.valor_unitario}
-                    onChange={(e) => handleActivityChange(e, index)}
-                  />
+                  <div className={styles.input_valor_container}>
+                    <input
+                      type="number"
+                      name="valor_unitario"
+                      value={activity.valor_unitario}
+                      onChange={(e) => handleActivityChange(e, index)}
+                      className={styles.input_valor}
+                      min="0"
+                    />
+                  </div>
                 </td>
                 <td>
-                  <input
-                    type="text"
-                    name="valor_total"
-                    value={activity.valor_total}
-                    onChange={(e) => handleActivityChange(e, index)}
-                  />
+                  <div className={styles.input_valor_container}>
+                    <input
+                      type="number"
+                      name="valor_total"
+                      value={activity.valor_total}
+                      onChange={(e) => handleActivityChange(e, index)}
+                      className={styles.input_valor}
+                      min="0"
+                    />
+                  </div>
                 </td>
 
                 <td>{renderCronogramaField()}</td>

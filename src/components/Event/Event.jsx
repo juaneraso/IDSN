@@ -505,52 +505,64 @@ const Event = ({
             <tbody>
               <tr>
                 <td>
-                  <input
-                    type="text"
-                    value={event.subregion}
-                    onChange={(e) =>
-                      handleEventChange(index, "subregion", e.target.value)
-                    }
-                  />
+                  <div className={styles.cellWrapper}>
+                    <textarea
+                      type="text"
+                      className={styles.textarea}
+                      value={event.subregion}
+                      onChange={(e) =>
+                        handleEventChange(index, "subregion", e.target.value)
+                      }
+                    />
+                  </div>
                 </td>
                 <td>
-                  <input
-                    type="text"
-                    value={event.municipio_priorizado}
-                    onChange={(e) =>
-                      handleEventChange(
-                        index,
-                        "municipio_priorizado",
-                        e.target.value
-                      )
-                    }
-                  />
+                  <div className={styles.cellWrapper}>
+                    <textarea
+                      type="text"
+                      className={styles.textarea}
+                      value={event.municipio_priorizado}
+                      onChange={(e) =>
+                        handleEventChange(
+                          index,
+                          "municipio_priorizado",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
                 </td>
                 <td>
-                  <input
-                    type="text"
-                    value={event.codigo_nombre_territorio}
-                    onChange={(e) =>
-                      handleEventChange(
-                        index,
-                        "codigo_nombre_territorio",
-                        e.target.value
-                      )
-                    }
-                  />
+                  <div className={styles.cellWrapper}>
+                    <textarea
+                      className={styles.textarea}
+                      type="text"
+                      value={event.codigo_nombre_territorio}
+                      onChange={(e) =>
+                        handleEventChange(
+                          index,
+                          "codigo_nombre_territorio",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
                 </td>
                 <td>
-                  <input
-                    type="text"
-                    value={event.codigo_micro_territorio}
-                    onChange={(e) =>
-                      handleEventChange(
-                        index,
-                        "codigo_micro_territorio",
-                        e.target.value
-                      )
-                    }
-                  />
+                  <div className={styles.cellWrapper}>
+                    <textarea
+                      className={styles.textarea}
+                      type="text"
+                      value={event.codigo_micro_territorio}
+                      onChange={(e) =>
+                        handleEventChange(
+                          index,
+                          "codigo_micro_territorio",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
                 </td>
                 <td>
                   <input

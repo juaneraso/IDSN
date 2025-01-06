@@ -1,112 +1,10 @@
-/* .eventContainer {
-  margin: 20px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.accordionButton {
-  padding: 5px 10px;
-  margin-right: 10px;
-  background-color: #1abc9c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.accordionButton:hover {
-  background-color: #16a085;
-}
-
-.deleteButton {
-  padding: 5px 10px;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.deleteButton:hover {
-  background-color: #c0392b;
-}
-
-.content {
-  margin-top: 15px;
-}
-
-.buttonMain {
-  width: 100%;
-  padding: 12px;
-  background-color: #1abc9c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  grid-column: span 2;
-  margin-bottom: 5px;
-}
-.buttonMain:disabled {
-  background-color: #95a5a6;
-  cursor: not-allowed;
-}
-
-.buttonMain:hover:not(:disabled) {
-  background-color: #16a085;
-}
-
-.axisContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.axisInput {
-  flex: 1;
-  margin-right: 10px;
-}
-
-.removeButton {
-  padding: 5px 10px;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.removeButton:hover {
-  background-color: #c0392b;
-} */
-
-/* .eventContainer {
-  margin: 0px;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-} */
-
 .table {
-  width: 100%;
+  /* width: 100%; */
   border-collapse: collapse;
   /* margin: 20px 0; */
   font-size: 1rem;
   text-align: left;
-  max-width: 100%;
+  /* max-width: 100%; */
   text-align: center;
 }
 
@@ -129,10 +27,6 @@
 .table tr:hover {
   background-color: #f1f1f1;
 }
-
-/* .input {
-  color: #7c9407;
-} */
 
 .deleteButton {
   padding: 5px 10px;
@@ -168,4 +62,33 @@
 
 .buttonAdd:hover:not(:disabled) {
   background-color: #16a085;
+}
+
+.table input {
+  width: 100%; /* Para ocupar todo el ancho de la celda */
+  box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
+  word-wrap: break-word; /* Permite que las palabras se ajusten */
+  white-space: pre-wrap; /* Hace que el texto se ajuste al ancho del input */
+  overflow-wrap: break-word; /* Ajusta el contenido para evitar desbordamiento */
+  overflow-y: auto; /* Agrega un scroll vertical si es necesario */
+  padding: 5px;
+  font-size: 0.9rem; /* Ajusta el tamaño de fuente */
+  resize: vertical; /* Permite cambiar manualmente la altura del input */
+}
+
+.textarea {
+  width: 100%;
+  min-height: 40px; /* Altura mínima */
+  max-height: 150px; /* Altura máxima */
+  box-sizing: border-box;
+  padding: 5px;
+  font-size: 0.9rem;
+  resize: vertical; /* Permitir que el usuario cambie la altura */
+  overflow-y: auto; /* Scroll si el contenido excede */
+}
+
+.cellWrapper {
+  display: flex; /* Permite ajustar el contenido dinámicamente */
+  width: 150px; /* Tamaño específico para el contenedor */
+  overflow: hidden;
 }

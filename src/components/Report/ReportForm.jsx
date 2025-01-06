@@ -333,6 +333,7 @@ const ReportForm = () => {
                 soportes: activity.array_soportes.map((soporte) => ({
                   tipo: soporte.tipo_soporte,
                   descripcion: soporte.descripcion_soporte,
+                  cantidad: soporte.cantidad_soporte,
                 })),
                 cronograma: activity.cronograma.map((item) => ({
                   [item.mes]: parseInt(item.peso, 10),
