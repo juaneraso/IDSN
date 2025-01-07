@@ -6,6 +6,7 @@ import Product from "../Product/Product";
 import Event from "../Event/Event";
 import { useSelector } from "react-redux";
 import qs from "qs";
+import Swal from "sweetalert2";
 
 const queryParameters = {
   fields: ["documentId", "nombre"], // Campos del recurso principal
@@ -38,7 +39,6 @@ const ReportForm = () => {
   const token = useSelector((state) => state.token.token);
   console.log("token", token);
 
-  const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
 
@@ -88,23 +88,213 @@ const ReportForm = () => {
     },
   ]);
 
+  // const validateEvents = (events) => {
+  //   const missingFields = [];
+
+  //   events.forEach((event, eventIndex) => {
+  //     // Validar los campos de nivel principal del evento
+  //     Object.keys(event).forEach((key) => {
+  //       if (typeof event[key] === "string" && event[key].trim() === "") {
+  //         missingFields.push(
+  //           `Evento ${eventIndex + 1}: El campo '${key}' está vacío.`
+  //         );
+  //       }
+  //     });
+
+  //     // Validar ejes estratégicos
+  //     (event.eje_estrategico || []).forEach((eje, ejeIndex) => {
+  //       if (!eje || eje.trim() === "") {
+  //         missingFields.push(
+  //           `Evento ${eventIndex + 1}, Eje Estratégico ${
+  //             ejeIndex + 1
+  //           }: está vacío.`
+  //         );
+  //       }
+  //     });
+
+  //     // Validar líneas operativas
+  //     (event.linea_operativa || []).forEach((linea, lineaIndex) => {
+  //       if (!linea || linea.trim() === "") {
+  //         missingFields.push(
+  //           `Evento ${eventIndex + 1}, Línea Operativa ${
+  //             lineaIndex + 1
+  //           }: está vacía.`
+  //         );
+  //       }
+  //     });
+
+  //     // Validar productos
+  //     (event.product_data?.producto || []).forEach(
+  //       (producto, productoIndex) => {
+  //         if (!producto.descripcion_producto.trim()) {
+  //           missingFields.push(
+  //             `Evento ${eventIndex + 1}, Producto ${
+  //               productoIndex + 1
+  //             }: descripción del producto está vacía.`
+  //           );
+  //         }
+
+  //         // Validar indicadores dentro de cada producto
+  //         (producto.indicadores || []).forEach((indicador, indicadorIndex) => {
+  //           if (!indicador.meta_producto.trim()) {
+  //             missingFields.push(
+  //               `Evento ${eventIndex + 1}, Producto ${
+  //                 productoIndex + 1
+  //               }, Indicador ${
+  //                 indicadorIndex + 1
+  //               }: meta del producto está vacía.`
+  //             );
+  //           }
+  //           if (!indicador.cantidad) {
+  //             missingFields.push(
+  //               `Evento ${eventIndex + 1}, Producto ${
+  //                 productoIndex + 1
+  //               }, Indicador ${indicadorIndex + 1}: cantidad está vacía.`
+  //             );
+  //           }
+  //         });
+  //       }
+  //     );
+
+  //     // Validar actividades
+  //     (event.activities || []).forEach((activity, activityIndex) => {
+  //       if (!activity.descripcion_actividad.trim()) {
+  //         missingFields.push(
+  //           `Evento ${eventIndex + 1}, Actividad ${
+  //             activityIndex + 1
+  //           }: descripción de la actividad está vacía.`
+  //         );
+  //       }
+  //       if (!activity.cantidad) {
+  //         missingFields.push(
+  //           `Evento ${eventIndex + 1}, Actividad ${
+  //             activityIndex + 1
+  //           }: cantidad está vacía.`
+  //         );
+  //       }
+  //     });
+  //   });
+
+  //   return missingFields;
+  // };
+
+  const validateEvents = (events) => {
+    const missingFields = [];
+
+    events.forEach((event, eventIndex) => {
+      // Validar los campos de nivel principal del evento
+      Object.keys(event).forEach((key) => {
+        if (typeof event[key] === "string" && event[key].trim() === "") {
+          missingFields.push(
+            `Evento ${eventIndex + 1}: El campo '${key}' está vacío.`
+          );
+        }
+      });
+
+      // Validar ejes estratégicos
+      (event.eje_estrategico || []).forEach((eje, ejeIndex) => {
+        if (!eje || typeof eje !== "string" || eje.trim() === "") {
+          missingFields.push(
+            `Evento ${eventIndex + 1}, Eje Estratégico ${
+              ejeIndex + 1
+            }: está vacío.`
+          );
+        }
+      });
+
+      // Validar líneas operativas
+      (event.linea_operativa || []).forEach((linea, lineaIndex) => {
+        if (!linea || typeof linea !== "string" || linea.trim() === "") {
+          missingFields.push(
+            `Evento ${eventIndex + 1}, Línea Operativa ${
+              lineaIndex + 1
+            }: está vacía.`
+          );
+        }
+      });
+
+      // Validar productos
+      (event.product_data?.producto || []).forEach(
+        (producto, productoIndex) => {
+          if (
+            !producto?.descripcion_producto ||
+            producto.descripcion_producto.trim() === ""
+          ) {
+            missingFields.push(
+              `Evento ${eventIndex + 1}, Producto ${
+                productoIndex + 1
+              }: descripción del producto está vacía.`
+            );
+          }
+
+          // Validar indicadores dentro de cada producto
+          (producto.indicadores || []).forEach((indicador, indicadorIndex) => {
+            if (
+              !indicador?.meta_producto ||
+              indicador.meta_producto.trim() === ""
+            ) {
+              missingFields.push(
+                `Evento ${eventIndex + 1}, Producto ${
+                  productoIndex + 1
+                }, Indicador ${
+                  indicadorIndex + 1
+                }: meta del producto está vacía.`
+              );
+            }
+            if (indicador?.cantidad == null) {
+              missingFields.push(
+                `Evento ${eventIndex + 1}, Producto ${
+                  productoIndex + 1
+                }, Indicador ${indicadorIndex + 1}: cantidad está vacía.`
+              );
+            }
+          });
+        }
+      );
+
+      // Validar actividades
+      (event.activities || []).forEach((activity, activityIndex) => {
+        if (
+          !activity?.descripcion_actividad ||
+          activity.descripcion_actividad.trim() === ""
+        ) {
+          missingFields.push(
+            `Evento ${eventIndex + 1}, Actividad ${
+              activityIndex + 1
+            }: descripción de la actividad está vacía.`
+          );
+        }
+        if (activity?.cantidad == null) {
+          missingFields.push(
+            `Evento ${eventIndex + 1}, Actividad ${
+              activityIndex + 1
+            }: cantidad está vacía.`
+          );
+        }
+      });
+    });
+
+    return missingFields;
+  };
+
   const resetForm = () => {
     // Reiniciar los datos del formulario principal
-    setReportData({
-      subregion: "",
-      municipio: "",
-      fechaRegistro: "",
-      codigo_territorio: "",
-      codigo_micro_territorio: "",
-      numero_micro_territorio: "",
-      numero_hogares: "",
-      proyecto: "",
-      actividad_pas: "",
-      descripcion: "",
-      tipo_territorio: "",
-      tipo_micro_territorio: "",
-      nombre_micro_territorio: "",
-    });
+
+    // setReportData({
+    //   subregion: "",
+    //   municipio: "",
+    //   fechaRegistro: "",
+    //   codigo_territorio: "",
+    //   codigo_micro_territorio: "",
+    //   numero_micro_territorio: "",
+    //   numero_hogares: "",
+    //   proyecto: "",
+    //   actividad_pas: "",
+    //   descripcion: "",
+    //   tipo_territorio: "",
+    //   tipo_micro_territorio: "",
+    //   nombre_micro_territorio: "",
+    // });
 
     // Reiniciar las actividades
     // setActivities([]);
@@ -181,31 +371,33 @@ const ReportForm = () => {
 
   console.log("Datos eventos", events);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setReportData({ ...reportData, [name]: value });
-  };
-
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
-    setSuccess(null);
+
+    // if (!validateEvents()) {
+    //   Swal.fire({
+    //     icon: "warning",
+    //     title: "Campos incompletos",
+    //     text: "Por favor, completa todos los campos antes de enviar.",
+    //   });
+    //   setLoading(false);
+    //   return;
+    // }
+
+    // const missingFields = validateEvents(events);
+    // if (missingFields.length > 0) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Faltan campos por llenar",
+    //     html: missingFields.join("<br>"), // Muestra los errores en un formato de lista
+    //   });
+    //   return;
+    // }
 
     try {
       // Transformar los datos al formato requerido
       const transformedData = {
         data: {
-          // territorializacion: {
-          //   numero_hogares: parseInt(event.total_hogares, 10),
-          //   municipio: event.municipio_priorizado,
-          //   territorio: event.codigo_nombre_territorio,
-          //   microterritorio: event.codigo_micro_territorio || null,
-          //   subregion: event.subregion,
-          // },
           eventos: events.map((event) => ({
             equipo: event.equipo_operativo,
             perfiles_profesional: event.perfil_profesional,
@@ -294,12 +486,23 @@ const ReportForm = () => {
 
       if (!response.ok) throw new Error("Error al enviar el reporte.");
 
-      setSuccess(true);
+      // setSuccess(true);
       // Reiniciar el formulario
+      Swal.fire({
+        icon: "success",
+        title: "¡Envío correcto!",
+        text: "Informacion agregada correctamente!",
+      });
+
       resetForm();
     } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor revise que todos los datos esten completos !",
+      });
       console.error(error);
-      setSuccess(false);
+      // setSuccess(false);
     } finally {
       setLoading(false);
     }
@@ -325,19 +528,13 @@ const ReportForm = () => {
             />
           </div>
 
-          {success === true && (
-            <p className={styles.success}>¡Reporte enviado con éxito!</p>
-          )}
-          {success === false && (
-            <p className={styles.error}>Error al enviar el reporte.</p>
-          )}
           <div className={styles.contedor_boton}>
             <button
               className={styles.buttonMain}
               type="submit"
-              disabled={loading}
+              // disabled={loading}
             >
-              {loading ? "Enviando..." : "Enviar Reporte"}
+              Enviar Anexo
             </button>
           </div>
         </form>

@@ -36,7 +36,7 @@ const Event = ({
   const customStyles = {
     control: (base) => ({
       ...base,
-      minWidth: "300px", // Ajusta el ancho mínimo
+      minWidth: "280px", // Ajusta el ancho mínimo
       //maxWidth: "400px", // Opcional, limita el ancho máximo
     }),
     menu: (base) => ({
@@ -392,7 +392,7 @@ const Event = ({
                         handleStrategicAxisChange(index, selectedOptions)
                       }
                       placeholder="Seleccionar ejes..."
-                      className={styles.select}
+                      styles={customStyles}
                     />
                   </td>
 
@@ -411,7 +411,7 @@ const Event = ({
                         handleLineaChange(index, selectedOptions)
                       }
                       placeholder="Seleccionar Lineas..."
-                      className={styles.select}
+                      styles={customStyles}
                     />
                   </td>
 

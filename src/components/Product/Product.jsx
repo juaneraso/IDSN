@@ -146,17 +146,20 @@ const Product = ({
                 <tbody>
                   <tr>
                     <td>
-                      <input
-                        type="text"
-                        value={product.descripcion_producto}
-                        onChange={(e) =>
-                          handleInputChange(
-                            productIndex,
-                            "descripcion_producto",
-                            e.target.value
-                          )
-                        }
-                      />
+                      <div className={styles.cellWrapper}>
+                        <textarea
+                          className={styles.textarea}
+                          type="text"
+                          value={product.descripcion_producto}
+                          onChange={(e) =>
+                            handleInputChange(
+                              productIndex,
+                              "descripcion_producto",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
                     </td>
                     <td>
                       {(product.indicadores || []).map(
