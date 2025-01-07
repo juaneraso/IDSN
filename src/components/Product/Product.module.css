@@ -145,24 +145,34 @@
   border: 1px solid #ccc;
   margin-bottom: 5px;
   gap: 2px;
-  /* width: 240px; */
+  width: 270px;
   justify-content: space-between;
   border-radius: 5px;
   /* 
   background-color: #16a085; */
 }
 
-.contenedor_title_product h4 {
-  /* margin: 0; */
-  /* font-size: 1.1rem; */
+/* .contenedor_title_product h4 {
   text-align: start;
-  width: 200px;
+  width: 150px;
   cursor: pointer;
+} */
+
+.titleAndIcon {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espaciado entre el h4 y el icono */
 }
 
-.contenedor_title_product h4:hover {
-  text-decoration: underline;
+.buttons {
+  display: flex;
+  gap: 5px; /* Espaciado entre los botones */
 }
+
+/* .contenedor_title_product h4:hover {
+  text-decoration: underline;
+} */
+
 .indicatorHeader {
   display: flex;
   justify-content: space-between;
@@ -218,5 +228,16 @@
 .cellWrapper {
   display: flex; /* Permite ajustar el contenido dinámicamente */
   width: 150px; /* Tamaño específico para el contenedor */
+  flex-direction: column;
   overflow: hidden;
+}
+
+.label {
+  margin-top: 10px;
+}
+
+.eye {
+  cursor: pointer;
+  font-size: 24px;
+  color: #555;
 }

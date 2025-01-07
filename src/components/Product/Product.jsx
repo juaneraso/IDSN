@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Product.module.css";
 import ActivityList from "../Activities/ActivityList";
+import { FaEye } from "react-icons/fa";
 
 const Product = ({
   product_data,
@@ -107,28 +108,36 @@ const Product = ({
       {(product_data.producto || []).map((product, productIndex) => (
         <div key={productIndex} className={styles.product}>
           <div className={styles.contenedor_title_product}>
-            <h4
-              onClick={() => toggleProduct(productIndex)}
+            <div className={styles.titleAndIcon}>
+              <h4
+              // onClick={() => toggleProduct(productIndex)}
               // className={styles.productTitle}
-            >
-              Producto {productIndex + 1}
-            </h4>
-            {productIndex > 0 && (
+              >
+                Producto {productIndex + 1}
+              </h4>
+              <FaEye
+                className={styles.eye}
+                onClick={() => toggleProduct(productIndex)}
+              />
+            </div>
+            <div className={styles.buttons}>
+              {productIndex > 0 && (
+                <button
+                  type="button"
+                  onClick={() => handleRemoveProduct(productIndex)}
+                  className={styles.removeButton_añadir}
+                >
+                  -
+                </button>
+              )}
               <button
                 type="button"
-                onClick={() => handleRemoveProduct(productIndex)}
-                className={styles.removeButton_añadir}
+                onClick={handleAddProduct}
+                className={styles.buttonMain_añadir}
               >
-                -
+                +
               </button>
-            )}
-            <button
-              type="button"
-              onClick={handleAddProduct}
-              className={styles.buttonMain_añadir}
-            >
-              +
-            </button>
+            </div>
           </div>
           {/* Contenido del acordeón */}
           {isProductOpen[productIndex] && (
@@ -264,9 +273,9 @@ const Product = ({
                           }
                         />
                       </div>
-                      <div>
-                        <label>Descripción</label>
-                        <input
+                      <div className={styles.cellWrapper}>
+                        <label className={styles.label}>Descripción</label>
+                        <textarea
                           type="text"
                           value={product.descripcion_operador}
                           onChange={(e) =>
@@ -276,6 +285,7 @@ const Product = ({
                               e.target.value
                             )
                           }
+                          className={styles.textarea}
                         />
                       </div>
                     </td>
@@ -300,9 +310,9 @@ const Product = ({
                         <button
                           type="button"
                           onClick={() => handleRemoveProduct(productIndex)}
-                          className={styles.removeButton}
+                          className={styles.removeButton_añadir}
                         >
-                          Eliminar
+                          -
                         </button>
                       )}
                     </td>

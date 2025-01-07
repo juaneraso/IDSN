@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Product from "../Product/Product";
 import styles from "./Event.module.css";
 import Select from "react-select"; // Importamos React Select
+import { FaEye } from "react-icons/fa"; // Importa el ícono de Font Awesome
 
 const Event = ({
   events,
@@ -18,6 +19,10 @@ const Event = ({
     // events.map(() => true) // Inicializamos todos como colapsados
     events.map((_, index) => index === 0)
   );
+
+  const handleClick = () => {
+    alert("¡Ícono de ojo clickeado!");
+  };
 
   const ejes = [
     "Gobernabilidad y gobernanza de la salud pública ",
@@ -132,9 +137,9 @@ const Event = ({
     setExpandedEvents(updatedExpandedEvents);
     // Condicion si queremos que el evento uno no se expanda
     // se puede aplicar o no
-    // if (index == 0) {
-    //   setExpandedEvents([...expandedEvents, false]);
-    // }
+    if (index == 0) {
+      setExpandedEvents([...expandedEvents, false]);
+    }
   };
 
   const handleRemoveEvent = (index) => {
@@ -440,10 +445,10 @@ const Event = ({
                     {index > 0 && (
                       <button
                         type="button"
-                        className={styles.deleteButton}
+                        className={styles.removeButton_añadir}
                         onClick={() => handleRemoveEvent(index)}
                       >
-                        Eliminar
+                        -
                       </button>
                     )}
                   </td>
@@ -454,6 +459,12 @@ const Event = ({
         </div>
       ))}
 
+      <div
+        style={{ cursor: "pointer", fontSize: "24px", color: "#555" }}
+        onClick={handleClick}
+      >
+        <FaEye />
+      </div>
       {/* <button
         className={styles.buttonAdd}
         type="button"

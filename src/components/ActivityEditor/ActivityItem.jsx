@@ -551,7 +551,7 @@ const ActivityItem = ({
                           </select>
                         </td>
                         <td>
-                          <input
+                          <textarea
                             type="text"
                             name="descripcion_soporte"
                             value={soporte.descripcion_soporte}
@@ -559,7 +559,7 @@ const ActivityItem = ({
                               handleSoporteChange(e, soporteIndex)
                             }
                             placeholder="Descripción Soporte"
-                            className={styles.soporte_input}
+                            className={styles.textarea}
                           />
                         </td>
                         <td>

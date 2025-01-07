@@ -163,3 +163,14 @@
 
   /* margin-left: 5px; */
 }
+
+.textarea {
+  width: 300px;
+  min-height: 40px; /* Altura mínima */
+  max-height: 150px; /* Altura máxima */
+  box-sizing: border-box;
+  padding: 5px;
+  font-size: 0.9rem;
+  resize: vertical; /* Permitir que el usuario cambie la altura */
+  overflow-y: auto; /* Scroll si el contenido excede */
+}
