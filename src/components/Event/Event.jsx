@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Product from "../Product/Product";
 import styles from "./Event.module.css";
 import Select from "react-select"; // Importamos React Select
-import { FaEye } from "react-icons/fa"; // Importa el ícono de Font Awesome
 
 const Event = ({
   events,
@@ -459,12 +458,6 @@ const Event = ({
         </div>
       ))}
 
-      <div
-        style={{ cursor: "pointer", fontSize: "24px", color: "#555" }}
-        onClick={handleClick}
-      >
-        <FaEye />
-      </div>
       {/* <button
         className={styles.buttonAdd}
         type="button"
