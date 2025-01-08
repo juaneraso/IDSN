@@ -8,9 +8,11 @@ const Header = () => {
   const navigate = useNavigate(); // Hook para navegación
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false); // Estado para el menú del usuario
 
-  const datos = useSelector((state) => state.token);
-  const user = datos.user;
-  console.log("datos", user);
+  const user_string = localStorage.getItem("token");
+  const user_object = JSON.parse(user_string);
+  const user = user_object.user;
+
+  console.log("datos_usuario", user);
 
   const handleHomeClick = () => {
     navigate("/dashbo"); // Redirigir al Home

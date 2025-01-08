@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ReportForm.module.css";
 import Header from "../Header/Header";
-import ReportFields from "../Fields/ReportFields";
-import Product from "../Product/Product";
 import Event from "../Event/Event";
 import { useSelector } from "react-redux";
 import qs from "qs";
@@ -36,8 +34,11 @@ const ReportForm = () => {
     nombre_micro_territorio: "",
   });
 
-  const token = useSelector((state) => state.token.token);
-  console.log("token", token);
+  //const token = useSelector((state) => state.token.token);
+  const token_string = localStorage.getItem("token");
+  const token_object = JSON.parse(token_string);
+  const token = token_object.token;
+  console.log("token", token_object.token);
 
   const [ejes, setEjes] = useState([]);
   const [lineas, setLineas] = useState([]);
