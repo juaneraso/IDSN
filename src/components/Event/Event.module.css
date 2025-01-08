@@ -101,7 +101,7 @@
   border: 1px solid #ccc;
   margin-bottom: 5px;
   gap: 2px;
-  /* width: 240px; */
+  /* width: 100%; */
   /* justify-content: space-between; */
   border-radius: 5px;
   margin-top: 5px;
@@ -114,9 +114,10 @@
   font-size: 2rem;
   text-align: start;
   width: 200px;
-  cursor: pointer;
+  /* margin-left: 200px; */
+  /* margin-right: 100px; */
 
-  /* flex: 1; */
+  cursor: pointer;
 }
 
 .contenedor_titulo_evento strong:hover {
@@ -137,6 +138,9 @@
   align-items: center;
 }
 
+.buttonMain_añadir:hover {
+  background-color: #027006;
+}
 .removeButton_añadir {
   background-color: #f44336;
   color: white;
@@ -153,5 +157,18 @@
 }
 
 .removeButton_añadir:hover {
-  background-color: #e74c3c;
+  background-color: #c23626;
+}
+
+.contenedor_evento {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  gap: 2px;
+  /* width: 100%; */
+  justify-content: space-between;
+  /* border-radius: 5px; */
 }

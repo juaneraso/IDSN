@@ -166,6 +166,7 @@ const Event = ({
                 Evento{" "}
               </strong>
             )}
+
             {index > 0 && (
               <button
                 type="button"

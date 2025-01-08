@@ -39,9 +39,6 @@ const ReportForm = () => {
   const token = useSelector((state) => state.token.token);
   console.log("token", token);
 
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(null);
-
   const [ejes, setEjes] = useState([]);
   const [lineas, setLineas] = useState([]);
   const [entornos, setEntornos] = useState([]);
@@ -87,195 +84,6 @@ const ReportForm = () => {
       },
     },
   ]);
-
-  // const validateEvents = (events) => {
-  //   const missingFields = [];
-
-  //   events.forEach((event, eventIndex) => {
-  //     // Validar los campos de nivel principal del evento
-  //     Object.keys(event).forEach((key) => {
-  //       if (typeof event[key] === "string" && event[key].trim() === "") {
-  //         missingFields.push(
-  //           `Evento ${eventIndex + 1}: El campo '${key}' está vacío.`
-  //         );
-  //       }
-  //     });
-
-  //     // Validar ejes estratégicos
-  //     (event.eje_estrategico || []).forEach((eje, ejeIndex) => {
-  //       if (!eje || eje.trim() === "") {
-  //         missingFields.push(
-  //           `Evento ${eventIndex + 1}, Eje Estratégico ${
-  //             ejeIndex + 1
-  //           }: está vacío.`
-  //         );
-  //       }
-  //     });
-
-  //     // Validar líneas operativas
-  //     (event.linea_operativa || []).forEach((linea, lineaIndex) => {
-  //       if (!linea || linea.trim() === "") {
-  //         missingFields.push(
-  //           `Evento ${eventIndex + 1}, Línea Operativa ${
-  //             lineaIndex + 1
-  //           }: está vacía.`
-  //         );
-  //       }
-  //     });
-
-  //     // Validar productos
-  //     (event.product_data?.producto || []).forEach(
-  //       (producto, productoIndex) => {
-  //         if (!producto.descripcion_producto.trim()) {
-  //           missingFields.push(
-  //             `Evento ${eventIndex + 1}, Producto ${
-  //               productoIndex + 1
-  //             }: descripción del producto está vacía.`
-  //           );
-  //         }
-
-  //         // Validar indicadores dentro de cada producto
-  //         (producto.indicadores || []).forEach((indicador, indicadorIndex) => {
-  //           if (!indicador.meta_producto.trim()) {
-  //             missingFields.push(
-  //               `Evento ${eventIndex + 1}, Producto ${
-  //                 productoIndex + 1
-  //               }, Indicador ${
-  //                 indicadorIndex + 1
-  //               }: meta del producto está vacía.`
-  //             );
-  //           }
-  //           if (!indicador.cantidad) {
-  //             missingFields.push(
-  //               `Evento ${eventIndex + 1}, Producto ${
-  //                 productoIndex + 1
-  //               }, Indicador ${indicadorIndex + 1}: cantidad está vacía.`
-  //             );
-  //           }
-  //         });
-  //       }
-  //     );
-
-  //     // Validar actividades
-  //     (event.activities || []).forEach((activity, activityIndex) => {
-  //       if (!activity.descripcion_actividad.trim()) {
-  //         missingFields.push(
-  //           `Evento ${eventIndex + 1}, Actividad ${
-  //             activityIndex + 1
-  //           }: descripción de la actividad está vacía.`
-  //         );
-  //       }
-  //       if (!activity.cantidad) {
-  //         missingFields.push(
-  //           `Evento ${eventIndex + 1}, Actividad ${
-  //             activityIndex + 1
-  //           }: cantidad está vacía.`
-  //         );
-  //       }
-  //     });
-  //   });
-
-  //   return missingFields;
-  // };
-
-  const validateEvents = (events) => {
-    const missingFields = [];
-
-    events.forEach((event, eventIndex) => {
-      // Validar los campos de nivel principal del evento
-      Object.keys(event).forEach((key) => {
-        if (typeof event[key] === "string" && event[key].trim() === "") {
-          missingFields.push(
-            `Evento ${eventIndex + 1}: El campo '${key}' está vacío.`
-          );
-        }
-      });
-
-      // Validar ejes estratégicos
-      (event.eje_estrategico || []).forEach((eje, ejeIndex) => {
-        if (!eje || typeof eje !== "string" || eje.trim() === "") {
-          missingFields.push(
-            `Evento ${eventIndex + 1}, Eje Estratégico ${
-              ejeIndex + 1
-            }: está vacío.`
-          );
-        }
-      });
-
-      // Validar líneas operativas
-      (event.linea_operativa || []).forEach((linea, lineaIndex) => {
-        if (!linea || typeof linea !== "string" || linea.trim() === "") {
-          missingFields.push(
-            `Evento ${eventIndex + 1}, Línea Operativa ${
-              lineaIndex + 1
-            }: está vacía.`
-          );
-        }
-      });
-
-      // Validar productos
-      (event.product_data?.producto || []).forEach(
-        (producto, productoIndex) => {
-          if (
-            !producto?.descripcion_producto ||
-            producto.descripcion_producto.trim() === ""
-          ) {
-            missingFields.push(
-              `Evento ${eventIndex + 1}, Producto ${
-                productoIndex + 1
-              }: descripción del producto está vacía.`
-            );
-          }
-
-          // Validar indicadores dentro de cada producto
-          (producto.indicadores || []).forEach((indicador, indicadorIndex) => {
-            if (
-              !indicador?.meta_producto ||
-              indicador.meta_producto.trim() === ""
-            ) {
-              missingFields.push(
-                `Evento ${eventIndex + 1}, Producto ${
-                  productoIndex + 1
-                }, Indicador ${
-                  indicadorIndex + 1
-                }: meta del producto está vacía.`
-              );
-            }
-            if (indicador?.cantidad == null) {
-              missingFields.push(
-                `Evento ${eventIndex + 1}, Producto ${
-                  productoIndex + 1
-                }, Indicador ${indicadorIndex + 1}: cantidad está vacía.`
-              );
-            }
-          });
-        }
-      );
-
-      // Validar actividades
-      (event.activities || []).forEach((activity, activityIndex) => {
-        if (
-          !activity?.descripcion_actividad ||
-          activity.descripcion_actividad.trim() === ""
-        ) {
-          missingFields.push(
-            `Evento ${eventIndex + 1}, Actividad ${
-              activityIndex + 1
-            }: descripción de la actividad está vacía.`
-          );
-        }
-        if (activity?.cantidad == null) {
-          missingFields.push(
-            `Evento ${eventIndex + 1}, Actividad ${
-              activityIndex + 1
-            }: cantidad está vacía.`
-          );
-        }
-      });
-    });
-
-    return missingFields;
-  };
 
   const resetForm = () => {
     // Reiniciar los datos del formulario principal
@@ -337,7 +145,6 @@ const ReportForm = () => {
     ]);
 
     // Reiniciar el estado de éxito
-    setSuccess(null);
   };
 
   useEffect(() => {
@@ -359,10 +166,8 @@ const ReportForm = () => {
         setPoblacion(data.poblacion_sujeto);
         setSoportes(data.soportes);
         setCups(data.cups);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching subregions:", error);
-        setLoading(false);
       }
     };
 
@@ -370,29 +175,146 @@ const ReportForm = () => {
   }, [token]);
 
   console.log("Datos eventos", events);
+  console.log("produc", events[0].activities.length);
+
+  // const isEventValid = (event) => {
+  //   // Verificar campos básicos del evento
+  //   const basicFieldsValid = Object.values(event).every((value) => {
+  //     if (Array.isArray(value)) return value.length > 0;
+  //     return value !== "";
+  //   });
+
+  //   // if(events[0])
+  //   // Validar product_data
+  //   const productDataValid =
+  //     event.product_data &&
+  //     event.product_data.producto.length > 0 &&
+  //     event.product_data.producto.every((producto) => {
+  //       // Validar campos de producto
+  //       const productoFieldsValid =
+  //         producto.descripcion_producto &&
+  //         producto.nombre_entidad &&
+  //         producto.descripcion_operador;
+
+  //       // Validar indicadores dentro del producto
+  //       const indicadoresValid =
+  //         producto.indicadores.length > 0 &&
+  //         producto.indicadores.every(
+  //           (indicador) =>
+  //             indicador.cantidad &&
+  //             indicador.indicador_linea_base &&
+  //             indicador.meta_producto
+  //         );
+
+  //       return productoFieldsValid && indicadoresValid;
+  //     });
+
+  //   return basicFieldsValid && productDataValid;
+  // };
+
+  const isEventValid = (event) => {
+    // Verificar campos principales de event
+    if (
+      !event.subregion ||
+      !event.municipio_priorizado ||
+      !event.codigo_nombre_territorio ||
+      !event.codigo_micro_territorio ||
+      !event.total_hogares ||
+      !event.equipo_operativo ||
+      !event.perfil_profesional ||
+      !event.perfil_operativo ||
+      !event.proyecto ||
+      !event.description_event ||
+      !event.indicator_name ||
+      !event.meta_indicator
+    ) {
+      return false;
+    }
+
+    // Verificar arrays principales de event
+    if (
+      !Array.isArray(event.eje_estrategico) ||
+      event.eje_estrategico.length === 0 ||
+      !Array.isArray(event.linea_operativa) ||
+      event.linea_operativa.length === 0
+    ) {
+      return false;
+    }
+
+    // Validar product_data
+    if (
+      !event.product_data ||
+      !Array.isArray(event.product_data.producto) ||
+      event.product_data.producto.length === 0 ||
+      event.product_data.producto.some(
+        (producto) =>
+          !producto.descripcion_producto ||
+          !Array.isArray(producto.indicadores) ||
+          producto.indicadores.some(
+            (indicador) =>
+              !indicador.cantidad ||
+              !indicador.indicador_linea_base ||
+              !indicador.meta_producto
+          )
+      )
+    ) {
+      return false;
+    }
+
+    // Validar activities
+    if (
+      !Array.isArray(event.activities) ||
+      event.activities.length === 0 ||
+      event.activities.some((activity) => {
+        if (!activity) return false; // Evitar errores si activity es null o undefined
+
+        return (
+          !activity.descripcion_actividad ||
+          !activity.cantidad ||
+          !activity.unidad_medida ||
+          !Array.isArray(activity.entorno) ||
+          activity.entorno.length === 0 ||
+          !Array.isArray(activity.tecnologia) ||
+          activity.tecnologia.length === 0 ||
+          !Array.isArray(activity.poblacion_sujeto) ||
+          activity.poblacion_sujeto.length === 0 ||
+          !activity.codigo_cups ||
+          !activity.valor_unitario ||
+          !activity.valor_total ||
+          !Array.isArray(activity.array_soportes) ||
+          activity.array_soportes.some(
+            (soporte) =>
+              !soporte.tipo_soporte ||
+              !soporte.descripcion_soporte ||
+              !soporte.cantidad_soporte
+          ) ||
+          !Array.isArray(activity.cronograma) ||
+          activity.cronograma.length !== 12 || // Asegurar que tenga 12 meses
+          activity.cronograma.some(
+            (item) => !item.mes || isNaN(parseInt(item.peso, 10))
+          )
+        );
+      })
+    ) {
+      return false;
+    }
+
+    return true; // Si pasa todas las validaciones
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // if (!validateEvents()) {
-    //   Swal.fire({
-    //     icon: "warning",
-    //     title: "Campos incompletos",
-    //     text: "Por favor, completa todos los campos antes de enviar.",
-    //   });
-    //   setLoading(false);
-    //   return;
-    // }
+    const allEventsValid = events.every(isEventValid);
 
-    // const missingFields = validateEvents(events);
-    // if (missingFields.length > 0) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Faltan campos por llenar",
-    //     html: missingFields.join("<br>"), // Muestra los errores en un formato de lista
-    //   });
-    //   return;
-    // }
+    if (!allEventsValid) {
+      Swal.fire({
+        icon: "warning",
+        title: "Campos incompletos",
+        text: "Por favor asegúrese de que todos los campos estén completos.",
+      });
+      return;
+    }
 
     try {
       // Transformar los datos al formato requerido
@@ -486,7 +408,6 @@ const ReportForm = () => {
 
       if (!response.ok) throw new Error("Error al enviar el reporte.");
 
-      // setSuccess(true);
       // Reiniciar el formulario
       Swal.fire({
         icon: "success",
@@ -494,7 +415,7 @@ const ReportForm = () => {
         text: "Informacion agregada correctamente!",
       });
 
-      resetForm();
+      //resetForm();
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -503,8 +424,6 @@ const ReportForm = () => {
       });
       console.error(error);
       // setSuccess(false);
-    } finally {
-      setLoading(false);
     }
   };
 
