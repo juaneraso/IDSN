@@ -58,6 +58,8 @@ function Prueba() {
       //localStorage.setItem('user', form);
       console.log("Fetch POST Response:", data);
 
+      localStorage.setItem("token", JSON.stringify(datos));
+
       dispatch(loginSuccess(datos));
       navigate("/dashbo");
     } catch (error) {
