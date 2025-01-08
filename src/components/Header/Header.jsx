@@ -8,8 +8,7 @@ const Header = () => {
   const navigate = useNavigate(); // Hook para navegación
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false); // Estado para el menú del usuario
 
-  const user_string = localStorage.getItem("token");
-  const user_object = JSON.parse(user_string);
+  const user_object = JSON.parse(localStorage.getItem("token")) || {};
   const user = user_object.user;
 
   console.log("datos_usuario", user);
