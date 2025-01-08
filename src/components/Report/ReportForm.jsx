@@ -86,27 +86,6 @@ const ReportForm = () => {
   ]);
 
   const resetForm = () => {
-    // Reiniciar los datos del formulario principal
-
-    // setReportData({
-    //   subregion: "",
-    //   municipio: "",
-    //   fechaRegistro: "",
-    //   codigo_territorio: "",
-    //   codigo_micro_territorio: "",
-    //   numero_micro_territorio: "",
-    //   numero_hogares: "",
-    //   proyecto: "",
-    //   actividad_pas: "",
-    //   descripcion: "",
-    //   tipo_territorio: "",
-    //   tipo_micro_territorio: "",
-    //   nombre_micro_territorio: "",
-    // });
-
-    // Reiniciar las actividades
-    // setActivities([]);
-
     // Reiniciar los datos del evento
     setEvents([
       {
@@ -177,200 +156,64 @@ const ReportForm = () => {
   console.log("Datos eventos", events);
   console.log("produc", events[0].activities.length);
 
-  // const isEventValid = (event) => {
-  //   // Verificar campos básicos del evento
-  //   const basicFieldsValid = Object.values(event).every((value) => {
-  //     if (Array.isArray(value)) return value.length > 0;
-  //     return value !== "";
-  //   });
-
-  //   // if(events[0])
-  //   // Validar product_data
-  //   const productDataValid =
-  //     event.product_data &&
-  //     event.product_data.producto.length > 0 &&
-  //     event.product_data.producto.every((producto) => {
-  //       // Validar campos de producto
-  //       const productoFieldsValid =
-  //         producto.descripcion_producto &&
-  //         producto.nombre_entidad &&
-  //         producto.descripcion_operador;
-
-  //       // Validar indicadores dentro del producto
-  //       const indicadoresValid =
-  //         producto.indicadores.length > 0 &&
-  //         producto.indicadores.every(
-  //           (indicador) =>
-  //             indicador.cantidad &&
-  //             indicador.indicador_linea_base &&
-  //             indicador.meta_producto
-  //         );
-
-  //       return productoFieldsValid && indicadoresValid;
-  //     });
-
-  //   return basicFieldsValid && productDataValid;
-  // };
-
-  const isEventValid = (event) => {
-    // Verificar campos principales de event
-    if (
-      !event.subregion ||
-      !event.municipio_priorizado ||
-      !event.codigo_nombre_territorio ||
-      !event.codigo_micro_territorio ||
-      !event.total_hogares ||
-      !event.equipo_operativo ||
-      !event.perfil_profesional ||
-      !event.perfil_operativo ||
-      !event.proyecto ||
-      !event.description_event ||
-      !event.indicator_name ||
-      !event.meta_indicator
-    ) {
-      return false;
-    }
-
-    // Verificar arrays principales de event
-    if (
-      !Array.isArray(event.eje_estrategico) ||
-      event.eje_estrategico.length === 0 ||
-      !Array.isArray(event.linea_operativa) ||
-      event.linea_operativa.length === 0
-    ) {
-      return false;
-    }
-
-    // Validar product_data
-    if (
-      !event.product_data ||
-      !Array.isArray(event.product_data.producto) ||
-      event.product_data.producto.length === 0 ||
-      event.product_data.producto.some(
-        (producto) =>
-          !producto.descripcion_producto ||
-          !Array.isArray(producto.indicadores) ||
-          producto.indicadores.some(
-            (indicador) =>
-              !indicador.cantidad ||
-              !indicador.indicador_linea_base ||
-              !indicador.meta_producto
-          )
-      )
-    ) {
-      return false;
-    }
-
-    // Validar activities
-    if (
-      !Array.isArray(event.activities) ||
-      event.activities.length === 0 ||
-      event.activities.some((activity) => {
-        if (!activity) return false; // Evitar errores si activity es null o undefined
-
-        return (
-          !activity.descripcion_actividad ||
-          !activity.cantidad ||
-          !activity.unidad_medida ||
-          !Array.isArray(activity.entorno) ||
-          activity.entorno.length === 0 ||
-          !Array.isArray(activity.tecnologia) ||
-          activity.tecnologia.length === 0 ||
-          !Array.isArray(activity.poblacion_sujeto) ||
-          activity.poblacion_sujeto.length === 0 ||
-          !activity.codigo_cups ||
-          !activity.valor_unitario ||
-          !activity.valor_total ||
-          !Array.isArray(activity.array_soportes) ||
-          activity.array_soportes.some(
-            (soporte) =>
-              !soporte.tipo_soporte ||
-              !soporte.descripcion_soporte ||
-              !soporte.cantidad_soporte
-          ) ||
-          !Array.isArray(activity.cronograma) ||
-          activity.cronograma.length !== 12 || // Asegurar que tenga 12 meses
-          activity.cronograma.some(
-            (item) => !item.mes || isNaN(parseInt(item.peso, 10))
-          )
-        );
-      })
-    ) {
-      return false;
-    }
-
-    return true; // Si pasa todas las validaciones
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const allEventsValid = events.every(isEventValid);
-
-    if (!allEventsValid) {
-      Swal.fire({
-        icon: "warning",
-        title: "Campos incompletos",
-        text: "Por favor asegúrese de que todos los campos estén completos.",
-      });
-      return;
-    }
 
     try {
       // Transformar los datos al formato requerido
       const transformedData = {
         data: {
           eventos: events.map((event) => ({
-            equipo: event.equipo_operativo,
-            perfiles_profesional: event.perfil_profesional,
-            perfil_operativo: event.perfil_operativo,
+            equipo: event.equipo_operativo || null,
+            perfiles_profesional: event.perfil_profesional || null,
+            perfil_operativo: event.perfil_operativo || null,
             territorializacion: {
-              numero_hogares: parseInt(event.total_hogares, 10),
-              municipio: event.municipio_priorizado,
-              territorio: event.codigo_nombre_territorio,
+              numero_hogares: parseInt(event.total_hogares, 10) || null,
+              municipio: event.municipio_priorizado || null,
+              territorio: event.codigo_nombre_territorio || null,
               microterritorio: event.codigo_micro_territorio || null,
-              subregion: event.subregion,
+              subregion: event.subregion || null,
             },
 
-            descripcion: event.description_event,
-            indicador_evento: event.indicator_name,
-            meta_indicador_evento: event.meta_indicator,
+            descripcion: event.description_event || null,
+            indicador_evento: event.indicator_name || null,
+            meta_indicador_evento: event.meta_indicator || null,
 
             ejes_estrategicos: (event.eje_estrategico || []).map((eje) => ({
-              nombre: eje,
+              nombre: eje || null,
             })),
             lineas_operativa: (event.linea_operativa || []).map((linea) => ({
-              nombre: linea,
+              nombre: linea || null,
             })),
 
             productos: event.product_data.producto.map((producto, index) => ({
-              descripcion: producto.descripcion_producto,
+              descripcion: producto.descripcion_producto || null,
 
               actividades: (event.activities[index] || []).map((activity) => ({
-                descripcion: activity.descripcion_actividad,
-                cantidad_a_ejecutar: activity.cantidad,
-                unidad_medida: activity.unidad_medida,
-                equipo: activity.equipo_operativo,
-                perfiles_profesional: activity.perfil_profesional,
-                perfil_operativo: activity.perfil_operativo,
-                valor_unitario: activity.valor_unitario,
-                valor_total: activity.valor_total,
+                descripcion: activity.descripcion_actividad || null,
+                cantidad_a_ejecutar: activity.cantidad || null,
+                unidad_medida: activity.unidad_medida || null,
+                equipo: activity.equipo_operativo || null,
+                perfiles_profesional: activity.perfil_profesional || null,
+                perfil_operativo: activity.perfil_operativo || null,
+                valor_unitario: activity.valor_unitario || null,
+                valor_total: activity.valor_total || null,
                 entornos: activity.entorno.map((entorno) => ({
-                  nombre: entorno,
+                  nombre: entorno || null,
                 })),
 
                 tecnologias: activity.tecnologia.map((tecno) => ({
-                  nombre: tecno,
+                  nombre: tecno || null,
                 })),
 
                 poblaciones: activity.poblacion_sujeto.map((poblacion) => ({
-                  nombre: poblacion,
+                  nombre: poblacion || null,
                 })),
-                cups: [{ codigo: activity.codigo_cups }],
+                cups: [{ codigo: activity.codigo_cups }] || null,
                 soportes: activity.array_soportes.map((soporte) => ({
-                  tipo: soporte.tipo_soporte,
-                  descripcion: soporte.descripcion_soporte,
-                  cantidad: soporte.cantidad_soporte,
+                  tipo: soporte.tipo_soporte || null,
+                  descripcion: soporte.descripcion_soporte || null,
+                  cantidad: soporte.cantidad_soporte || null,
                 })),
                 cronograma: activity.cronograma.map((item) => ({
                   [item.mes]: parseInt(item.peso, 10),
@@ -378,17 +221,17 @@ const ReportForm = () => {
               })),
 
               operador_pic: {
-                nombre_entidad: producto.nombre_entidad,
-                descripcion: producto.descripcion_operador,
+                nombre_entidad: producto.nombre_entidad || null,
+                descripcion: producto.descripcion_operador || null,
               },
               indicadores: (producto.indicadores || []).map((indicador) => ({
-                meta_producto: indicador.meta_producto,
-                cantidad: indicador.cantidad,
-                indicador_linea_base: indicador.indicador_linea_base,
+                meta_producto: indicador.meta_producto || null,
+                cantidad: indicador.cantidad || null,
+                indicador_linea_base: indicador.indicador_linea_base || null,
               })),
             })),
             proyecto_idsn: {
-              proyecto: event.proyecto,
+              proyecto: event.proyecto || null,
             },
           })),
         },
@@ -423,7 +266,6 @@ const ReportForm = () => {
         text: "Por favor revise que todos los datos esten completos !",
       });
       console.error(error);
-      // setSuccess(false);
     }
   };
 
