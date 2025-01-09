@@ -8,10 +8,6 @@
   /* background-color: #32a016; */
 }
 
-/* table {
-  text-align: center;
-} */
-
 .input_estilo {
   width: 100%;
 }
@@ -136,6 +132,7 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
+
   /* margin-top: 5px; */
   /* margin-right: 10px; */
 }
@@ -173,4 +170,16 @@
   font-size: 0.9rem;
   resize: vertical; /* Permitir que el usuario cambie la altura */
   overflow-y: auto; /* Scroll si el contenido excede */
+}
+
+.soporte_div {
+  display: flex;
+  margin: -10px;
+}
+
+.contenedor_boton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
 }
