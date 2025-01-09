@@ -20,7 +20,7 @@ const Sidebar = () => {
               to="/"
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
-              Reportes
+              Anexo Tecnico
             </NavLink>
           </li>
           <li>
@@ -28,7 +28,7 @@ const Sidebar = () => {
               to="/view"
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
-              Anexo Tecnico
+              Visualización
             </NavLink>
           </li>
         </ul>

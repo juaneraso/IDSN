@@ -27,6 +27,7 @@ function Register() {
   });
 
   const navigate = useNavigate();
+  const back = import.meta.env.VITE_APP_BACK;
 
   const isEmailValid = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Validación de formato email
@@ -88,7 +89,8 @@ function Register() {
 
     try {
       const response = await fetch(
-        "http://localhost:1337/api/auth/local/register",
+        // "http://localhost:1337/api/auth/local/register",
+        `${back}/auth/local/register`,
         {
           method: "POST",
           headers: {

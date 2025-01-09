@@ -35,11 +35,14 @@ function Prueba() {
 
   const dispatch = useDispatch();
 
+  const back = import.meta.env.VITE_APP_BACK;
+
   const submitHandler = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:1337/api/auth/local", {
+      // const response = await fetch("http://localhost:1337/api/auth/local", {
+      const response = await fetch(`${back}/api/auth/local`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

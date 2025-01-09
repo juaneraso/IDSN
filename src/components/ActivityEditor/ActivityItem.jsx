@@ -884,6 +884,7 @@ const ActivityItem = ({
                                   }
                                   placeholder="Cantidad"
                                   className={styles.soporte_input}
+                                  min="0"
                                 />
                               </td>
                               <td>

@@ -18,7 +18,9 @@ const queryParameters = {
 const queryString = qs.stringify(queryParameters, { encodeValuesOnly: true });
 
 // URL PARA PETICION BACK
-const url = `http://localhost:1337/api/labels`;
+// const url = `http://localhost:1337/api/labels`;
+const back = import.meta.env.VITE_APP_BACK;
+const url = `${back}/api/labels`;
 
 const ReportForm = () => {
   const [reportData, setReportData] = useState({
@@ -193,9 +195,6 @@ const ReportForm = () => {
                 descripcion: activity.descripcion_actividad || null,
                 cantidad_a_ejecutar: activity.cantidad || null,
                 unidad_medida: activity.unidad_medida || null,
-                equipo: activity.equipo_operativo || null,
-                perfiles_profesional: activity.perfil_profesional || null,
-                perfil_operativo: activity.perfil_operativo || null,
                 valor_unitario: activity.valor_unitario || null,
                 valor_total: activity.valor_total || null,
                 entornos: activity.entorno.map((entorno) => ({
@@ -240,7 +239,8 @@ const ReportForm = () => {
       console.log("Transformed Data:", transformedData);
 
       // Realizar la solicitud
-      const response = await fetch("http://localhost:1337/api/anexo-tecnicos", {
+      // const response = await fetch("http://localhost:1337/api/anexo-tecnicos", {
+      const response = await fetch(`${back}/api/anexo-tecnicos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
