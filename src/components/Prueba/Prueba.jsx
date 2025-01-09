@@ -55,10 +55,10 @@ function Prueba() {
         token: data.jwt,
         user: form.identifier,
       };
-      //localStorage.setItem('user', form);
+
       console.log("Fetch POST Response:", data);
 
-      localStorage.setItem("token", JSON.stringify(datos));
+      sessionStorage.setItem("token", JSON.stringify(datos));
 
       dispatch(loginSuccess(datos));
       navigate("/dashbo");

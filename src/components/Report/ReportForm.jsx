@@ -35,8 +35,7 @@ const ReportForm = () => {
   });
 
   //const token = useSelector((state) => state.token.token);
-
-  const token_object = JSON.parse(localStorage.getItem("token")) || {};
+  const token_object = JSON.parse(sessionStorage.getItem("token")) || {};
   const token = token_object.token;
   console.log("token", token_object.token);
 
