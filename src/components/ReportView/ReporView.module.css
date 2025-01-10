@@ -55,3 +55,8 @@
   /* width: 100%; */
   overflow-x: auto;
 }
+
+.eje_contenedor {
+  display: flex;
+  align-items: center;
+}

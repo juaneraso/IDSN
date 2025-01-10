@@ -214,8 +214,9 @@ const Product = ({
                               <div className={styles.indicatorContent}>
                                 <label>Cantidad</label>
                                 <input
-                                  type="text"
+                                  type="number"
                                   value={indicator.cantidad}
+                                  min="0"
                                   onChange={(e) =>
                                     handleUpdateIndicator(
                                       productIndex,

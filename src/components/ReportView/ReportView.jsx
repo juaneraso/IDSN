@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import qs from "qs";
+
 import { useSelector } from "react-redux";
 import Header from "../Header/Header";
-import Event from "../Event/Event";
+
 import styles from "./ReporView.module.css";
+import Spinner from "../Spinner/Spinner";
 
 const ReportView = () => {
   const [data, setData] = useState(null);
@@ -32,7 +33,7 @@ const ReportView = () => {
         const result = await response.json();
         setData(result);
       } catch (error) {
-        setError(error.message);
+        // setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -41,7 +42,9 @@ const ReportView = () => {
     fetchData();
   }, [token]);
 
-  if (loading) return <div>Loading...</div>;
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error}</div>;
+  if (loading) return <Spinner />;
   if (error) return <div>Error: {error}</div>;
 
   console.log("datos", data);
@@ -51,7 +54,7 @@ const ReportView = () => {
       <Header />
       <h1>Anexo Técnicos</h1>
       <div className={styles.formContainer}>
-        {data.data.map((row, index) =>
+        {data?.data?.map((row, index) =>
           row.eventos.map((evento) => (
             <table className={styles.table}>
               <thead>
@@ -89,22 +92,27 @@ const ReportView = () => {
                   <td>{evento.indicador_evento}</td>
                   <td>{evento.meta_indicador_evento}</td>
                   <td>
-                    <div>
-                      <ul>
+                    <table>
+                      <tbody>
                         {evento.ejes_estrategicos.map((eje, index) => (
-                          <li>{eje.nombre}</li>
+                          <tr>
+                            <td>{eje.nombre}</td>
+                          </tr>
                         ))}
-                      </ul>
-                    </div>
+                      </tbody>
+                    </table>
                   </td>
+
                   <td>
-                    <div>
-                      <ul>
+                    <table>
+                      <tbody>
                         {evento.lineas_operativa.map((linea, index) => (
-                          <li>{linea.nombre}</li>
+                          <tr>
+                            <td>{linea.nombre}</td>
+                          </tr>
                         ))}
-                      </ul>
-                    </div>
+                      </tbody>
+                    </table>
                   </td>
                   <tr>
                     {evento.productos.map((producto, subIndex) => (
@@ -149,18 +157,219 @@ const ReportView = () => {
                                 )
                               )}
                             </td>
-                            <td>{producto.descripcion}</td>
+
+                            <td>
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th>Entidad</th>
+                                    <th>Descripcion</th>
+                                  </tr>
+                                  <tr></tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>
+                                      {producto.operador_pic.nombre_entidad}
+                                    </td>
+                                    <td>{producto.operador_pic.descripcion}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+
+                            <td>
+                              {producto.actividades.map(
+                                (actividad, indicadorIndex) => (
+                                  <table
+                                    key={indicadorIndex}
+                                    className={styles.subTable}
+                                    style={{ marginBottom: "1rem" }} // Espaciado entre tablas
+                                  >
+                                    <thead>
+                                      <tr>
+                                        <th>Descripcion</th>
+                                        <th>Cantidad a Ejecutar</th>
+                                        <th>Unidad de Medida</th>
+                                        <th>Entornos</th>
+                                        <th>Tecnologias</th>
+                                        <th>Poblacion Sujeto</th>
+                                        <th>Soportes</th>
+                                        <th>Código Cups</th>
+                                        <th>Valor Unitario</th>
+                                        <th>Valor Total</th>
+                                        <th>Cronograma</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td>{actividad.descripcion}</td>
+                                        <td>{actividad.cantidad_a_ejecutar}</td>
+                                        <td>{actividad.unidad_medida}</td>
+                                        <td>
+                                          {actividad.entornos.map(
+                                            (entorno, indicadorIndex) => (
+                                              <tr>*{entorno.nombre}</tr>
+                                            )
+                                          )}
+                                        </td>
+                                        <td>
+                                          {actividad.tecnologias.map(
+                                            (tecno, indicadorIndex) => (
+                                              <tr>*{tecno.nombre}</tr>
+                                            )
+                                          )}
+                                        </td>
+                                        <td>
+                                          {actividad.poblaciones.map(
+                                            (poblacion, indicadorIndex) => (
+                                              <tr>*{poblacion.nombre}</tr>
+                                            )
+                                          )}
+                                        </td>
+
+                                        <td>
+                                          {actividad.soportes.map(
+                                            (soporte, indicadorIndex) => (
+                                              <table
+                                                key={indicadorIndex}
+                                                className={styles.subTable}
+                                                style={{ marginBottom: "1rem" }} // Espaciado entre tablas
+                                              >
+                                                <thead>
+                                                  <tr>
+                                                    <th>Tipo Soporte</th>
+                                                    <th>Descripcion</th>
+                                                    <th>Cantidad</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr>
+                                                    <td>{soporte.tipo}</td>
+                                                    <td>
+                                                      {soporte.descripcion}
+                                                    </td>
+                                                    <td>{soporte.cantidad}</td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                            )
+                                          )}
+                                        </td>
+                                        <td>{actividad.cups[0].codigo}</td>
+                                        <td>{actividad.valor_unitario}</td>
+                                        <td>{actividad.valor_total}</td>
+                                        <td>
+                                          <table
+                                            key={indicadorIndex}
+                                            className={styles.subTable}
+                                            style={{ marginBottom: "1rem" }} // Espaciado entre tablas
+                                          >
+                                            <thead>
+                                              <tr>
+                                                <th>Mes</th>
+                                                <th>Porcentaje</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {actividad.cronograma.map(
+                                                (crono, indicadorIndex) => (
+                                                  <tr>
+                                                    {crono.Ene > 0 && (
+                                                      <>
+                                                        <td>Enero</td>
+                                                        <td>{crono.Ene}%</td>
+                                                      </>
+                                                    )}
+                                                    {crono.Feb > 0 && (
+                                                      <>
+                                                        <td>Febrero</td>
+                                                        <td>{crono.Feb}%</td>
+                                                      </>
+                                                    )}
+                                                    {crono.Mar > 0 && (
+                                                      <>
+                                                        <td>Marzo</td>
+                                                        <td>{crono.Mar}%</td>
+                                                      </>
+                                                    )}
+                                                    {crono.Abr > 0 && (
+                                                      <>
+                                                        <td>Abril</td>
+                                                        <td>{crono.Abr}%</td>
+                                                      </>
+                                                    )}
+                                                    {crono.May > 0 && (
+                                                      <>
+                                                        <td>Mayo</td>
+                                                        <td>{crono.May}%</td>
+                                                      </>
+                                                    )}
+                                                    {crono.Jun > 0 && (
+                                                      <>
+                                                        <td>Junio</td>
+                                                        <td>{crono.Jun}%</td>
+                                                      </>
+                                                    )}
+                                                    {crono.Jul > 0 && (
+                                                      <>
+                                                        <td>Julio</td>
+                                                        <td>{crono.Jul}%</td>
+                                                      </>
+                                                    )}
+                                                    {crono.Ago > 0 && (
+                                                      <>
+                                                        <td>Agosto</td>
+                                                        <td>{crono.Ago}%</td>
+                                                      </>
+                                                    )}
+                                                    {crono.Sept > 0 && (
+                                                      <>
+                                                        <td>Septiembre</td>
+                                                        <td>{crono.Sept}%</td>
+                                                      </>
+                                                    )}
+                                                    {crono.Oct > 0 && (
+                                                      <>
+                                                        <td>Octubre</td>
+                                                        <td>{crono.Oct}%</td>
+                                                      </>
+                                                    )}
+                                                    {crono.Nov > 0 && (
+                                                      <>
+                                                        <td>Noviembre</td>
+                                                        <td>{crono.Nov}%</td>
+                                                      </>
+                                                    )}
+                                                    {crono.Dic > 0 && (
+                                                      <>
+                                                        <td>Diciembre</td>
+                                                        <td>{crono.Dic}%</td>
+                                                      </>
+                                                    )}
+                                                  </tr>
+                                                )
+                                              )}
+                                            </tbody>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                )
+                              )}
+                            </td>
                           </tbody>
                         </table>
                       </tr>
                     ))}
                   </tr>
 
-                  <td>
+                  {/* <td>
                     <div className={styles.cellWrapper}>
                       <p>hola</p>
                     </div>
-                  </td>
+                  </td> */}
                 </tr>
               </tbody>
             </table>
