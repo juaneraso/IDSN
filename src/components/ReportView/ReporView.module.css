@@ -60,3 +60,29 @@
   display: flex;
   align-items: center;
 }
+
+.filterContainer {
+  position: sticky; /* Hace que el elemento sea fijo al hacer scroll */
+  top: 0; /* Se queda pegado al borde superior */
+  background-color: white; /* Fondo blanco para que destaque */
+  z-index: 100; /* Asegura que se superpone a otros elementos si es necesario */
+  padding: 10px; /* Espaciado interno */
+  border-bottom: 1px solid #ddd; /* Línea para separarlo visualmente */
+  display: flex; /* Facilita alinear elementos */
+  justify-content: space-between; /* Espacia los elementos dentro del contenedor */
+  align-items: center; /* Centra los elementos verticalmente */
+}
+
+.filterSelect {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.filterSelect:focus {
+  border-color: #007bff; /* Cambia el color del borde al enfocarse */
+  outline: none;
+}

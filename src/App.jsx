@@ -8,6 +8,7 @@ import RegistroUsuario from "./components/Registro/RegistroUsuario.jsx";
 import Dashbo from "./components/Dashbo/Dashbo.jsx";
 import ReportForm from "./components/Report/ReportForm.jsx";
 import ReportView from "./components/ReportView/ReportView.jsx";
+import Edit from "./components/EditView/Edit.jsx";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path="/dashbo" element={<Dashbo />} />
       <Route path="/" element={<ReportForm />} />
       <Route path="/view" element={<ReportView />} />
+      <Route path="/edit" element={<Edit />} />
     </Routes>
   );
 }

@@ -208,7 +208,7 @@ const ReportForm = () => {
                 poblaciones: activity.poblacion_sujeto.map((poblacion) => ({
                   nombre: poblacion || null,
                 })),
-                cups: [{ codigo: activity.codigo_cups }] || null,
+                cups: { codigo: activity.codigo_cups } || null,
                 soportes: activity.array_soportes.map((soporte) => ({
                   tipo: soporte.tipo_soporte || null,
                   descripcion: soporte.descripcion_soporte || null,

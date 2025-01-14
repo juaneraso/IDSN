@@ -192,7 +192,7 @@ const Event = ({
               <thead>
                 <tr>
                   <th>Subregión</th>
-                  <th>Municipio Priorizado</th>
+                  <th>Nodo-Municipio Priorizado</th>
                   <th>Código - Nombre de Territorio APS</th>
                   <th>Código Micro-Territorio</th>
                   <th>Total número de Hogares Beneficiarios</th>
