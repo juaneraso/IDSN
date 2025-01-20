@@ -3,6 +3,7 @@ import Event from "../Event/Event";
 import { useLocation } from "react-router-dom";
 import Header from "../Header/Header";
 import Swal from "sweetalert2";
+import styles from "../EditView/Edit.module.css";
 
 const Edit = () => {
   const back = import.meta.env.VITE_APP_BACK;
@@ -19,6 +20,79 @@ const Edit = () => {
 
     try {
       // Transformar los datos al formato requerido
+      // const transformedData = {
+      //   data: {
+      //     eventos: events.map((event) => ({
+      //       equipo: event.equipo_operativo || null,
+      //       perfiles_profesional: event.perfil_profesional || null,
+      //       perfil_operativo: event.perfil_operativo || null,
+      //       territorializacion: {
+      //         numero_hogares: parseInt(event.total_hogares, 10) || null,
+      //         municipio: event.municipio_priorizado || null,
+      //         territorio: event.codigo_nombre_territorio || null,
+      //         microterritorio: event.codigo_micro_territorio || null,
+      //         subregion: event.subregion || null,
+      //       },
+
+      //       descripcion: event.description_event || null,
+      //       indicador_evento: event.indicator_name || null,
+      //       meta_indicador_evento: event.meta_indicator || null,
+
+      //       ejes_estrategicos: (event.eje_estrategico || []).map((eje) => ({
+      //         nombre: eje || null,
+      //       })),
+      //       lineas_operativa: (event.linea_operativa || []).map((linea) => ({
+      //         nombre: linea || null,
+      //       })),
+
+      //       productos: event.product_data.producto.map((producto, index) => ({
+      //         descripcion: producto.descripcion_producto || null,
+
+      //         actividades: (event.activities[index] || []).map((activity) => ({
+      //           descripcion: activity.descripcion_actividad || null,
+      //           cantidad_a_ejecutar: activity.cantidad || null,
+      //           unidad_medida: activity.unidad_medida || null,
+      //           valor_unitario: activity.valor_unitario || null,
+      //           valor_total: activity.valor_total || null,
+      //           entornos: activity.entorno.map((entorno) => ({
+      //             nombre: entorno || null,
+      //           })),
+
+      //           tecnologias: activity.tecnologia.map((tecno) => ({
+      //             nombre: tecno || null,
+      //           })),
+
+      //           poblaciones: activity.poblacion_sujeto.map((poblacion) => ({
+      //             nombre: poblacion || null,
+      //           })),
+      //           cups: { codigo: activity.codigo_cups } || null,
+      //           soportes: activity.array_soportes.map((soporte) => ({
+      //             tipo: soporte.tipo_soporte || null,
+      //             descripcion: soporte.descripcion_soporte || null,
+      //             cantidad: soporte.cantidad_soporte || null,
+      //           })),
+      //           cronograma: activity.cronograma.map((item) => ({
+      //             [item.mes]: parseInt(item.peso, 10),
+      //           })),
+      //         })),
+
+      //         operador_pic: {
+      //           nombre_entidad: producto.nombre_entidad || null,
+      //           descripcion: producto.descripcion_operador || null,
+      //         },
+      //         indicadores: (producto.indicadores || []).map((indicador) => ({
+      //           meta_producto: indicador.meta_producto || null,
+      //           cantidad: indicador.cantidad || null,
+      //           indicador_linea_base: indicador.indicador_linea_base || null,
+      //         })),
+      //       })),
+      //       proyecto_idsn: {
+      //         proyecto: event.proyecto || null,
+      //       },
+      //     })),
+      //   },
+      // };
+
       const transformedData = {
         data: {
           eventos: events.map((event) => ({
@@ -27,10 +101,15 @@ const Edit = () => {
             perfil_operativo: event.perfil_operativo || null,
             territorializacion: {
               numero_hogares: parseInt(event.total_hogares, 10) || null,
-              municipio: event.municipio_priorizado || null,
+              municipios: {
+                connect: (event.subregion || []).map((region) => ({
+                  documentId: region || null,
+                })),
+              },
+              // municipio: event.municipio_priorizado || null,
               territorio: event.codigo_nombre_territorio || null,
               microterritorio: event.codigo_micro_territorio || null,
-              subregion: event.subregion || null,
+              // subregion: event.subregion || null,
             },
 
             descripcion: event.description_event || null,
@@ -74,19 +153,20 @@ const Edit = () => {
                   [item.mes]: parseInt(item.peso, 10),
                 })),
               })),
+              operador_pic: producto.operador_pic.operador_pic,
 
-              operador_pic: {
-                nombre_entidad: producto.nombre_entidad || null,
-                descripcion: producto.descripcion_operador || null,
-              },
+              // operador_pic: {
+              //   nombre_entidad: producto.nombre_entidad || null,
+              //   descripcion: "hoola" || null,
+              // },
               indicadores: (producto.indicadores || []).map((indicador) => ({
                 meta_producto: indicador.meta_producto || null,
                 cantidad: indicador.cantidad || null,
                 indicador_linea_base: indicador.indicador_linea_base || null,
               })),
             })),
-            proyecto_idsn: {
-              proyecto: event.proyecto || null,
+            proyectos_idsn: {
+              connect: [{ documentId: event.proyecto }] || null,
             },
           })),
         },
@@ -131,15 +211,18 @@ const Edit = () => {
   // Función para transformar los datos del evento
   const transformEvent = (evento) => {
     return {
-      subregion: evento.territorializacion.subregion,
-      municipio_priorizado: evento.territorializacion.municipio,
+      //subregion: evento.territorializacion.subregion,
+      subregion: evento.territorializacion.municipios.map(
+        (muni) => muni.nombre_municipio
+      ),
+      // municipio_priorizado: evento.territorializacion.municipio,
       codigo_nombre_territorio: evento.territorializacion.territorio,
       codigo_micro_territorio: evento.territorializacion.microterritorio,
       total_hogares: evento.territorializacion.numero_hogares,
       equipo_operativo: evento.equipo,
       perfil_profesional: evento.perfiles_profesional,
       perfil_operativo: evento.perfil_operativo,
-      proyecto: evento.proyecto_idsn.proyecto,
+      proyecto: evento.proyectos_idsn.proyecto,
       description_event: evento.descripcion,
       indicator_name: evento.indicador_evento,
       meta_indicator: evento.meta_indicador_evento,
@@ -232,7 +315,7 @@ const Edit = () => {
             indicador_linea_base: indicador.indicador_linea_base,
             meta_producto: indicador.meta_producto,
           })),
-          nombre_entidad: producto.operador_pic.nombre_entidad,
+          operador_pic: producto.operador_pic.operador_pic,
           descripcion_operador: producto.operador_pic.descripcion,
         })),
       },
@@ -246,12 +329,8 @@ const Edit = () => {
   return (
     <>
       <Header />
-      <div>
-        <Event
-          events={events}
-          setEvents={setEvents}
-          // Pasa otras props si son necesarias
-        />
+      <div className={styles.formContainer}>
+        <Event events={events} setEvents={setEvents} />
       </div>
       <div>
         <button onClick={() => handle_send(events)}>Editar</button>

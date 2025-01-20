@@ -8,7 +8,6 @@ const Product = ({
   setProductData,
   activities,
   setActivities,
-  subregions,
   entornos,
   tecnologias,
   poblaciones,
@@ -87,8 +86,8 @@ const Product = ({
           indicador_linea_base: "",
         },
       ],
-      nombre_entidad: "",
-      descripcion_operador: "",
+      // nombre_entidad: "",
+      // descripcion_operador: "",
     };
     const updatedProducts = [...(product_data.producto || []), newProduct];
     setProductData({ ...product_data, producto: updatedProducts });
@@ -109,12 +108,7 @@ const Product = ({
         <div key={productIndex} className={styles.product}>
           <div className={styles.contenedor_title_product}>
             <div className={styles.titleAndIcon}>
-              <h4
-              // onClick={() => toggleProduct(productIndex)}
-              // className={styles.productTitle}
-              >
-                Producto {productIndex + 1}
-              </h4>
+              <h4>Producto {productIndex + 1}</h4>
               <FaEye
                 className={styles.eye}
                 onClick={() => toggleProduct(productIndex)}
@@ -147,7 +141,7 @@ const Product = ({
                   <tr>
                     <th>Descripción del Producto</th>
                     <th>Indicadores</th>
-                    <th>Operador PIC</th>
+                    {/* <th>Operador PIC</th> */}
                     <th>Actividades</th>
                     <th>Acciones</th>
                   </tr>
@@ -258,8 +252,7 @@ const Product = ({
                         )
                       )}
                     </td>
-                    <td>
-                      {/* Operador */}
+                    {/* <td>
                       <div>
                         <label>Nombre Operador</label>
                         <input
@@ -273,8 +266,8 @@ const Product = ({
                             )
                           }
                         />
-                      </div>
-                      <div className={styles.cellWrapper}>
+                      </div> 
+                     <div className={styles.cellWrapper}>
                         <label className={styles.label}>Descripción</label>
                         <textarea
                           type="text"
@@ -288,8 +281,8 @@ const Product = ({
                           }
                           className={styles.textarea}
                         />
-                      </div>
-                    </td>
+                      </div> 
+                    </td> */}
                     <td>
                       <ActivityList
                         entornos={entornos}
@@ -303,7 +296,6 @@ const Product = ({
                           newActivities[productIndex] = updatedActivities;
                           setActivities(newActivities);
                         }}
-                        subregions={subregions}
                       />
                     </td>
                     <td>

@@ -11,6 +11,7 @@
   align-items: flex-start;
   width: 100%;
   overflow-x: auto;
+  /* height: 600px; */
 }
 
 h2 {

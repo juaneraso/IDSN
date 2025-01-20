@@ -3,19 +3,8 @@ import styles from "./ReportForm.module.css";
 import Header from "../Header/Header";
 import Event from "../Event/Event";
 import { useSelector } from "react-redux";
-import qs from "qs";
+
 import Swal from "sweetalert2";
-
-const queryParameters = {
-  fields: ["documentId", "nombre"], // Campos del recurso principal
-  populate: {
-    municipios: {
-      fields: ["nombre"], // Campos específicos de la relación
-    },
-  },
-};
-
-const queryString = qs.stringify(queryParameters, { encodeValuesOnly: true });
 
 // URL PARA PETICION BACK
 // const url = `http://localhost:1337/api/labels`;
@@ -53,7 +42,8 @@ const ReportForm = () => {
 
   const [events, setEvents] = useState([
     {
-      subregion: "",
+      subregion: [],
+      operador_pic: "",
       municipio_priorizado: "",
       codigo_nombre_territorio: "",
       codigo_micro_territorio: "",
@@ -66,7 +56,7 @@ const ReportForm = () => {
       indicator_name: "",
       meta_indicator: "",
       eje_estrategico: [],
-      linea_operativa: [],
+      linea_operativa: "",
       activities: [],
       product_data: {
         producto: [
@@ -79,8 +69,8 @@ const ReportForm = () => {
                 meta_producto: "",
               },
             ],
-            nombre_entidad: "",
-            descripcion_operador: "",
+            // nombre_entidad: "",
+            // descripcion_operador: "",
           },
         ],
       },
@@ -91,7 +81,8 @@ const ReportForm = () => {
     // Reiniciar los datos del evento
     setEvents([
       {
-        subregion: "",
+        subregion: [],
+        operador_pic: "",
         municipio_priorizado: "",
         codigo_nombre_territorio: "",
         codigo_micro_territorio: "",
@@ -104,7 +95,7 @@ const ReportForm = () => {
         indicator_name: "",
         meta_indicator: "",
         eje_estrategico: [],
-        linea_operativa: [],
+        linea_operativa: "",
         activities: [],
         product_data: {
           producto: [
@@ -117,8 +108,8 @@ const ReportForm = () => {
                   meta_producto: "",
                 },
               ],
-              nombre_entidad: "",
-              descripcion_operador: "",
+              // nombre_entidad: "",
+              // descripcion_operador: "",
             },
           ],
         },
@@ -156,7 +147,6 @@ const ReportForm = () => {
   }, [token]);
 
   console.log("Datos eventos", events);
-  console.log("produc", events[0].activities.length);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -166,15 +156,23 @@ const ReportForm = () => {
       const transformedData = {
         data: {
           eventos: events.map((event) => ({
+            operador_pic: {
+              connect: [{ documentId: event.operador_pic }] || null,
+            },
             equipo: event.equipo_operativo || null,
             perfiles_profesional: event.perfil_profesional || null,
             perfil_operativo: event.perfil_operativo || null,
             territorializacion: {
               numero_hogares: parseInt(event.total_hogares, 10) || null,
-              municipio: event.municipio_priorizado || null,
+              municipios: {
+                connect: (event.subregion || []).map((region) => ({
+                  documentId: region || null,
+                })),
+              },
+              // municipio: event.municipio_priorizado || null,
               territorio: event.codigo_nombre_territorio || null,
               microterritorio: event.codigo_micro_territorio || null,
-              subregion: event.subregion || null,
+              // subregion: event.subregion || null,
             },
 
             descripcion: event.description_event || null,
@@ -184,9 +182,14 @@ const ReportForm = () => {
             ejes_estrategicos: (event.eje_estrategico || []).map((eje) => ({
               nombre: eje || null,
             })),
-            lineas_operativa: (event.linea_operativa || []).map((linea) => ({
-              nombre: linea || null,
-            })),
+            // lineas_operativa: (event.linea_operativa || []).map((linea) => ({
+            //   nombre: linea || null,
+            // })),
+            lineas_operativa: [
+              {
+                nombre: event.linea_operativa || null,
+              },
+            ],
 
             productos: event.product_data.producto.map((producto, index) => ({
               descripcion: producto.descripcion_producto || null,
@@ -219,18 +222,18 @@ const ReportForm = () => {
                 })),
               })),
 
-              operador_pic: {
-                nombre_entidad: producto.nombre_entidad || null,
-                descripcion: producto.descripcion_operador || null,
-              },
+              // operador_pic: {
+              //   nombre_entidad: producto.nombre_entidad || null,
+              //   descripcion: producto.descripcion_operador || null,
+              // },
               indicadores: (producto.indicadores || []).map((indicador) => ({
                 meta_producto: indicador.meta_producto || null,
                 cantidad: indicador.cantidad || null,
                 indicador_linea_base: indicador.indicador_linea_base || null,
               })),
             })),
-            proyecto_idsn: {
-              proyecto: event.proyecto || null,
+            proyectos_idsn: {
+              connect: [{ documentId: event.proyecto }] || null,
             },
           })),
         },

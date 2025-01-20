@@ -1,41 +1,143 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Product from "../Product/Product";
 import styles from "./Event.module.css";
 import Select from "react-select"; // Importamos React Select
 
-const Event = ({
-  events,
-  setEvents,
-  //ejes,
-  //lineas,
-  entornos,
-  tecnologias,
-  poblaciones,
-  soportes,
-  cups,
-}) => {
+const Event = ({ events, setEvents }) => {
   const [expandedEvents, setExpandedEvents] = useState(
     // events.map(() => true) // Inicializamos todos como colapsados
     events.map((_, index) => index === 0)
   );
 
-  const handleClick = () => {
-    alert("¡Ícono de ojo clickeado!");
-  };
+  // Estados
+  const [ejes, setEjes] = useState([]);
+  const [lineas, setLineas] = useState([]);
+  const [entornos, setEntornos] = useState([]);
+  const [tecnologias, setTecnologias] = useState([]);
+  const [poblaciones, setPoblacion] = useState([]);
+  const [soportes, setSoportes] = useState([]);
+  const [cups, setCups] = useState([]);
+  const [equipos, setEquipos] = useState([]);
 
-  const ejes = [
-    "Gobernabilidad y gobernanza de la salud pública ",
-    "Pueblos y comunidades étnicas y campesinas, mujeres, sectores LGBTIQ+ y otras poblaciones por condición y/o situación.",
-    "Determinantes Sociales de la Salud",
-    "Atención Primaria en Salud",
-    "Cambio climático, emergencias, desastres y pandemias",
-    "Conocimiento en salud pública y Soberanía Sanitaria",
-    "Personal de salud",
-  ];
+  const [labels, setLabels] = useState([]);
 
-  const equipos = ["Equipos básicos en salud", "Equipo complementario"];
+  const [municipios, setMunicipios] = useState([]);
+  const [proyectos, setProyectos] = useState([]);
+  const [operadores, setOperadores] = useState([]);
 
-  const lineas = ["Cuidado de la salud en el territorio"];
+  const back = import.meta.env.VITE_APP_BACK;
+  const url = `${back}/api/labels`;
+  const url_municipios = `${back}/api/municipios?pagination[pageSize]=100`;
+  const url_proyectos = `${back}/api/proyectos-idsns`;
+  const url_operadores = `${back}/api/operador-pics?pagination[pageSize]=100`;
+  const token_object = JSON.parse(sessionStorage.getItem("token")) || {};
+  const token = token_object.token;
+
+  useEffect(() => {
+    const fetch_data = async () => {
+      try {
+        const response = await fetch(`${url}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error("Error al obtener subregiones.");
+        const data = await response.json();
+        //setSubregions(data.data);
+        setLabels(data);
+        setCups(data.cups);
+        setEjes(data.ejes);
+        setEntornos(data.entornos);
+        setEquipos(data.equipos);
+        setLineas(data.lineas_operativas);
+        setPoblacion(data.poblacion_sujeto);
+        setSoportes(data.soportes);
+        setTecnologias(data.tecnologias);
+      } catch (error) {
+        console.error("Error fetching subregions:", error);
+      }
+    };
+
+    fetch_data();
+  }, [token]);
+
+  useEffect(() => {
+    const fetch_subregion = async () => {
+      try {
+        const response = await fetch(`${url_municipios}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error("Error al obtener subregiones.");
+        const data = await response.json();
+        //setSubregions(data.data);
+        setMunicipios(data.data);
+      } catch (error) {
+        console.error("Error fetching subregions:", error);
+      }
+    };
+
+    fetch_subregion();
+  }, [token]);
+
+  useEffect(() => {
+    const fetch_proyecto = async () => {
+      try {
+        const response = await fetch(`${url_proyectos}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error("Error al obtener subregiones.");
+        const data = await response.json();
+        //setSubregions(data.data);
+        setProyectos(data.data);
+      } catch (error) {
+        console.error("Error fetching subregions:", error);
+      }
+    };
+
+    fetch_proyecto();
+  }, [token]);
+
+  useEffect(() => {
+    const fetch_operador = async () => {
+      try {
+        const response = await fetch(`${url_operadores}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error("Error al obtener subregiones.");
+        const data = await response.json();
+        //setSubregions(data.data);
+        setOperadores(data.data);
+      } catch (error) {
+        console.error("Error fetching subregions:", error);
+      }
+    };
+
+    fetch_operador();
+  }, [token]);
+
+  // console.log("Municipios", municipios);
+  // console.log("Operadores", operadores);
+  // console.log("proyectos", proyectos);
+
+  // const ejes = [
+  //   "Gobernabilidad y gobernanza de la salud pública ",
+  //   "Pueblos y comunidades étnicas y campesinas, mujeres, sectores LGBTIQ+ y otras poblaciones por condición y/o situación.",
+  //   "Determinantes Sociales de la Salud",
+  //   "Atención Primaria en Salud",
+  //   "Cambio climático, emergencias, desastres y pandemias",
+  //   "Conocimiento en salud pública y Soberanía Sanitaria",
+  //   "Personal de salud",
+  // ];
+
+  // const equipos = ["Equipos básicos en salud", "Equipo complementario"];
+
+  // const lineas = ["Cuidado de la salud en el territorio"];
 
   const customStyles = {
     control: (base) => ({
@@ -65,11 +167,19 @@ const Event = ({
     setEvents(updatedEvents);
   };
 
-  const handleLineaChange = (eventIndex, selectedOptions) => {
+  // const handle_municipio = (eventIndex, selectedOption) => {
+  //   const updatedEvents = [...events];
+  //   updatedEvents[eventIndex].subregion = selectedOption
+  //     ? selectedOption.value
+  //     : ""; // Guarda el valor seleccionado o una cadena vacía si no hay selección
+  //   setEvents(updatedEvents);
+  // };
+
+  const handle_municipio = (eventIndex, selectedOptions) => {
     const updatedEvents = [...events];
-    updatedEvents[eventIndex].linea_operativa = selectedOptions.map(
+    updatedEvents[eventIndex].subregion = selectedOptions.map(
       (option) => option.value
-    ); // Almacenar solo los valores seleccionados
+    ); // Guarda los valores seleccionados en un array
     setEvents(updatedEvents);
   };
 
@@ -81,6 +191,22 @@ const Event = ({
     setEvents(updatedEvents);
   };
 
+  const handle_linea_change = (eventIndex, selectedOption) => {
+    const updatedEvents = [...events];
+    updatedEvents[eventIndex].linea_operativa = selectedOption
+      ? selectedOption.value
+      : ""; // Guarda el valor seleccionado o una cadena vacía si no hay selección
+    setEvents(updatedEvents);
+  };
+
+  // const handleLineaChange = (eventIndex, selectedOptions) => {
+  //   const updatedEvents = [...events];
+  //   updatedEvents[eventIndex].linea_operativa = selectedOptions.map(
+  //     (option) => option.value
+  //   ); // Almacenar solo los valores seleccionados
+  //   setEvents(updatedEvents);
+  // };
+
   const handleEventChange = (index, field, value) => {
     const updatedEvents = [...events];
     updatedEvents[index][field] = value;
@@ -91,7 +217,8 @@ const Event = ({
     setEvents([
       ...events,
       {
-        subregion: "",
+        subregion: [],
+        operador_pic: "",
         municipio_priorizado: "",
         codigo_nombre_territorio: "",
         codigo_micro_territorio: "",
@@ -104,7 +231,7 @@ const Event = ({
         indicator_name: "",
         meta_indicator: "",
         eje_estrategico: [],
-        linea_operativa: [],
+        linea_operativa: "",
         activities: [],
         product_data: {
           producto: [
@@ -117,14 +244,11 @@ const Event = ({
                   meta_producto: "",
                 },
               ],
-              nombre_entidad: "",
-              descripcion_operador: "",
+              // nombre_entidad: "",
+              // descripcion_operador: "",
             },
           ],
         },
-        // product_data: {
-        //   producto: [],
-        // },
       },
     ]);
     setExpandedEvents([...expandedEvents, false]);
@@ -143,9 +267,27 @@ const Event = ({
 
   const handleRemoveEvent = (index) => {
     const updatedEvents = events.filter((_, i) => i !== index);
+    const updatedExpandedEvents = [...expandedEvents];
     setEvents(updatedEvents);
     setExpandedEvents(updatedExpandedEvents);
   };
+
+  const handle_proyecto = (eventIndex, selectedOption) => {
+    const updatedEvents = [...events];
+    updatedEvents[eventIndex].proyecto = selectedOption
+      ? selectedOption.value
+      : ""; // Guarda el valor seleccionado o una cadena vacía si no hay selección
+    setEvents(updatedEvents);
+  };
+
+  const handle_operador = (eventIndex, selectedOption) => {
+    const updatedEvents = [...events];
+    updatedEvents[eventIndex].operador_pic = selectedOption
+      ? selectedOption.value
+      : ""; // Guarda el valor seleccionado o una cadena vacía si no hay selección
+    setEvents(updatedEvents);
+  };
+
   return (
     <div className={styles.eventContainer}>
       {events.map((event, index) => (
@@ -191,8 +333,8 @@ const Event = ({
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Subregión</th>
                   <th>Nodo-Municipio Priorizado</th>
+                  <th>Operador PIC</th>
                   <th>Código - Nombre de Territorio APS</th>
                   <th>Código Micro-Territorio</th>
                   <th>Total número de Hogares Beneficiarios</th>
@@ -212,33 +354,63 @@ const Event = ({
               <tbody>
                 <tr>
                   <td>
-                    <div className={styles.cellWrapper}>
-                      <textarea
-                        type="text"
-                        className={styles.textarea}
-                        value={event.subregion}
-                        onChange={(e) =>
-                          handleEventChange(index, "subregion", e.target.value)
-                        }
-                      />
-                    </div>
+                    <Select
+                      isMulti
+                      value={event.subregion.map((subregion) => ({
+                        value: subregion,
+                        //   label:
+                        //     municipios.find(
+                        //       (muni) => muni.documentId === subregion.documentId
+                        //     )?.label || subregion.documentId, // Muestra el label.
+                        // }))}
+                        label:
+                          municipios.find(
+                            (muni) => muni.documentId === subregion
+                          )?.label || subregion, // Muestra el label.
+                      }))}
+                      // options={municipios.map((muni) => ({
+                      //   value: { documentId: muni.documentId, id: muni.id },
+                      //   label: muni.label,
+                      // }))}
+                      options={municipios.map((muni) => ({
+                        value: muni.documentId,
+                        label: muni.label,
+                      }))}
+                      onChange={(selectedOptions) =>
+                        handle_municipio(index, selectedOptions)
+                      }
+                      placeholder="Seleccionar Region"
+                      styles={customStyles}
+                    />
                   </td>
+
                   <td>
-                    <div className={styles.cellWrapper}>
-                      <textarea
-                        type="text"
-                        className={styles.textarea}
-                        value={event.municipio_priorizado}
-                        onChange={(e) =>
-                          handleEventChange(
-                            index,
-                            "municipio_priorizado",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </div>
+                    <Select
+                      name="operador"
+                      options={operadores.map((option) => ({
+                        value: option.documentId, // Valor asociado internamente
+                        label: option.operador_pic, // Texto visible al usuario
+                      }))}
+                      value={
+                        event.operador_pic
+                          ? {
+                              value: event.operador_pic,
+                              label:
+                                operadores.find(
+                                  (operador) =>
+                                    operador.documentId === event.operador_pic
+                                )?.operador_pic || event.operador_pic,
+                            }
+                          : null
+                      }
+                      onChange={(selectedOption) =>
+                        handle_operador(index, selectedOption)
+                      }
+                      placeholder="Seleccionar Operador"
+                      styles={customStyles}
+                    />
                   </td>
+
                   <td>
                     <div className={styles.cellWrapper}>
                       <textarea
@@ -273,6 +445,7 @@ const Event = ({
                   </td>
                   <td>
                     <input
+                      className={styles.input_hogares}
                       type="text"
                       value={event.total_hogares}
                       onChange={(e) =>
@@ -308,7 +481,8 @@ const Event = ({
                   </td>
 
                   <td>
-                    <input
+                    <textarea
+                      className={styles.textarea}
                       type="text"
                       value={event.perfil_profesional}
                       onChange={(e) =>
@@ -321,7 +495,8 @@ const Event = ({
                     />
                   </td>
                   <td>
-                    <input
+                    <textarea
+                      className={styles.textarea}
                       type="text"
                       value={event.perfil_operativo}
                       onChange={(e) =>
@@ -334,16 +509,34 @@ const Event = ({
                     />
                   </td>
                   <td>
-                    <input
-                      type="text"
-                      value={event.proyecto}
-                      onChange={(e) =>
-                        handleEventChange(index, "proyecto", e.target.value)
+                    <Select
+                      name="proyecto"
+                      options={proyectos.map((option) => ({
+                        value: option.documentId, // Valor asociado internamente
+                        label: option.proyecto, // Texto visible al usuario
+                      }))}
+                      value={
+                        event.proyecto
+                          ? {
+                              value: event.proyecto,
+                              label:
+                                proyectos.find(
+                                  (proyecto) =>
+                                    proyecto.documentId === event.proyecto
+                                )?.proyecto || event.proyecto,
+                            }
+                          : null
                       }
+                      onChange={(selectedOption) =>
+                        handle_proyecto(index, selectedOption)
+                      }
+                      placeholder="Seleccionar Proyecto"
+                      styles={customStyles}
                     />
                   </td>
                   <td>
-                    <input
+                    <textarea
+                      className={styles.textarea}
                       type="text"
                       value={event.description_event}
                       onChange={(e) =>
@@ -356,7 +549,8 @@ const Event = ({
                     />
                   </td>
                   <td>
-                    <input
+                    <textarea
+                      className={styles.textarea}
                       type="text"
                       value={event.indicator_name}
                       onChange={(e) =>
@@ -369,7 +563,8 @@ const Event = ({
                     />
                   </td>
                   <td>
-                    <input
+                    <textarea
+                      className={styles.textarea}
                       type="text"
                       value={event.meta_indicator}
                       onChange={(e) =>
@@ -402,7 +597,7 @@ const Event = ({
                   </td>
 
                   <td>
-                    <Select
+                    {/* <Select
                       isMulti
                       value={event.linea_operativa.map((axis) => ({
                         value: axis,
@@ -416,6 +611,27 @@ const Event = ({
                         handleLineaChange(index, selectedOptions)
                       }
                       placeholder="Seleccionar Lineas..."
+                      styles={customStyles}
+                    /> */}
+
+                    <Select
+                      name="linea"
+                      options={lineas.map((option) => ({
+                        value: option,
+                        label: option,
+                      }))}
+                      value={
+                        event.linea_operativa
+                          ? {
+                              value: event.linea_operativa,
+                              label: event.linea_operativa,
+                            }
+                          : null
+                      }
+                      onChange={(selectedOption) =>
+                        handle_linea_change(index, selectedOption)
+                      }
+                      placeholder="Seleccionar Linea "
                       styles={customStyles}
                     />
                   </td>

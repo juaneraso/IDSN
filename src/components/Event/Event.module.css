@@ -64,25 +64,34 @@
   background-color: #16a085;
 }
 
-.table input {
-  width: 100%; /* Para ocupar todo el ancho de la celda */
-  box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
-  word-wrap: break-word; /* Permite que las palabras se ajusten */
-  white-space: pre-wrap; /* Hace que el texto se ajuste al ancho del input */
-  overflow-wrap: break-word; /* Ajusta el contenido para evitar desbordamiento */
-  overflow-y: auto; /* Agrega un scroll vertical si es necesario */
-  padding: 5px;
-  font-size: 0.9rem; /* Ajusta el tamaño de fuente */
-  resize: vertical; /* Permite cambiar manualmente la altura del input */
+.table .input_hogares {
+  width: 100%;
+  text-align: center;
+  /* background-color: #95a5a6; */
 }
 
+/* .table input {
+  width: 100px;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  overflow-y: auto;
+  padding: 5px;
+  font-size: 0.9rem;
+  resize: vertical;
+  background-color: #4caf50;
+} */
+
 .textarea {
-  width: 100%;
+  width: fit-content;
+  text-align: justify;
   min-height: 40px; /* Altura mínima */
   max-height: 150px; /* Altura máxima */
   box-sizing: border-box;
   padding: 5px;
   font-size: 0.9rem;
+  /* background-color: #1abc9c; */
   resize: vertical; /* Permitir que el usuario cambie la altura */
   overflow-y: auto; /* Scroll si el contenido excede */
 }

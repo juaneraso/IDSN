@@ -5,7 +5,6 @@ import styles from "./ActivityList.module.css";
 const ActivityList = ({
   activities,
   setActivities,
-  subregions,
   entornos,
   tecnologias,
   poblaciones,
@@ -98,7 +97,6 @@ const ActivityList = ({
             handleActivityChange={handleActivityChange}
             handleRemoveActivity={handleRemoveActivity}
             handleAddActivity={handleAddActivity}
-            subregions={subregions}
             entornos={entornos}
             tecnologias={tecnologias}
             poblaciones={poblaciones}

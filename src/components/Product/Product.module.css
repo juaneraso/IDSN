@@ -72,25 +72,6 @@
   background-color: #f9f9f9;
 }
 
-/* .field {
-  margin-bottom: 10px;
-}
-
-.field label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.field input,
-.field textarea {
-  width: 100%;
-  padding: 8px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-} */
-
 .buttonMain {
   width: 100%;
   padding: 12px;
@@ -210,12 +191,12 @@
   border: 1px solid #ddd;
   padding: 10px;
   margin-bottom: 15px;
-  background-color: #fff;
+  background-color: #ffffff;
   border-radius: 5px;
 }
 
 .textarea {
-  width: 100%;
+  width: 200px;
   min-height: 40px; /* Altura mínima */
   max-height: 150px; /* Altura máxima */
   box-sizing: border-box;
@@ -223,13 +204,16 @@
   font-size: 0.9rem;
   resize: vertical; /* Permitir que el usuario cambie la altura */
   overflow-y: auto; /* Scroll si el contenido excede */
+  /* background-color: #ddd; */
 }
 
 .cellWrapper {
   display: flex; /* Permite ajustar el contenido dinámicamente */
-  width: 150px; /* Tamaño específico para el contenedor */
+  /* width: 150px;  */
+
   flex-direction: column;
   overflow: hidden;
+  /* background-color: #1abc9c; */
 }
 
 .label {
@@ -240,4 +224,18 @@
   cursor: pointer;
   font-size: 24px;
   color: #555;
+}
+
+.table input {
+  /* width: 100px; */
+  box-sizing: border-box;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  overflow-y: auto;
+  padding: 5px;
+  font-size: 0.9rem;
+  resize: vertical;
+  text-align: center;
+  /* background-color: #4caf50; */
 }

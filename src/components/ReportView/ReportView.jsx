@@ -59,34 +59,24 @@ const ReportView = () => {
   const projectOptions = [
     ...new Set(
       data?.data?.flatMap((row) =>
-        row.eventos.map((evento) => evento.proyecto_idsn?.proyecto)
+        row.eventos.map((evento) => evento.proyectos_idsn?.proyecto)
       )
     ),
   ].filter(Boolean); // Filtrar valores no válidos (null, undefined)
 
   // Obtener lista única de valores para el menú desplegable de operadores
+
   const operatorOptions = [
     ...new Set(
       data?.data?.flatMap((row) =>
-        row.eventos.flatMap((evento) =>
-          evento.productos.map(
-            (producto) => producto.operador_pic.nombre_entidad
-          )
+        row.eventos.flatMap(
+          (evento) =>
+            // evento.productos.map((producto) => producto.operador_pic.operador_pic)
+            evento.operador_pic.operador_pic
         )
       )
     ),
   ].filter(Boolean);
-
-  // Filtrar datos basados en el valor seleccionado
-  // const filteredData = data?.data
-  //   ?.map((row) => ({
-  //     ...row,
-  //     eventos: row.eventos.filter(
-  //       (evento) =>
-  //         !filterValue || evento.proyecto_idsn?.proyecto === filterValue
-  //     ),
-  //   }))
-  //   .filter((row) => row.eventos.length > 0);
 
   // Filtrar datos basados en los valores seleccionados
   const filteredData = data?.data
@@ -94,17 +84,17 @@ const ReportView = () => {
       ...row,
       eventos: row.eventos.filter(
         (evento) =>
-          (!filterValue || evento.proyecto_idsn?.proyecto === filterValue) &&
+          (!filterValue || evento.proyectos_idsn?.proyecto === filterValue) &&
           (!operatorFilterValue ||
-            evento.productos.some(
-              (producto) =>
-                producto.operador_pic.nombre_entidad === operatorFilterValue
-            ))
+            evento.operador_pic.operador_pic === operatorFilterValue)
+        // evento.productos.some(
+        //   (producto) =>
+        //     producto.operador_pic.operador_pic === operatorFilterValue
+        // )
       ),
     }))
     .filter((row) => row.eventos.length > 0);
 
-  console.log("filtro", filterValue);
   return (
     <>
       <Header />
@@ -146,8 +136,8 @@ const ReportView = () => {
             <table key={`${index}-${evento.id}`} className={styles.table}>
               <thead>
                 <tr>
-                  <th>Subregión</th>
                   <th>Nodo - Municipio Priorizado</th>
+                  <th>Operador Pic</th>
                   <th>Código - Nombre de Territorio APS</th>
                   <th>Código Micro-Territorio</th>
                   <th>Total número de Hogares Beneficiarios</th>
@@ -168,15 +158,30 @@ const ReportView = () => {
               </thead>
               <tbody>
                 <tr>
-                  <td>{evento.territorializacion.subregion}</td>
-                  <td>{evento.territorializacion.municipio}</td>
+                  {/* <td>
+                    {evento.territorializacion.municipios[0].nombre_municipio}
+                  </td> */}
+                  <td>
+                    <table>
+                      <tbody>
+                        {evento.territorializacion.municipios.map(
+                          (muni, index) => (
+                            <tr key={index}>
+                              <td>{muni.label}</td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  </td>
+                  <td>{evento.operador_pic.operador_pic}</td>
                   <td>{evento.territorializacion.territorio}</td>
                   <td>{evento.territorializacion.microterritorio}</td>
                   <td>{evento.territorializacion.numero_hogares}</td>
                   <td>{evento.equipo}</td>
                   <td>{evento.perfiles_profesional}</td>
                   <td>{evento.perfil_operativo}</td>
-                  <td>{evento.proyecto_idsn.proyecto}</td>
+                  <td>{evento.proyectos_idsn.proyecto}</td>
                   <td>{evento.descripcion}</td>
                   <td>{evento.indicador_evento}</td>
                   <td>{evento.meta_indicador_evento}</td>
@@ -211,7 +216,7 @@ const ReportView = () => {
                               <tr>
                                 <th>Descripcion del producto</th>
                                 <th>Indicadores</th>
-                                <th>Operador PIC</th>
+                                {/* <th>Operador PIC</th> */}
                                 <th>Actividades</th>
                               </tr>
                             </thead>
@@ -247,7 +252,7 @@ const ReportView = () => {
                                 )}
                               </td>
 
-                              <td>
+                              {/* <td>
                                 <table>
                                   <thead>
                                     <tr>
@@ -267,7 +272,7 @@ const ReportView = () => {
                                     </tr>
                                   </tbody>
                                 </table>
-                              </td>
+                              </td> */}
                               <td>
                                 {producto.actividades.map(
                                   (actividad, indicadorIndex) => (
