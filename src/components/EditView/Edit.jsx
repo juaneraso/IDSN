@@ -97,6 +97,9 @@ const Edit = () => {
         data: {
           eventos: events.map((event) => ({
             equipo: event.equipo_operativo || null,
+            operador_pic: {
+              connect: [{ documentId: event.operador_pic }] || null,
+            },
             perfiles_profesional: event.perfil_profesional || null,
             perfil_operativo: event.perfil_operativo || null,
             territorializacion: {
@@ -153,7 +156,7 @@ const Edit = () => {
                   [item.mes]: parseInt(item.peso, 10),
                 })),
               })),
-              operador_pic: producto.operador_pic.operador_pic,
+              // operador_pic: producto.operador_pic.operador_pic,
 
               // operador_pic: {
               //   nombre_entidad: producto.nombre_entidad || null,
@@ -212,9 +215,8 @@ const Edit = () => {
   const transformEvent = (evento) => {
     return {
       //subregion: evento.territorializacion.subregion,
-      subregion: evento.territorializacion.municipios.map(
-        (muni) => muni.nombre_municipio
-      ),
+      subregion: evento.territorializacion.municipios.map((muni) => muni.label),
+      operador_pic: evento.operador_pic.operador_pic,
       // municipio_priorizado: evento.territorializacion.municipio,
       codigo_nombre_territorio: evento.territorializacion.territorio,
       codigo_micro_territorio: evento.territorializacion.microterritorio,
@@ -315,8 +317,8 @@ const Edit = () => {
             indicador_linea_base: indicador.indicador_linea_base,
             meta_producto: indicador.meta_producto,
           })),
-          operador_pic: producto.operador_pic.operador_pic,
-          descripcion_operador: producto.operador_pic.descripcion,
+          // operador_pic: producto.operador_pic.operador_pic,
+          // descripcion_operador: producto.operador_pic.descripcion,
         })),
       },
     };

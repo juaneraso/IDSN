@@ -156,9 +156,14 @@ const ReportForm = () => {
       const transformedData = {
         data: {
           eventos: events.map((event) => ({
-            operador_pic: {
-              connect: [{ documentId: event.operador_pic }] || null,
-            },
+            // operador_pic: {
+            //   connect: [{ documentId: event.operador_pic }] || null,
+            // },
+            operador_pic: event.operador_pic
+              ? {
+                  connect: [{ documentId: event.operador_pic }],
+                }
+              : null,
             equipo: event.equipo_operativo || null,
             perfiles_profesional: event.perfil_profesional || null,
             perfil_operativo: event.perfil_operativo || null,
