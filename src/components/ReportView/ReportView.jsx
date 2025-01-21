@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../Header/Header";
 import styles from "./ReporView.module.css";
 import Spinner from "../Spinner/Spinner";
+import Swal from "sweetalert2";
 
 const ReportView = () => {
   const [data, setData] = useState(null);
@@ -10,6 +11,8 @@ const ReportView = () => {
   const [error, setError] = useState(null);
   const [filterValue, setFilterValue] = useState(""); // Estado para el filtro
   const [operatorFilterValue, setOperatorFilterValue] = useState(""); // Filtro por operador
+
+  const [nombre, setNombre] = useState("");
 
   const back = import.meta.env.VITE_APP_BACK;
   const token_object = JSON.parse(sessionStorage.getItem("token")) || {};
@@ -55,6 +58,61 @@ const ReportView = () => {
     });
   };
 
+  const handle_soporte = () => {
+    Swal.fire({
+      title: "Ingresa tus datos",
+      html: `
+        <label for="nombre">Nombre:</label>
+        <input id="nombre" class="swal2-input" placeholder="Tu nombre aquí">
+        
+        <label for="comentarios">Comentarios:</label>
+        <textarea id="comentarios" class="swal2-textarea" placeholder="Escribe tus comentarios"></textarea>
+        
+        <label for="archivo">Subir archivo:</label>
+        <input type="file" id="archivo" class="swal2-file">
+      `,
+      showCancelButton: true,
+      confirmButtonText: "Enviar",
+      cancelButtonText: "Cancelar",
+      preConfirm: () => {
+        // Obtener los valores de los inputs
+        const nombre = document.getElementById("nombre").value;
+        const comentarios = document.getElementById("comentarios").value;
+        const archivo = document.getElementById("archivo").files[0]; // Archivo seleccionado
+
+        setNombre(nombre);
+        // Validar que todos los campos tengan datos
+        if (!nombre || !comentarios || !archivo) {
+          Swal.showValidationMessage("Por favor completa todos los campos.");
+          return false;
+        }
+
+        // Devolver los datos ingresados
+        return { nombre, comentarios, archivo };
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Mostrar los datos ingresados
+        console.log("Datos ingresados:", result.value);
+
+        const { nombre, comentarios, archivo } = result.value;
+        console.log("Nombre:", nombre);
+        console.log("Comentarios:", comentarios);
+        console.log("Archivo:", archivo.name); // Nombre del archivo
+
+        Swal.fire(
+          "¡Enviado!",
+          "Tus datos han sido enviados con éxito.",
+          "success"
+        );
+      } else {
+        console.log("El usuario canceló el popup");
+      }
+    });
+  };
+
+  console.log("nombre", nombre);
+
   // Obtener lista única de valores para el menú desplegable
   const projectOptions = [
     ...new Set(
@@ -72,7 +130,7 @@ const ReportView = () => {
         row.eventos.flatMap(
           (evento) =>
             // evento.productos.map((producto) => producto.operador_pic.operador_pic)
-            evento.operador_pic.operador_pic
+            evento?.operador_pic?.operador_pic
         )
       )
     ),
@@ -86,7 +144,7 @@ const ReportView = () => {
         (evento) =>
           (!filterValue || evento.proyectos_idsn?.proyecto === filterValue) &&
           (!operatorFilterValue ||
-            evento.operador_pic.operador_pic === operatorFilterValue)
+            evento?.operador_pic?.operador_pic === operatorFilterValue)
         // evento.productos.some(
         //   (producto) =>
         //     producto.operador_pic.operador_pic === operatorFilterValue
@@ -163,7 +221,7 @@ const ReportView = () => {
                   </td> */}
                   <td>
                     <table>
-                      <tbody>
+                      {/* <tbody>
                         {evento.territorializacion.municipios.map(
                           (muni, index) => (
                             <tr key={index}>
@@ -171,24 +229,55 @@ const ReportView = () => {
                             </tr>
                           )
                         )}
+                      </tbody> */}
+
+                      <tbody>
+                        {Array.isArray(
+                          evento?.territorializacion?.municipios
+                        ) && evento.territorializacion.municipios.length > 0 ? (
+                          evento.territorializacion.municipios.map(
+                            (muni, index) => (
+                              <tr key={index}>
+                                <td>{muni.label}</td>
+                              </tr>
+                            )
+                          )
+                        ) : (
+                          <tr>
+                            <td>Informacion sin ingresar</td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </td>
-                  <td>{evento.operador_pic.operador_pic}</td>
-                  <td>{evento.territorializacion.territorio}</td>
-                  <td>{evento.territorializacion.microterritorio}</td>
-                  <td>{evento.territorializacion.numero_hogares}</td>
-                  <td>{evento.equipo}</td>
-                  <td>{evento.perfiles_profesional}</td>
-                  <td>{evento.perfil_operativo}</td>
-                  <td>{evento.proyectos_idsn.proyecto}</td>
-                  <td>{evento.descripcion}</td>
-                  <td>{evento.indicador_evento}</td>
-                  <td>{evento.meta_indicador_evento}</td>
+                  <td>{evento?.operador_pic?.operador_pic}</td>
+                  {/* <td>{evento.territorializacion.territorio}</td> */}
+                  {/* <td>
+                    {evento?.territorializacion?.territorio
+                      ? evento.territorializacion.territorio
+                      : "No hay territorio"}
+                  </td> */}
+                  <td>{evento?.territorializacion?.territorio || ""}</td>
+
+                  <td>
+                    {evento?.territorializacion?.microterritorio ||
+                      "Falta ingresar "}
+                  </td>
+                  <td>
+                    {evento?.territorializacion?.numero_hogares ||
+                      "No hay hogares"}
+                  </td>
+                  <td>{evento?.equipo}</td>
+                  <td>{evento?.perfiles_profesional}</td>
+                  <td>{evento?.perfil_operativo}</td>
+                  <td>{evento?.proyectos_idsn?.proyecto}</td>
+                  <td>{evento?.descripcion}</td>
+                  <td>{evento?.indicador_evento}</td>
+                  <td>{evento?.meta_indicador_evento}</td>
                   <td>
                     <table>
                       <tbody>
-                        {evento.ejes_estrategicos.map((eje, index) => (
+                        {evento?.ejes_estrategicos?.map((eje, index) => (
                           <tr key={index}>
                             <td>{eje.nombre}</td>
                           </tr>
@@ -199,7 +288,7 @@ const ReportView = () => {
                   <td>
                     <table>
                       <tbody>
-                        {evento.lineas_operativa.map((linea, index) => (
+                        {evento?.lineas_operativa?.map((linea, index) => (
                           <tr key={index}>
                             <td>{linea.nombre}</td>
                           </tr>
@@ -340,6 +429,7 @@ const ReportView = () => {
                                                       <th>Tipo Soporte</th>
                                                       <th>Descripcion</th>
                                                       <th>Cantidad</th>
+                                                      <th>Acciones</th>
                                                     </tr>
                                                   </thead>
                                                   <tbody>
@@ -350,6 +440,15 @@ const ReportView = () => {
                                                       </td>
                                                       <td>
                                                         {soporte.cantidad}
+                                                      </td>
+                                                      <td>
+                                                        <button
+                                                          onClick={() =>
+                                                            handle_soporte()
+                                                          }
+                                                        >
+                                                          Soporte
+                                                        </button>
                                                       </td>
                                                     </tr>
                                                   </tbody>

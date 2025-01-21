@@ -12,19 +12,6 @@ const back = import.meta.env.VITE_APP_BACK;
 const url = `${back}/api/labels`;
 
 const ReportForm = () => {
-  const [reportData, setReportData] = useState({
-    subregion: "",
-    municipio: "",
-    fechaRegistro: "",
-    codigo_territorio: "",
-    codigo_micro_territorio: "",
-    numero_micro_territorio: "",
-    numero_hogares: "",
-    tipo_territorio: "",
-    tipo_micro_territorio: "",
-    nombre_micro_territorio: "",
-  });
-
   //const token = useSelector((state) => state.token.token);
   const token_object = JSON.parse(sessionStorage.getItem("token")) || {};
   const token = token_object.token;
@@ -44,7 +31,7 @@ const ReportForm = () => {
     {
       subregion: [],
       operador_pic: "",
-      municipio_priorizado: "",
+      // municipio_priorizado: "",
       codigo_nombre_territorio: "",
       codigo_micro_territorio: "",
       total_hogares: "",
@@ -83,7 +70,7 @@ const ReportForm = () => {
       {
         subregion: [],
         operador_pic: "",
-        municipio_priorizado: "",
+        // municipio_priorizado: "",
         codigo_nombre_territorio: "",
         codigo_micro_territorio: "",
         total_hogares: "",
@@ -167,18 +154,37 @@ const ReportForm = () => {
             equipo: event.equipo_operativo || null,
             perfiles_profesional: event.perfil_profesional || null,
             perfil_operativo: event.perfil_operativo || null,
-            territorializacion: {
-              numero_hogares: parseInt(event.total_hogares, 10) || null,
-              municipios: {
-                connect: (event.subregion || []).map((region) => ({
-                  documentId: region || null,
-                })),
-              },
-              // municipio: event.municipio_priorizado || null,
-              territorio: event.codigo_nombre_territorio || null,
-              microterritorio: event.codigo_micro_territorio || null,
-              // subregion: event.subregion || null,
-            },
+            // territorializacion:
+            //   {
+            //     numero_hogares: parseInt(event.total_hogares, 10) || null,
+            //     municipios: {
+            //       connect: (event.subregion || []).map((region) => ({
+            //         documentId: region || null,
+            //       })),
+            //     },
+            //     territorio: event.codigo_nombre_territorio || null,
+            //     microterritorio: event.codigo_micro_territorio || null,
+            //   } || null,
+            territorializacion:
+              event.total_hogares ||
+              (Array.isArray(event.subregion) && event.subregion.length > 0) ||
+              event.codigo_nombre_territorio ||
+              event.codigo_micro_territorio
+                ? {
+                    numero_hogares: parseInt(event.total_hogares, 10) || null,
+                    municipios:
+                      Array.isArray(event.subregion) &&
+                      event.subregion.length > 0
+                        ? {
+                            connect: (event.subregion || []).map((region) => ({
+                              documentId: region || null,
+                            })),
+                          }
+                        : [],
+                    territorio: event.codigo_nombre_territorio || null,
+                    microterritorio: event.codigo_micro_territorio || null,
+                  }
+                : null,
 
             descripcion: event.description_event || null,
             indicador_evento: event.indicator_name || null,
@@ -190,11 +196,13 @@ const ReportForm = () => {
             // lineas_operativa: (event.linea_operativa || []).map((linea) => ({
             //   nombre: linea || null,
             // })),
-            lineas_operativa: [
-              {
-                nombre: event.linea_operativa || null,
-              },
-            ],
+            lineas_operativa: event.linea_operativa
+              ? [
+                  {
+                    nombre: event.linea_operativa,
+                  },
+                ]
+              : [],
 
             productos: event.product_data.producto.map((producto, index) => ({
               descripcion: producto.descripcion_producto || null,
@@ -227,19 +235,17 @@ const ReportForm = () => {
                 })),
               })),
 
-              // operador_pic: {
-              //   nombre_entidad: producto.nombre_entidad || null,
-              //   descripcion: producto.descripcion_operador || null,
-              // },
               indicadores: (producto.indicadores || []).map((indicador) => ({
                 meta_producto: indicador.meta_producto || null,
                 cantidad: indicador.cantidad || null,
                 indicador_linea_base: indicador.indicador_linea_base || null,
               })),
             })),
-            proyectos_idsn: {
-              connect: [{ documentId: event.proyecto }] || null,
-            },
+            proyectos_idsn: event.proyecto
+              ? {
+                  connect: [{ documentId: event.proyecto }] || null,
+                }
+              : null,
           })),
         },
       };

@@ -20,18 +20,27 @@ const Edit = () => {
 
     try {
       // Transformar los datos al formato requerido
+
       // const transformedData = {
       //   data: {
       //     eventos: events.map((event) => ({
       //       equipo: event.equipo_operativo || null,
+      //       operador_pic: {
+      //         connect: [{ documentId: event.operador_pic }] || null,
+      //       },
       //       perfiles_profesional: event.perfil_profesional || null,
       //       perfil_operativo: event.perfil_operativo || null,
       //       territorializacion: {
       //         numero_hogares: parseInt(event.total_hogares, 10) || null,
-      //         municipio: event.municipio_priorizado || null,
+      //         municipios: {
+      //           connect: (event.subregion || []).map((region) => ({
+      //             documentId: region || null,
+      //           })),
+      //         },
+      //         // municipio: event.municipio_priorizado || null,
       //         territorio: event.codigo_nombre_territorio || null,
       //         microterritorio: event.codigo_micro_territorio || null,
-      //         subregion: event.subregion || null,
+      //         // subregion: event.subregion || null,
       //       },
 
       //       descripcion: event.description_event || null,
@@ -75,19 +84,20 @@ const Edit = () => {
       //             [item.mes]: parseInt(item.peso, 10),
       //           })),
       //         })),
+      //         // operador_pic: producto.operador_pic.operador_pic,
 
-      //         operador_pic: {
-      //           nombre_entidad: producto.nombre_entidad || null,
-      //           descripcion: producto.descripcion_operador || null,
-      //         },
+      //         // operador_pic: {
+      //         //   nombre_entidad: producto.nombre_entidad || null,
+      //         //   descripcion: "hoola" || null,
+      //         // },
       //         indicadores: (producto.indicadores || []).map((indicador) => ({
       //           meta_producto: indicador.meta_producto || null,
       //           cantidad: indicador.cantidad || null,
       //           indicador_linea_base: indicador.indicador_linea_base || null,
       //         })),
       //       })),
-      //       proyecto_idsn: {
-      //         proyecto: event.proyecto || null,
+      //       proyectos_idsn: {
+      //         connect: [{ documentId: event.proyecto }] || null,
       //       },
       //     })),
       //   },
@@ -96,24 +106,48 @@ const Edit = () => {
       const transformedData = {
         data: {
           eventos: events.map((event) => ({
+            // operador_pic: {
+            //   connect: [{ documentId: event.operador_pic }] || null,
+            // },
+            operador_pic: event.operador_pic
+              ? {
+                  connect: [{ documentId: event.operador_pic }],
+                }
+              : null,
             equipo: event.equipo_operativo || null,
-            operador_pic: {
-              connect: [{ documentId: event.operador_pic }] || null,
-            },
             perfiles_profesional: event.perfil_profesional || null,
             perfil_operativo: event.perfil_operativo || null,
-            territorializacion: {
-              numero_hogares: parseInt(event.total_hogares, 10) || null,
-              municipios: {
-                connect: (event.subregion || []).map((region) => ({
-                  documentId: region || null,
-                })),
-              },
-              // municipio: event.municipio_priorizado || null,
-              territorio: event.codigo_nombre_territorio || null,
-              microterritorio: event.codigo_micro_territorio || null,
-              // subregion: event.subregion || null,
-            },
+            // territorializacion:
+            //   {
+            //     numero_hogares: parseInt(event.total_hogares, 10) || null,
+            //     municipios: {
+            //       connect: (event.subregion || []).map((region) => ({
+            //         documentId: region || null,
+            //       })),
+            //     },
+            //     territorio: event.codigo_nombre_territorio || null,
+            //     microterritorio: event.codigo_micro_territorio || null,
+            //   } || null,
+            territorializacion:
+              event.total_hogares ||
+              (Array.isArray(event.subregion) && event.subregion.length > 0) ||
+              event.codigo_nombre_territorio ||
+              event.codigo_micro_territorio
+                ? {
+                    numero_hogares: parseInt(event.total_hogares, 10) || null,
+                    municipios:
+                      Array.isArray(event.subregion) &&
+                      event.subregion.length > 0
+                        ? {
+                            connect: (event.subregion || []).map((region) => ({
+                              documentId: region || null,
+                            })),
+                          }
+                        : [],
+                    territorio: event.codigo_nombre_territorio || null,
+                    microterritorio: event.codigo_micro_territorio || null,
+                  }
+                : null,
 
             descripcion: event.description_event || null,
             indicador_evento: event.indicator_name || null,
@@ -122,9 +156,18 @@ const Edit = () => {
             ejes_estrategicos: (event.eje_estrategico || []).map((eje) => ({
               nombre: eje || null,
             })),
-            lineas_operativa: (event.linea_operativa || []).map((linea) => ({
-              nombre: linea || null,
-            })),
+            // lineas_operativa: (event.linea_operativa || []).map((linea) => ({
+            //   nombre: linea || null,
+            // })),
+            lineas_operativa:
+              Array.isArray(event.linea_operativa) &&
+              event.linea_operativa.length > 0
+                ? [
+                    {
+                      nombre: event.linea_operativa,
+                    },
+                  ]
+                : [],
 
             productos: event.product_data.producto.map((producto, index) => ({
               descripcion: producto.descripcion_producto || null,
@@ -156,21 +199,18 @@ const Edit = () => {
                   [item.mes]: parseInt(item.peso, 10),
                 })),
               })),
-              // operador_pic: producto.operador_pic.operador_pic,
 
-              // operador_pic: {
-              //   nombre_entidad: producto.nombre_entidad || null,
-              //   descripcion: "hoola" || null,
-              // },
               indicadores: (producto.indicadores || []).map((indicador) => ({
                 meta_producto: indicador.meta_producto || null,
                 cantidad: indicador.cantidad || null,
                 indicador_linea_base: indicador.indicador_linea_base || null,
               })),
             })),
-            proyectos_idsn: {
-              connect: [{ documentId: event.proyecto }] || null,
-            },
+            proyectos_idsn: event.proyecto
+              ? {
+                  connect: [{ documentId: event.proyecto }] || null,
+                }
+              : null,
           })),
         },
       };
@@ -215,21 +255,23 @@ const Edit = () => {
   const transformEvent = (evento) => {
     return {
       //subregion: evento.territorializacion.subregion,
-      subregion: evento.territorializacion.municipios.map((muni) => muni.label),
-      operador_pic: evento.operador_pic.operador_pic,
+      subregion: evento?.territorializacion?.municipios?.map(
+        (muni) => muni.documentId
+      ),
+      operador_pic: evento?.operador_pic?.documentId,
       // municipio_priorizado: evento.territorializacion.municipio,
-      codigo_nombre_territorio: evento.territorializacion.territorio,
-      codigo_micro_territorio: evento.territorializacion.microterritorio,
-      total_hogares: evento.territorializacion.numero_hogares,
-      equipo_operativo: evento.equipo,
-      perfil_profesional: evento.perfiles_profesional,
-      perfil_operativo: evento.perfil_operativo,
-      proyecto: evento.proyectos_idsn.proyecto,
-      description_event: evento.descripcion,
-      indicator_name: evento.indicador_evento,
-      meta_indicator: evento.meta_indicador_evento,
-      eje_estrategico: evento.ejes_estrategicos.map((eje) => eje.nombre),
-      linea_operativa: evento.lineas_operativa.map((linea) => linea.nombre),
+      codigo_nombre_territorio: evento?.territorializacion?.territorio,
+      codigo_micro_territorio: evento?.territorializacion?.microterritorio,
+      total_hogares: evento?.territorializacion?.numero_hogares,
+      equipo_operativo: evento?.equipo,
+      perfil_profesional: evento?.perfiles_profesional,
+      perfil_operativo: evento?.perfil_operativo,
+      proyecto: evento?.proyectos_idsn?.documentId,
+      description_event: evento?.descripcion,
+      indicator_name: evento?.indicador_evento,
+      meta_indicator: evento?.meta_indicador_evento,
+      eje_estrategico: evento?.ejes_estrategicos?.map((eje) => eje.nombre),
+      linea_operativa: evento?.lineas_operativa?.map((linea) => linea.nombre),
       // activities: [
       //   evento.productos.map((producto) => {
       //     console.log(

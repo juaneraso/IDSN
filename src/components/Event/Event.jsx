@@ -356,7 +356,7 @@ const Event = ({ events, setEvents }) => {
                   <td>
                     <Select
                       isMulti
-                      value={event.subregion.map((subregion) => ({
+                      value={event?.subregion?.map((subregion) => ({
                         value: subregion,
                         //   label:
                         //     municipios.find(
