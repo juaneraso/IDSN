@@ -13,11 +13,11 @@ import Edit from "./components/EditView/Edit.jsx";
 function App() {
   return (
     <Routes>
-      <Route path="/repo" element={<Prueba />} />
+      <Route path="/" element={<Prueba />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<RegistroUsuario />} />
       <Route path="/dashbo" element={<Dashbo />} />
-      <Route path="/" element={<ReportForm />} />
+      <Route path="/repo" element={<ReportForm />} />
       <Route path="/view" element={<ReportView />} />
       <Route path="/edit" element={<Edit />} />
     </Routes>

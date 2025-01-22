@@ -17,7 +17,7 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink
-              to="/"
+              to="/repo"
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
               Anexo Tecnico
