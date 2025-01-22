@@ -250,7 +250,7 @@ const ReportForm = () => {
         },
       };
 
-      console.log("Transformed Data:", transformedData);
+      //console.log("Transformed Data:", transformedData);
 
       // Realizar la solicitud
       // const response = await fetch("http://localhost:1337/api/anexo-tecnicos", {
