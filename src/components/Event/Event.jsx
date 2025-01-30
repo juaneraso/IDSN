@@ -25,11 +25,15 @@ const Event = ({ events, setEvents }) => {
   const [proyectos, setProyectos] = useState([]);
   const [operadores, setOperadores] = useState([]);
 
+  const [usuario, setUsuario] = useState("");
+
   const back = import.meta.env.VITE_APP_BACK;
   const url = `${back}/api/labels`;
   const url_municipios = `${back}/api/municipios?pagination[pageSize]=100`;
   const url_proyectos = `${back}/api/proyectos-idsns`;
   const url_operadores = `${back}/api/operador-pics?pagination[pageSize]=100`;
+  const url_usuarios = `${back}/api/users/me?pLevel=2`;
+
   const token_object = JSON.parse(sessionStorage.getItem("token")) || {};
   const token = token_object.token;
 
@@ -121,6 +125,27 @@ const Event = ({ events, setEvents }) => {
     fetch_operador();
   }, [token]);
 
+  useEffect(() => {
+    const fetch_user = async () => {
+      try {
+        const response = await fetch(`${url_usuarios}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error("Error al obtener usuarios.");
+        const data = await response.json();
+        console.log("data_usuario", data);
+        //setSubregions(data.data);
+        // setMunicipios(data.data);
+      } catch (error) {
+        console.error("Error fetching subregions:", error);
+      }
+    };
+
+    fetch_user();
+  }, [token]);
+
   // console.log("Municipios", municipios);
   // console.log("Operadores", operadores);
   // console.log("proyectos", proyectos);
@@ -166,14 +191,6 @@ const Event = ({ events, setEvents }) => {
     ); // Almacenar solo los valores seleccionados
     setEvents(updatedEvents);
   };
-
-  // const handle_municipio = (eventIndex, selectedOption) => {
-  //   const updatedEvents = [...events];
-  //   updatedEvents[eventIndex].subregion = selectedOption
-  //     ? selectedOption.value
-  //     : ""; // Guarda el valor seleccionado o una cadena vacía si no hay selección
-  //   setEvents(updatedEvents);
-  // };
 
   const handle_municipio = (eventIndex, selectedOptions) => {
     const updatedEvents = [...events];

@@ -18,7 +18,32 @@ const ReportView = () => {
   const token_object = JSON.parse(sessionStorage.getItem("token")) || {};
   const token = token_object.token;
 
+  const url_municipios = `${back}/api/municipios?pagination[pageSize]=100`;
+  const [municipios, setMunicipios] = useState([]);
+
+  const url_soportes = `${back}/api/seguimiento/upload-file`;
+  const url_soportes_get = `${back}/api/check-seguimiento?`;
   const navigate = useNavigate(); // Hook para navegación
+
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      minWidth: "280px", // Ajusta el ancho mínimo
+      //maxWidth: "400px", // Opcional, limita el ancho máximo
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 5, // Asegura que el menú no se superponga
+    }),
+    option: (base) => ({
+      ...base,
+      whiteSpace: "nowrap", // Evita que el texto se parta
+    }),
+    multiValueLabel: (base) => ({
+      ...base,
+      whiteSpace: "normal", // Permite que las etiquetas ocupen más espacio
+    }),
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +70,26 @@ const ReportView = () => {
     fetchData();
   }, [token]);
 
+  useEffect(() => {
+    const fetch_subregion = async () => {
+      try {
+        const response = await fetch(`${url_municipios}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error("Error al obtener subregiones.");
+        const data = await response.json();
+        //setSubregions(data.data);
+        setMunicipios(data.data);
+      } catch (error) {
+        console.error("Error fetching subregions:", error);
+      }
+    };
+
+    fetch_subregion();
+  }, [token]);
+
   if (loading) return <Spinner />;
   if (error) return <div>Error: {error}</div>;
   console.log("datos", data);
@@ -58,57 +103,395 @@ const ReportView = () => {
     });
   };
 
-  const handle_soporte = () => {
-    Swal.fire({
-      title: "Ingresa tus datos",
-      html: `
-        <label for="nombre">Nombre:</label>
-        <input id="nombre" class="swal2-input" placeholder="Tu nombre aquí">
-        
-        <label for="comentarios">Comentarios:</label>
-        <textarea id="comentarios" class="swal2-textarea" placeholder="Escribe tus comentarios"></textarea>
-        
-        <label for="archivo">Subir archivo:</label>
-        <input type="file" id="archivo" class="swal2-file">
-      `,
-      showCancelButton: true,
-      confirmButtonText: "Enviar",
-      cancelButtonText: "Cancelar",
-      preConfirm: () => {
-        // Obtener los valores de los inputs
-        const nombre = document.getElementById("nombre").value;
-        const comentarios = document.getElementById("comentarios").value;
-        const archivo = document.getElementById("archivo").files[0]; // Archivo seleccionado
+  // const handle_soporte = (documentId, soporteId) => {
+  //   console.log("documentId", documentId);
+  //   console.log("SoporteId", soporteId);
 
-        setNombre(nombre);
-        // Validar que todos los campos tengan datos
-        if (!nombre || !comentarios || !archivo) {
-          Swal.showValidationMessage("Por favor completa todos los campos.");
-          return false;
+  //   const selectOptions = municipios
+  //     .map(
+  //       (muni) => `<option value="${muni.documentId}">${muni.label}</option>`
+  //     )
+  //     .join("");
+
+  //   Swal.fire({
+  //     title: "Ingrese la información",
+  //     html: `
+
+  //       <label for="region">Seleccionar Región:</label>
+  //       <select id="region" class="swal2-select">
+  //         <option value="">Selecciona una región</option>
+  //         ${selectOptions}
+  //       </select>
+
+  //       <label for="archivo">Archivo Soporte:</label>
+  //       <input type="file" id="archivo" class="swal2-file" >
+  //     `,
+  //     showCancelButton: true,
+  //     confirmButtonText: "Enviar",
+  //     cancelButtonText: "Cancelar",
+  //     preConfirm: () => {
+  //       // const nombre = document.getElementById("nombre").value;
+  //       // const comentarios = document.getElementById("comentarios").value;
+  //       const region = document.getElementById("region").value;
+  //       const archivo = document.getElementById("archivo").files[0];
+
+  //       // Validar que todos los campos tengan datos
+  //       if (!region || !archivo) {
+  //         Swal.showValidationMessage("Por favor completa todos los campos.");
+  //         return false;
+  //       }
+
+  //       return { region, archivo };
+  //     },
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       console.log("Datos ingresados:", result.value);
+
+  //       const { region, archivo } = result.value;
+  //       // console.log("Nombre:", nombre);
+  //       // console.log("Comentarios:", comentarios);
+  //       console.log("Región:", region);
+  //       console.log("Archivo:", archivo.name);
+
+  //       Swal.fire(
+  //         "¡Enviado!",
+  //         "Tus datos han sido enviados con éxito.",
+  //         "success"
+  //       );
+  //     } else {
+  //       console.log("El usuario canceló el popup");
+  //     }
+  //   });
+  // };
+
+  // const handle_soporte = async (documentId, soporteId) => {
+  //   console.log("documentId", documentId);
+  //   console.log("SoporteId", soporteId);
+
+  //   const selectOptions = municipios
+  //     .map(
+  //       (muni) => `<option value="${muni.documentId}">${muni.label}</option>`
+  //     )
+  //     .join("");
+
+  //   Swal.fire({
+  //     title: "Ingrese la información",
+  //     html: `
+  //       <label for="region">Seleccionar Región:</label>
+  //       <select id="region" class="swal2-select">
+  //         <option value="">Selecciona una región</option>
+  //         ${selectOptions}
+  //       </select>
+
+  //       <label for="archivo">Archivo Soporte:</label>
+  //       <input type="file" id="archivo" class="swal2-file">
+  //     `,
+  //     showCancelButton: true,
+  //     confirmButtonText: "Enviar",
+  //     cancelButtonText: "Cancelar",
+  //     preConfirm: () => {
+  //       const region = document.getElementById("region").value;
+  //       const archivo = document.getElementById("archivo").files[0];
+
+  //       if (!region || !archivo) {
+  //         Swal.showValidationMessage("Por favor completa todos los campos.");
+  //         return false;
+  //       }
+
+  //       return { region, archivo };
+  //     },
+  //   }).then(async (result) => {
+  //     if (result.isConfirmed) {
+  //       const { region, archivo } = result.value;
+
+  //       // Crear FormData
+  //       const formData = new FormData();
+  //       formData.append("anexo_id", documentId);
+  //       formData.append("soporte_id", soporteId);
+  //       formData.append("municipio_id", region);
+  //       formData.append("files", archivo);
+
+  //       try {
+  //         // Enviar POST al backend
+  //         const response = await fetch(`${url_soportes}`, {
+  //           method: "POST",
+  //           body: formData,
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         });
+
+  //         if (!response.ok) throw new Error("Error al enviar los datos");
+
+  //         const data = await response.json();
+  //         console.log("Respuesta del servidor:", data);
+
+  //         Swal.fire(
+  //           "¡Enviado!",
+  //           "Tus datos han sido enviados con éxito.",
+  //           "success"
+  //         );
+  //       } catch (error) {
+  //         console.error("Error:", error);
+  //         Swal.fire("Error", "Hubo un problema al enviar los datos.", "error");
+  //       }
+  //     } else {
+  //       console.log("El usuario canceló el popup");
+  //     }
+  //   });
+  // };
+
+  // const handle_soporte = async (documentId, soporteId) => {
+  //   console.log("documentId", documentId);
+  //   console.log("SoporteId", soporteId);
+
+  //   try {
+  //     // Hacer la petición GET para obtener datos existentes
+  //     const response = await fetch(
+  //       `${url_soportes_get}anexo_id=${documentId}&soporte_id=${soporteId}`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     // if (!response.ok) throw new Error("Error al obtener los datos");
+
+  //     const existingData = await response.json();
+  //     console.log("Datos existentes:", existingData);
+
+  //     // Verificar si hay datos existentes
+  //     const hasExistingData =
+  //       existingData && Object.keys(existingData).length > 0;
+
+  //     const selectOptions = municipios
+  //       .map(
+  //         (muni) =>
+  //           `<option value="${muni.documentId}" ${
+  //             hasExistingData &&
+  //             muni.documentId === existingData.municipio.documentId
+  //               ? "selected"
+  //               : ""
+  //           }>${muni.label}</option>`
+  //       )
+  //       .join("");
+
+  //     // Mostrar SweetAlert con los datos obtenidos o en blanco
+  //     Swal.fire({
+  //       title: hasExistingData ? "Editar Soporte" : "Ingrese la Información",
+  //       html: `
+  //         <label for="region">Seleccionar Región:</label>
+  //         <select id="region" class="swal2-select">
+  //           <option value="">Selecciona una región</option>
+  //           ${selectOptions}
+  //         </select>
+
+  //    ${
+  //      hasExistingData
+  //        ? `<p><strong>Archivo actual:</strong> ${existingData.archivos[0].name}</p>`
+  //        : `<label for="archivo">Archivo Soporte:</label>
+  //          <input type="file" id="archivo" class="swal2-file">`
+  //    }
+  //       `,
+  //       showCancelButton: true,
+  //       confirmButtonText: hasExistingData ? "Actualizar" : "Enviar",
+  //       cancelButtonText: "Cancelar",
+  //       preConfirm: () => {
+  //         const region = document.getElementById("region").value;
+  //         const archivo = document.getElementById("archivo").files[0];
+
+  //         if (!region || (!archivo && !hasExistingData)) {
+  //           Swal.showValidationMessage("Por favor completa todos los campos.");
+  //           return false;
+  //         }
+
+  //         return { region, archivo };
+  //       },
+  //     }).then(async (result) => {
+  //       if (result.isConfirmed) {
+  //         const { region, archivo } = result.value;
+
+  //         // Crear FormData
+  //         const formData = new FormData();
+  //         formData.append("anexo_id", documentId);
+  //         formData.append("soporte_id", soporteId);
+  //         formData.append("municipio_id", region);
+
+  //         if (archivo) {
+  //           formData.append("files", archivo);
+  //         }
+
+  //         try {
+  //           // Enviar POST o PUT al backend
+  //           const response = await fetch(`${url_soportes}`, {
+  //             method: hasExistingData ? "PUT" : "POST",
+  //             body: formData,
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //             },
+  //           });
+
+  //           if (!response.ok) throw new Error("Error al enviar los datos");
+
+  //           const data = await response.json();
+  //           console.log("Respuesta del servidor:", data);
+
+  //           Swal.fire(
+  //             "¡Éxito!",
+  //             `Tus datos han sido ${
+  //               hasExistingData ? "actualizados" : "enviados"
+  //             } con éxito.`,
+  //             "success"
+  //           );
+  //         } catch (error) {
+  //           console.error("Error:", error);
+  //           Swal.fire(
+  //             "Error",
+  //             "Hubo un problema al enviar los datos.",
+  //             "error"
+  //           );
+  //         }
+  //       } else {
+  //         console.log("El usuario canceló el popup");
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     Swal.fire("Error", "No se pudieron obtener los datos.", "error");
+  //   }
+  // };
+
+  const handle_soporte = async (documentId, soporteId) => {
+    console.log("documentId", documentId);
+    console.log("SoporteId", soporteId);
+
+    try {
+      // Hacer la petición GET para obtener datos existentes
+      const response = await fetch(
+        `${url_soportes_get}anexo_id=${documentId}&soporte_id=${soporteId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
+      );
 
-        // Devolver los datos ingresados
-        return { nombre, comentarios, archivo };
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Mostrar los datos ingresados
-        console.log("Datos ingresados:", result.value);
+      let existingData = null;
 
-        const { nombre, comentarios, archivo } = result.value;
-        console.log("Nombre:", nombre);
-        console.log("Comentarios:", comentarios);
-        console.log("Archivo:", archivo.name); // Nombre del archivo
-
-        Swal.fire(
-          "¡Enviado!",
-          "Tus datos han sido enviados con éxito.",
-          "success"
-        );
+      if (response.ok) {
+        existingData = await response.json();
+      } else if (response.status === 404) {
+        console.warn("No se encontraron datos para este soporte.");
+        existingData = null; // O puedes asignar un objeto vacío si prefieres
       } else {
-        console.log("El usuario canceló el popup");
+        throw new Error(`Error al obtener los datos: ${response.status}`);
       }
-    });
+
+      console.log("Datos existentes:", existingData);
+
+      // Verificar si hay datos existentes
+      const hasExistingData = existingData !== null;
+
+      const selectOptions = municipios
+        .map(
+          (muni) =>
+            `<option value="${muni.documentId}" ${
+              hasExistingData &&
+              muni.documentId === existingData?.municipio?.documentId
+                ? "selected"
+                : ""
+            }>${muni.label}</option>`
+        )
+        .join("");
+
+      // Mostrar SweetAlert con los datos obtenidos o en blanco
+      Swal.fire({
+        title: hasExistingData ? "Editar Soporte" : "Ingrese la Información",
+        html: `
+          <label for="region">Seleccionar Región:</label>
+          <select id="region" class="swal2-select">
+            <option value="">Selecciona una región</option>
+            ${selectOptions}
+          </select>
+  
+          ${
+            hasExistingData
+              ? `<p><strong>Archivo actual:</strong> ${existingData.archivos[0].name}</p>`
+              : `<label for="archivo">Archivo Soporte:</label>
+                 <input type="file" id="archivo" class="swal2-file">`
+          }
+        `,
+        showCancelButton: true,
+        confirmButtonText: hasExistingData ? "Actualizar" : "Enviar",
+        cancelButtonText: "Cancelar",
+        preConfirm: () => {
+          const region = document.getElementById("region").value;
+          const archivo = document.getElementById("archivo")?.files[0];
+
+          if (!region || (!archivo && !hasExistingData)) {
+            Swal.showValidationMessage("Por favor completa todos los campos.");
+            return false;
+          }
+
+          return { region, archivo };
+        },
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const { region, archivo } = result.value;
+
+          // Crear FormData
+          const formData = new FormData();
+          formData.append("anexo_id", documentId);
+          formData.append("soporte_id", soporteId);
+          formData.append("municipio_id", region);
+
+          if (archivo) {
+            formData.append("files", archivo);
+          }
+
+          try {
+            // Enviar POST o PUT al backend
+            const response = await fetch(`${url_soportes}`, {
+              method: hasExistingData ? "PUT" : "POST",
+              body: formData,
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            if (!response.ok) throw new Error("Error al enviar los datos");
+
+            const data = await response.json();
+            console.log("Respuesta del servidor:", data);
+
+            Swal.fire(
+              "¡Éxito!",
+              `Tus datos han sido ${
+                hasExistingData ? "actualizados" : "enviados"
+              } con éxito.`,
+              "success"
+            );
+          } catch (error) {
+            console.error("Error:", error);
+            Swal.fire(
+              "Error",
+              "Hubo un problema al enviar los datos.",
+              "error"
+            );
+          }
+        } else {
+          console.log("El usuario canceló el popup");
+        }
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      Swal.fire("Error", "No se pudieron obtener los datos.", "error");
+    }
   };
 
   console.log("nombre", nombre);
@@ -444,7 +827,10 @@ const ReportView = () => {
                                                       <td>
                                                         <button
                                                           onClick={() =>
-                                                            handle_soporte()
+                                                            handle_soporte(
+                                                              row.documentId,
+                                                              soporte.id
+                                                            )
                                                           }
                                                         >
                                                           Soporte
