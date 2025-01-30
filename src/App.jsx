@@ -9,6 +9,7 @@ import Dashbo from "./components/Dashbo/Dashbo.jsx";
 import ReportForm from "./components/Report/ReportForm.jsx";
 import ReportView from "./components/ReportView/ReportView.jsx";
 import Edit from "./components/EditView/Edit.jsx";
+import Seguimiento from "./components/Seguimiento/Seguimiento.jsx";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route path="/repo" element={<ReportForm />} />
       <Route path="/view" element={<ReportView />} />
       <Route path="/edit" element={<Edit />} />
+      <Route path="/seg" element={<Seguimiento />} />
     </Routes>
   );
 }

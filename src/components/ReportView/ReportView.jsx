@@ -103,66 +103,13 @@ const ReportView = () => {
     });
   };
 
-  // const handle_soporte = (documentId, soporteId) => {
-  //   console.log("documentId", documentId);
-  //   console.log("SoporteId", soporteId);
-
-  //   const selectOptions = municipios
-  //     .map(
-  //       (muni) => `<option value="${muni.documentId}">${muni.label}</option>`
-  //     )
-  //     .join("");
-
-  //   Swal.fire({
-  //     title: "Ingrese la información",
-  //     html: `
-
-  //       <label for="region">Seleccionar Región:</label>
-  //       <select id="region" class="swal2-select">
-  //         <option value="">Selecciona una región</option>
-  //         ${selectOptions}
-  //       </select>
-
-  //       <label for="archivo">Archivo Soporte:</label>
-  //       <input type="file" id="archivo" class="swal2-file" >
-  //     `,
-  //     showCancelButton: true,
-  //     confirmButtonText: "Enviar",
-  //     cancelButtonText: "Cancelar",
-  //     preConfirm: () => {
-  //       // const nombre = document.getElementById("nombre").value;
-  //       // const comentarios = document.getElementById("comentarios").value;
-  //       const region = document.getElementById("region").value;
-  //       const archivo = document.getElementById("archivo").files[0];
-
-  //       // Validar que todos los campos tengan datos
-  //       if (!region || !archivo) {
-  //         Swal.showValidationMessage("Por favor completa todos los campos.");
-  //         return false;
-  //       }
-
-  //       return { region, archivo };
-  //     },
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       console.log("Datos ingresados:", result.value);
-
-  //       const { region, archivo } = result.value;
-  //       // console.log("Nombre:", nombre);
-  //       // console.log("Comentarios:", comentarios);
-  //       console.log("Región:", region);
-  //       console.log("Archivo:", archivo.name);
-
-  //       Swal.fire(
-  //         "¡Enviado!",
-  //         "Tus datos han sido enviados con éxito.",
-  //         "success"
-  //       );
-  //     } else {
-  //       console.log("El usuario canceló el popup");
-  //     }
-  //   });
-  // };
+  const handle_click_actividad = (actividad) => {
+    navigate("/seg", {
+      state: {
+        actividad: actividad, // Pasa aquí los datos que necesitas
+      },
+    });
+  };
 
   // const handle_soporte = async (documentId, soporteId) => {
   //   console.log("documentId", documentId);
@@ -599,21 +546,8 @@ const ReportView = () => {
               </thead>
               <tbody>
                 <tr>
-                  {/* <td>
-                    {evento.territorializacion.municipios[0].nombre_municipio}
-                  </td> */}
                   <td>
                     <table>
-                      {/* <tbody>
-                        {evento.territorializacion.municipios.map(
-                          (muni, index) => (
-                            <tr key={index}>
-                              <td>{muni.label}</td>
-                            </tr>
-                          )
-                        )}
-                      </tbody> */}
-
                       <tbody>
                         {Array.isArray(
                           evento?.territorializacion?.municipios
@@ -634,12 +568,7 @@ const ReportView = () => {
                     </table>
                   </td>
                   <td>{evento?.operador_pic?.operador_pic}</td>
-                  {/* <td>{evento.territorializacion.territorio}</td> */}
-                  {/* <td>
-                    {evento?.territorializacion?.territorio
-                      ? evento.territorializacion.territorio
-                      : "No hay territorio"}
-                  </td> */}
+
                   <td>{evento?.territorializacion?.territorio || ""}</td>
 
                   <td>
@@ -688,7 +617,6 @@ const ReportView = () => {
                               <tr>
                                 <th>Descripcion del producto</th>
                                 <th>Indicadores</th>
-                                {/* <th>Operador PIC</th> */}
                                 <th>Actividades</th>
                               </tr>
                             </thead>
@@ -724,27 +652,6 @@ const ReportView = () => {
                                 )}
                               </td>
 
-                              {/* <td>
-                                <table>
-                                  <thead>
-                                    <tr>
-                                      <th>Entidad</th>
-                                      <th>Descripcion</th>
-                                    </tr>
-                                    <tr></tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td>
-                                        {producto.operador_pic.nombre_entidad}
-                                      </td>
-                                      <td>
-                                        {producto.operador_pic.descripcion}
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td> */}
                               <td>
                                 {producto.actividades.map(
                                   (actividad, indicadorIndex) => (
@@ -766,6 +673,7 @@ const ReportView = () => {
                                           <th>Valor Unitario</th>
                                           <th>Valor Total</th>
                                           <th>Cronograma</th>
+                                          <th>Acciones</th>
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -857,87 +765,38 @@ const ReportView = () => {
                                                   <th>Porcentaje</th>
                                                 </tr>
                                               </thead>
+
                                               <tbody>
                                                 {actividad.cronograma.map(
-                                                  (crono, indicadorIndex) => (
-                                                    <tr>
-                                                      {crono.Ene > 0 && (
-                                                        <>
-                                                          <td>Enero</td>
-                                                          <td>{crono.Ene}%</td>
-                                                        </>
-                                                      )}
-                                                      {crono.Feb > 0 && (
-                                                        <>
-                                                          <td>Febrero</td>
-                                                          <td>{crono.Feb}%</td>
-                                                        </>
-                                                      )}
-                                                      {crono.Mar > 0 && (
-                                                        <>
-                                                          <td>Marzo</td>
-                                                          <td>{crono.Mar}%</td>
-                                                        </>
-                                                      )}
-                                                      {crono.Abr > 0 && (
-                                                        <>
-                                                          <td>Abril</td>
-                                                          <td>{crono.Abr}%</td>
-                                                        </>
-                                                      )}
-                                                      {crono.May > 0 && (
-                                                        <>
-                                                          <td>Mayo</td>
-                                                          <td>{crono.May}%</td>
-                                                        </>
-                                                      )}
-                                                      {crono.Jun > 0 && (
-                                                        <>
-                                                          <td>Junio</td>
-                                                          <td>{crono.Jun}%</td>
-                                                        </>
-                                                      )}
-                                                      {crono.Jul > 0 && (
-                                                        <>
-                                                          <td>Julio</td>
-                                                          <td>{crono.Jul}%</td>
-                                                        </>
-                                                      )}
-                                                      {crono.Ago > 0 && (
-                                                        <>
-                                                          <td>Agosto</td>
-                                                          <td>{crono.Ago}%</td>
-                                                        </>
-                                                      )}
-                                                      {crono.Sept > 0 && (
-                                                        <>
-                                                          <td>Septiembre</td>
-                                                          <td>{crono.Sept}%</td>
-                                                        </>
-                                                      )}
-                                                      {crono.Oct > 0 && (
-                                                        <>
-                                                          <td>Octubre</td>
-                                                          <td>{crono.Oct}%</td>
-                                                        </>
-                                                      )}
-                                                      {crono.Nov > 0 && (
-                                                        <>
-                                                          <td>Noviembre</td>
-                                                          <td>{crono.Nov}%</td>
-                                                        </>
-                                                      )}
-                                                      {crono.Dic > 0 && (
-                                                        <>
-                                                          <td>Diciembre</td>
-                                                          <td>{crono.Dic}%</td>
-                                                        </>
-                                                      )}
-                                                    </tr>
-                                                  )
+                                                  (crono, index) =>
+                                                    Object.entries(crono).map(
+                                                      ([mes, porcentaje]) =>
+                                                        porcentaje > 0 ? (
+                                                          <tr
+                                                            key={`${index}-${mes}`}
+                                                          >
+                                                            <td>{mes}</td>
+                                                            <td>
+                                                              {porcentaje}%
+                                                            </td>
+                                                          </tr>
+                                                        ) : null
+                                                    )
                                                 )}
                                               </tbody>
                                             </table>
+                                          </td>
+                                          <td>
+                                            <button
+                                              onClick={() =>
+                                                handle_click_actividad({
+                                                  ...actividad,
+                                                  documentId: row.documentId, // Agregar documentId aquí
+                                                })
+                                              }
+                                            >
+                                              Seguimiento
+                                            </button>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -953,7 +812,6 @@ const ReportView = () => {
                   )}
 
                   <td>
-                    {/* <button onClick={() => handle_click(evento)}>Editar</button> */}
                     <button
                       onClick={() =>
                         handle_click({
