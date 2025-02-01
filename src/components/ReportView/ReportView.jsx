@@ -25,26 +25,6 @@ const ReportView = () => {
   const url_soportes_get = `${back}/api/check-seguimiento?`;
   const navigate = useNavigate(); // Hook para navegación
 
-  const customStyles = {
-    control: (base) => ({
-      ...base,
-      minWidth: "280px", // Ajusta el ancho mínimo
-      //maxWidth: "400px", // Opcional, limita el ancho máximo
-    }),
-    menu: (base) => ({
-      ...base,
-      zIndex: 5, // Asegura que el menú no se superponga
-    }),
-    option: (base) => ({
-      ...base,
-      whiteSpace: "nowrap", // Evita que el texto se parta
-    }),
-    multiValueLabel: (base) => ({
-      ...base,
-      whiteSpace: "normal", // Permite que las etiquetas ocupen más espacio
-    }),
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -466,6 +446,8 @@ const ReportView = () => {
     ),
   ].filter(Boolean);
 
+  console.log("operadores", operatorOptions);
+
   // Filtrar datos basados en los valores seleccionados
   const filteredData = data?.data
     ?.map((row) => ({
@@ -496,8 +478,10 @@ const ReportView = () => {
           className={styles.filterSelect}
         >
           <option value="">Todos los proyectos</option>
-          {projectOptions.map((option, index) => (
-            <option key={index} value={option}>
+          {/* {projectOptions.map((option, index) => ( */}
+          {projectOptions.map((option) => (
+            // <option key={index} value={option}>
+            <option key={option.id || option} value={option}>
               {option}
             </option>
           ))}
@@ -511,8 +495,8 @@ const ReportView = () => {
           className={styles.filterSelect}
         >
           <option value="">Todos los operadores</option>
-          {operatorOptions.map((option, index) => (
-            <option key={index} value={option}>
+          {operatorOptions.map((option) => (
+            <option key={option} value={option}>
               {option}
             </option>
           ))}
@@ -546,6 +530,18 @@ const ReportView = () => {
               </thead>
               <tbody>
                 <tr>
+                  {/* <td>
+                    {Array.isArray(evento?.territorializacion?.municipios) &&
+                    evento.territorializacion.municipios.length > 0 ? (
+                      <ul>
+                        {evento.territorializacion.municipios.map((muni) => (
+                          <li key={muni.id || muni.label}>{muni.label}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      "Información sin ingresar"
+                    )}
+                  </td> */}
                   <td>
                     <table>
                       <tbody>
@@ -567,10 +563,9 @@ const ReportView = () => {
                       </tbody>
                     </table>
                   </td>
+
                   <td>{evento?.operador_pic?.operador_pic}</td>
-
                   <td>{evento?.territorializacion?.territorio || ""}</td>
-
                   <td>
                     {evento?.territorializacion?.microterritorio ||
                       "Falta ingresar "}
@@ -589,8 +584,8 @@ const ReportView = () => {
                   <td>
                     <table>
                       <tbody>
-                        {evento?.ejes_estrategicos?.map((eje, index) => (
-                          <tr key={index}>
+                        {evento?.ejes_estrategicos?.map((eje) => (
+                          <tr key={eje.id}>
                             <td>{eje.nombre}</td>
                           </tr>
                         ))}
@@ -600,8 +595,8 @@ const ReportView = () => {
                   <td>
                     <table>
                       <tbody>
-                        {evento?.lineas_operativa?.map((linea, index) => (
-                          <tr key={index}>
+                        {evento?.lineas_operativa?.map((linea) => (
+                          <tr key={linea.id}>
                             <td>{linea.nombre}</td>
                           </tr>
                         ))}
@@ -609,208 +604,312 @@ const ReportView = () => {
                     </table>
                   </td>
                   {(filterValue || operatorFilterValue) != "" && (
-                    <tr>
-                      {evento.productos.map((producto, subIndex) => (
-                        <tr colSpan="4">
-                          <table className={styles.subTable}>
-                            <thead>
-                              <tr>
-                                <th>Descripcion del producto</th>
-                                <th>Indicadores</th>
-                                <th>Actividades</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <td>{producto.descripcion}</td>
+                    <td>
+                      <table>
+                        <tbody>
+                          {evento.productos.map((producto) => (
+                            <tr key={producto.id || producto.descripcion}>
+                              <td
+                                key={producto.id || producto.descripcion}
+                                colSpan="4"
+                              >
+                                <table className={styles.subTable}>
+                                  <thead>
+                                    <tr>
+                                      <th>Descripcion del producto</th>
+                                      <th>Indicadores</th>
+                                      <th>Actividades</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td>{producto.descripcion}</td>
 
-                              <td>
-                                {producto.indicadores.map(
-                                  (indicador, indicadorIndex) => (
-                                    <table
-                                      key={indicadorIndex}
-                                      className={styles.subTable}
-                                      style={{ marginBottom: "1rem" }} // Espaciado entre tablas
-                                    >
-                                      <thead>
-                                        <tr>
-                                          <th>Indicador linea base</th>
-                                          <th>Cantidad</th>
-                                          <th>Meta Producto</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                          <td>
-                                            {indicador.indicador_linea_base}
-                                          </td>
-                                          <td>{indicador.cantidad}</td>
-                                          <td>{indicador.meta_producto}</td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  )
-                                )}
-                              </td>
-
-                              <td>
-                                {producto.actividades.map(
-                                  (actividad, indicadorIndex) => (
-                                    <table
-                                      key={indicadorIndex}
-                                      className={styles.subTable}
-                                      style={{ marginBottom: "1rem" }} // Espaciado entre tablas
-                                    >
-                                      <thead>
-                                        <tr>
-                                          <th>Descripcion</th>
-                                          <th>Cantidad a Ejecutar</th>
-                                          <th>Unidad de Medida</th>
-                                          <th>Entornos</th>
-                                          <th>Tecnologias</th>
-                                          <th>Poblacion Sujeto</th>
-                                          <th>Soportes</th>
-                                          <th>Código Cups</th>
-                                          <th>Valor Unitario</th>
-                                          <th>Valor Total</th>
-                                          <th>Cronograma</th>
-                                          <th>Acciones</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                          <td>{actividad.descripcion}</td>
-                                          <td>
-                                            {actividad.cantidad_a_ejecutar}
-                                          </td>
-                                          <td>{actividad.unidad_medida}</td>
-                                          <td>
-                                            {actividad.entornos.map(
-                                              (entorno, indicadorIndex) => (
-                                                <tr>*{entorno.nombre}</tr>
-                                              )
-                                            )}
-                                          </td>
-                                          <td>
-                                            {actividad.tecnologias.map(
-                                              (tecno, indicadorIndex) => (
-                                                <tr>*{tecno.nombre}</tr>
-                                              )
-                                            )}
-                                          </td>
-                                          <td>
-                                            {actividad.poblaciones.map(
-                                              (poblacion, indicadorIndex) => (
-                                                <tr>*{poblacion.nombre}</tr>
-                                              )
-                                            )}
-                                          </td>
-
-                                          <td>
-                                            {actividad.soportes.map(
-                                              (soporte, indicadorIndex) => (
-                                                <table
-                                                  key={indicadorIndex}
-                                                  className={styles.subTable}
-                                                  style={{
-                                                    marginBottom: "1rem",
-                                                  }} // Espaciado entre tablas
-                                                >
-                                                  <thead>
-                                                    <tr>
-                                                      <th>Tipo Soporte</th>
-                                                      <th>Descripcion</th>
-                                                      <th>Cantidad</th>
-                                                      <th>Acciones</th>
-                                                    </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                    <tr>
-                                                      <td>{soporte.tipo}</td>
-                                                      <td>
-                                                        {soporte.descripcion}
-                                                      </td>
-                                                      <td>
-                                                        {soporte.cantidad}
-                                                      </td>
-                                                      <td>
-                                                        <button
-                                                          onClick={() =>
-                                                            handle_soporte(
-                                                              row.documentId,
-                                                              soporte.id
-                                                            )
-                                                          }
-                                                        >
-                                                          Soporte
-                                                        </button>
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                              )
-                                            )}
-                                          </td>
-                                          <td>{actividad.cups.codigo}</td>
-                                          <td>{actividad.valor_unitario}</td>
-                                          <td>{actividad.valor_total}</td>
-                                          <td>
-                                            <table
-                                              key={indicadorIndex}
-                                              className={styles.subTable}
-                                              style={{ marginBottom: "1rem" }} // Espaciado entre tablas
-                                            >
-                                              <thead>
-                                                <tr>
-                                                  <th>Mes</th>
-                                                  <th>Porcentaje</th>
+                                      {/* Indicadores */}
+                                      <td>
+                                        <table className={styles.subTable}>
+                                          <thead>
+                                            <tr>
+                                              <th>Indicador linea base</th>
+                                              <th>Cantidad</th>
+                                              <th>Meta Producto</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {producto.indicadores.map(
+                                              (indicador, index) => (
+                                                <tr key={indicador.id || index}>
+                                                  <td>
+                                                    {
+                                                      indicador.indicador_linea_base
+                                                    }
+                                                  </td>
+                                                  <td>{indicador.cantidad}</td>
+                                                  <td>
+                                                    {indicador.meta_producto}
+                                                  </td>
                                                 </tr>
-                                              </thead>
+                                              )
+                                            )}
+                                          </tbody>
+                                        </table>
+                                      </td>
 
-                                              <tbody>
-                                                {actividad.cronograma.map(
-                                                  (crono, index) =>
-                                                    Object.entries(crono).map(
-                                                      ([mes, porcentaje]) =>
-                                                        porcentaje > 0 ? (
-                                                          <tr
-                                                            key={`${index}-${mes}`}
+                                      {/* Actividades */}
+                                      <td>
+                                        <table className={styles.subTable}>
+                                          <thead>
+                                            <tr>
+                                              <th>Descripcion</th>
+                                              <th>Cantidad a Ejecutar</th>
+                                              <th>Unidad de Medida</th>
+                                              <th>Entornos</th>
+                                              <th>Tecnologias</th>
+                                              <th>Poblacion Sujeto</th>
+                                              <th>Soportes</th>
+                                              <th>Código Cups</th>
+                                              <th>Valor Unitario</th>
+                                              <th>Valor Total</th>
+                                              <th>Cronograma</th>
+                                              <th>Acciones</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {producto.actividades.map(
+                                              (actividad, index) => (
+                                                <tr key={actividad.id || index}>
+                                                  <td>
+                                                    {actividad.descripcion}
+                                                  </td>
+                                                  <td>
+                                                    {
+                                                      actividad.cantidad_a_ejecutar
+                                                    }
+                                                  </td>
+                                                  <td>
+                                                    {actividad.unidad_medida}
+                                                  </td>
+
+                                                  {/* Entornos */}
+                                                  {/* <td>
+                                                    <ul>
+                                                      {actividad.entornos.map(
+                                                        (entorno, i) => (
+                                                          <li
+                                                            key={
+                                                              entorno.id || i
+                                                            }
                                                           >
-                                                            <td>{mes}</td>
-                                                            <td>
-                                                              {porcentaje}%
-                                                            </td>
-                                                          </tr>
-                                                        ) : null
-                                                    )
-                                                )}
-                                              </tbody>
-                                            </table>
-                                          </td>
-                                          <td>
-                                            <button
-                                              onClick={() =>
-                                                handle_click_actividad({
-                                                  ...actividad,
-                                                  documentId: row.documentId, // Agregar documentId aquí
-                                                })
-                                              }
-                                            >
-                                              Seguimiento
-                                            </button>
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  )
-                                )}
-                              </td>
-                            </tbody>
-                          </table>
-                        </tr>
-                      ))}
-                    </tr>
-                  )}
+                                                            {entorno.nombre}
+                                                          </li>
+                                                        )
+                                                      )}
+                                                    </ul>
+                                                  </td> */}
+                                                  <td>
+                                                    <table>
+                                                      <tbody>
+                                                        {actividad.entornos.map(
+                                                          (entorno) => (
+                                                            <tr
+                                                              key={entorno.id}
+                                                            >
+                                                              <td>
+                                                                {entorno.nombre}
+                                                              </td>
+                                                            </tr>
+                                                          )
+                                                        )}
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
 
+                                                  {/* Tecnologías */}
+                                                  <td>
+                                                    <table>
+                                                      <tbody>
+                                                        {actividad.tecnologias.map(
+                                                          (tecno, i) => (
+                                                            <tr
+                                                              key={
+                                                                tecno.id || i
+                                                              }
+                                                            >
+                                                              <td>
+                                                                *{tecno.nombre}
+                                                              </td>
+                                                            </tr>
+                                                          )
+                                                        )}
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+
+                                                  {/* Poblaciones */}
+                                                  <td>
+                                                    <table>
+                                                      <tbody>
+                                                        {actividad.poblaciones.map(
+                                                          (poblacion, i) => (
+                                                            <tr
+                                                              key={
+                                                                poblacion.id ||
+                                                                i
+                                                              }
+                                                            >
+                                                              <td>
+                                                                *
+                                                                {
+                                                                  poblacion.nombre
+                                                                }
+                                                              </td>
+                                                            </tr>
+                                                          )
+                                                        )}
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                  {/* Soportes */}
+
+                                                  <td>
+                                                    <table
+                                                      className={
+                                                        styles.subTable
+                                                      }
+                                                    >
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Tipo Soporte</th>
+                                                          <th>Descripción</th>
+                                                          <th>Cantidad</th>
+                                                          <th>Acciones</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        {actividad.soportes.map(
+                                                          (soporte, i) => (
+                                                            <tr
+                                                              key={
+                                                                soporte.id || i
+                                                              }
+                                                            >
+                                                              <td>
+                                                                {soporte.tipo}
+                                                              </td>
+                                                              <td>
+                                                                {
+                                                                  soporte.descripcion
+                                                                }
+                                                              </td>
+                                                              <td>
+                                                                {
+                                                                  soporte.cantidad
+                                                                }
+                                                              </td>
+                                                              <td>
+                                                                <button
+                                                                  onClick={() =>
+                                                                    handle_soporte(
+                                                                      row.documentId,
+                                                                      soporte.id
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  Soporte
+                                                                </button>
+                                                              </td>
+                                                            </tr>
+                                                          )
+                                                        )}
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+
+                                                  <td>
+                                                    {actividad.cups.codigo}
+                                                  </td>
+                                                  <td>
+                                                    {actividad.valor_unitario}
+                                                  </td>
+                                                  <td>
+                                                    {actividad.valor_total}
+                                                  </td>
+
+                                                  {/* Cronograma */}
+                                                  <td>
+                                                    <table
+                                                      className={
+                                                        styles.subTable
+                                                      }
+                                                    >
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Mes</th>
+                                                          <th>Porcentaje</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        {actividad.cronograma.map(
+                                                          (crono, i) =>
+                                                            Object.entries(
+                                                              crono
+                                                            ).map(
+                                                              ([
+                                                                mes,
+                                                                porcentaje,
+                                                              ]) =>
+                                                                porcentaje >
+                                                                  0 && (
+                                                                  <tr
+                                                                    key={`${i}-${mes}`}
+                                                                  >
+                                                                    <td>
+                                                                      {mes}
+                                                                    </td>
+                                                                    <td>
+                                                                      {
+                                                                        porcentaje
+                                                                      }
+                                                                      %
+                                                                    </td>
+                                                                  </tr>
+                                                                )
+                                                            )
+                                                        )}
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+
+                                                  {/* Acciones */}
+                                                  <td>
+                                                    <button
+                                                      onClick={() =>
+                                                        handle_click_actividad({
+                                                          ...actividad,
+                                                          documentId:
+                                                            row.documentId,
+                                                        })
+                                                      }
+                                                    >
+                                                      Seguimiento
+                                                    </button>
+                                                  </td>
+                                                </tr>
+                                              )
+                                            )}
+                                          </tbody>
+                                        </table>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </td>
+                  )}
                   <td>
                     <button
                       onClick={() =>
