@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { FaEdit } from "react-icons/fa";
 import { FaClipboardList } from "react-icons/fa";
 import { FaPaperclip } from "react-icons/fa";
+import withReactContent from "sweetalert2-react-content";
 
 const ReportView = () => {
   const [data, setData] = useState(null);
@@ -26,7 +27,23 @@ const ReportView = () => {
 
   const url_soportes = `${back}/api/seguimiento/upload-file`;
   const url_soportes_get = `${back}/api/check-seguimiento?`;
+  const url_soportes_delete = `${back}/api/seguimiento/remove-file`;
   const navigate = useNavigate(); // Hook para navegación
+
+  const MySwal = withReactContent(Swal);
+
+  const showLoadingSwal = (mensaje, mensaje_2) => {
+    console.log("mensaje", mensaje_2);
+    MySwal.fire({
+      title: mensaje_2,
+      html: <Spinner envio={mensaje} />, // Aquí se muestra el spinner
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,7 +90,7 @@ const ReportView = () => {
     fetch_subregion();
   }, [token]);
 
-  if (loading) return <Spinner />;
+  if (loading) return <Spinner envio={"Cargando datos, por favor espera..."} />;
   if (error) return <div>Error: {error}</div>;
   console.log("datos", data);
   console.log("token", token);
@@ -94,89 +111,11 @@ const ReportView = () => {
     });
   };
 
-  // const handle_soporte = async (documentId, soporteId) => {
-  //   console.log("documentId", documentId);
-  //   console.log("SoporteId", soporteId);
-
-  //   const selectOptions = municipios
-  //     .map(
-  //       (muni) => `<option value="${muni.documentId}">${muni.label}</option>`
-  //     )
-  //     .join("");
-
-  //   Swal.fire({
-  //     title: "Ingrese la información",
-  //     html: `
-  //       <label for="region">Seleccionar Región:</label>
-  //       <select id="region" class="swal2-select">
-  //         <option value="">Selecciona una región</option>
-  //         ${selectOptions}
-  //       </select>
-
-  //       <label for="archivo">Archivo Soporte:</label>
-  //       <input type="file" id="archivo" class="swal2-file">
-  //     `,
-  //     showCancelButton: true,
-  //     confirmButtonText: "Enviar",
-  //     cancelButtonText: "Cancelar",
-  //     preConfirm: () => {
-  //       const region = document.getElementById("region").value;
-  //       const archivo = document.getElementById("archivo").files[0];
-
-  //       if (!region || !archivo) {
-  //         Swal.showValidationMessage("Por favor completa todos los campos.");
-  //         return false;
-  //       }
-
-  //       return { region, archivo };
-  //     },
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       const { region, archivo } = result.value;
-
-  //       // Crear FormData
-  //       const formData = new FormData();
-  //       formData.append("anexo_id", documentId);
-  //       formData.append("soporte_id", soporteId);
-  //       formData.append("municipio_id", region);
-  //       formData.append("files", archivo);
-
-  //       try {
-  //         // Enviar POST al backend
-  //         const response = await fetch(`${url_soportes}`, {
-  //           method: "POST",
-  //           body: formData,
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         });
-
-  //         if (!response.ok) throw new Error("Error al enviar los datos");
-
-  //         const data = await response.json();
-  //         console.log("Respuesta del servidor:", data);
-
-  //         Swal.fire(
-  //           "¡Enviado!",
-  //           "Tus datos han sido enviados con éxito.",
-  //           "success"
-  //         );
-  //       } catch (error) {
-  //         console.error("Error:", error);
-  //         Swal.fire("Error", "Hubo un problema al enviar los datos.", "error");
-  //       }
-  //     } else {
-  //       console.log("El usuario canceló el popup");
-  //     }
-  //   });
-  // };
-
   const handle_soporte = async (documentId, soporteId) => {
     console.log("documentId", documentId);
     console.log("SoporteId", soporteId);
 
     try {
-      // Hacer la petición GET para obtener datos existentes
       const response = await fetch(
         `${url_soportes_get}anexo_id=${documentId}&soporte_id=${soporteId}`,
         {
@@ -189,109 +128,199 @@ const ReportView = () => {
       );
 
       let existingData = null;
-
       if (response.ok) {
         existingData = await response.json();
       } else if (response.status === 404) {
         console.warn("No se encontraron datos para este soporte.");
-        existingData = null; // O puedes asignar un objeto vacío si prefieres
+        existingData = null;
       } else {
         throw new Error(`Error al obtener los datos: ${response.status}`);
       }
 
       console.log("Datos existentes:", existingData);
+      const hasExistingData = existingData?.evidencias?.length > 0;
 
-      // Verificar si hay datos existentes
-      const hasExistingData = existingData !== null;
+      let evidenciasHTML = "";
 
-      const selectOptions = municipios
-        .map(
-          (muni) =>
-            `<option value="${muni.documentId}" ${
-              hasExistingData &&
-              muni.documentId ===
-                existingData?.evidencias[0]?.municipio?.documentId
-                ? "selected"
-                : ""
-            }>${muni.label}</option>`
-        )
-        .join("");
+      // 🔹 Mostrar evidencias existentes con botón de eliminar
+      if (hasExistingData) {
+        evidenciasHTML = existingData.evidencias
+          .map(
+            (evidencia, index) => `
+            <div id="evidencia-existente-${
+              evidencia.documentId
+            }" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; 
+        border-radius: 5px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
+              <div  style="flex: 1; min-width: 200px;">
+                <p><strong>Soporte ${index + 1}:</strong></p>
+                <p><strong>Archivo:</strong> ${evidencia.archivo.name}</p>
+                <p><strong>Región:</strong> ${evidencia.municipio.label}</p> 
+              </div>
+           <div>
+          <button class="swal2-confirm btn-delete" data-evidencia-id="${
+            evidencia.documentId
+          }" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius:5px ;cursor: pointer;">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div> 
 
-      // Mostrar SweetAlert con los datos obtenidos o en blanco
+            </div>
+          `
+          )
+          .join("");
+      }
+
+      // 🔹 Nueva lista para evidencias a enviar
+      let nuevasEvidencias = [];
+
+      // 🔹 Formulario para agregar nuevas evidencias
+      evidenciasHTML += `
+        <button id="add-evidencia" class="swal2-confirm" style="background-color: green; color: white; margin-top: 10px; padding: 5px 10px; border: none;border-radius: 5px; pointer;">
+          Agregar Nuevo Soporte
+        </button>
+        <div id="extra-evidencias" style="margin-top: 10px;"></div>
+      `;
+
       Swal.fire({
-        title: hasExistingData ? "Editar Soporte" : "Ingrese la Información",
-        html: `
-          <label for="region">Seleccionar Región:</label>
-          <select id="region" class="swal2-select">
-            <option value="">Selecciona una región</option>
-            ${selectOptions}
-          </select>
-  
-          ${
-            hasExistingData
-              ? `<p><strong>Archivo actual:</strong> ${existingData.evidencias[0].archivo.name}</p>`
-              : `<label for="archivo">Archivo Soporte:</label>
-                 <input type="file" id="archivo" class="swal2-file">`
-          }
-        `,
+        title: hasExistingData ? "Soportes Actuales" : "Ingrese la Información",
+        html: evidenciasHTML,
         showCancelButton: true,
-        confirmButtonText: hasExistingData ? "Actualizar" : "Enviar",
+        confirmButtonText: "Enviar",
         cancelButtonText: "Cancelar",
-        preConfirm: () => {
-          const region = document.getElementById("region").value;
-          const archivo = document.getElementById("archivo")?.files[0];
+        didOpen: () => {
+          const extraEvidenciasDiv =
+            document.getElementById("extra-evidencias");
 
-          if (!region || (!archivo && !hasExistingData)) {
-            Swal.showValidationMessage("Por favor completa todos los campos.");
+          // 🔹 Evento para eliminar evidencias existentes
+          document.querySelectorAll(".btn-delete").forEach((btn) => {
+            btn.addEventListener("click", async (event) => {
+              const evidenciaId =
+                event.target.getAttribute("data-evidencia-id");
+
+              await deleteEvidencia(evidenciaId, documentId, soporteId);
+              document.getElementById(`evidencia-existente-${evidenciaId}`);
+            });
+          });
+
+          // 🔹 Evento para agregar una nueva evidencia
+          document
+            .getElementById("add-evidencia")
+            .addEventListener("click", () => {
+              const evidenciaId = `evidencia-${nuevasEvidencias.length}`;
+
+              const newEvidenciaHTML = `
+              <div id="${evidenciaId}" 
+                style="margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; 
+                border-radius: 5px; display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%;">
+            
+                <div style="flex: 1; min-width: 200px;">
+                  <label for="region-${evidenciaId}" style="margin-top: 10px;margin-left:40px">Seleccionar Región:</label>
+                  <select id="region-${evidenciaId}" class="swal2-select" style="width: 100%; margin-top: 5px;">
+                    <option value="">Selecciona una región</option>
+                    ${municipios
+                      .map(
+                        (muni) =>
+                          `<option value="${muni.documentId}">${muni.label}</option>`
+                      )
+                      .join("")}
+                  </select>
+                  
+                  <label for="archivo-${evidenciaId}" style="margin-top: 10px;margin-left:40px">Archivo Soporte:</label>
+                  <input type="file" id="archivo-${evidenciaId}" class="swal2-file" style="width: 100%; margin-top: 5px; margin-left:40px">
+                </div>
+            
+                <div style="display: flex; align-items: center; justify-content: flex-end; min-width: 80px;">
+                  <button class="swal2-confirm btn-delete-evidencia" data-id="${evidenciaId}" 
+                    style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer; 
+                    display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 5px;">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+            
+              </div>
+            `;
+
+              extraEvidenciasDiv.insertAdjacentHTML(
+                "beforeend",
+                newEvidenciaHTML
+              );
+              nuevasEvidencias.push(evidenciaId);
+
+              // Evento para eliminar evidencias antes de enviarlas
+              document
+                .querySelector(`[data-id="${evidenciaId}"]`)
+                .addEventListener("click", (event) => {
+                  const id = event.target.getAttribute("data-id");
+                  document.getElementById(id).remove();
+                  nuevasEvidencias = nuevasEvidencias.filter((e) => e !== id);
+                });
+            });
+        },
+        preConfirm: async () => {
+          if (nuevasEvidencias.length === 0) {
+            Swal.showValidationMessage("Debes agregar al menos una evidencia.");
             return false;
           }
 
-          return { region, archivo };
+          return nuevasEvidencias.map((id) => ({
+            region: document.getElementById(`region-${id}`).value,
+            archivo: document.getElementById(`archivo-${id}`).files[0],
+          }));
         },
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const { region, archivo } = result.value;
+          const evidenciasAEnviar = result.value;
 
-          // Crear FormData
-          const formData = new FormData();
-          formData.append("anexo_id", documentId);
-          formData.append("soporte_id", soporteId);
-          formData.append("municipio_id", region);
+          for (const evidencia of evidenciasAEnviar) {
+            if (!evidencia.region || !evidencia.archivo) {
+              Swal.fire(
+                "Error",
+                "Todos los soportes deben tener región y archivo. Por favor intente nuevamente",
+                "error"
+              );
+              return;
+            }
 
-          if (archivo) {
-            formData.append("files", archivo);
+            try {
+              showLoadingSwal(
+                "Enviando soportes, por favor espera ...,",
+                "Enviando Soportes..."
+              );
+              // setLoading(true);
+              const formData = new FormData();
+              formData.append("anexo_id", documentId);
+              formData.append("soporte_id", soporteId);
+              formData.append("municipio_id", evidencia.region);
+              formData.append("files", evidencia.archivo);
+
+              const response = await fetch(`${url_soportes}`, {
+                method: "POST",
+                body: formData,
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+
+              if (!response.ok) throw new Error("Error al enviar los datos");
+
+              console.log("Evidencia enviada:", await response.json());
+              Swal.close();
+            } catch (error) {
+              console.error("Error:", error);
+              Swal.fire(
+                "Error",
+                "Hubo un problema al enviar los datos.",
+                "error"
+              );
+              return;
+            }
           }
 
-          try {
-            // Enviar POST o PUT al backend
-            const response = await fetch(`${url_soportes}`, {
-              method: hasExistingData ? "PUT" : "POST",
-              body: formData,
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-
-            if (!response.ok) throw new Error("Error al enviar los datos");
-
-            const data = await response.json();
-            console.log("Respuesta del servidor:", data);
-
-            Swal.fire(
-              "¡Éxito!",
-              `Tus datos han sido ${
-                hasExistingData ? "actualizados" : "enviados"
-              } con éxito.`,
-              "success"
-            );
-          } catch (error) {
-            console.error("Error:", error);
-            Swal.fire(
-              "Error",
-              "Hubo un problema al enviar los datos.",
-              "error"
-            );
-          }
+          Swal.fire(
+            "¡Éxito!",
+            "Todos los soportes fueron enviados.",
+            "success"
+          );
         } else {
           console.log("El usuario canceló el popup");
         }
@@ -300,6 +329,64 @@ const ReportView = () => {
       console.error("Error:", error);
       Swal.fire("Error", "No se pudieron obtener los datos.", "error");
     }
+  };
+
+  const deleteEvidencia = async (evidenciaId, documentId, soporteId) => {
+    console.log("evidenciaId", evidenciaId);
+    console.log("documentId", documentId);
+    console.log("soporteId", soporteId);
+
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará la evidencia permanentemente.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          showLoadingSwal(
+            "Eliminando soporte, por favor espera ...",
+            "Eliminado soportes..."
+          );
+          const response = await fetch(`${url_soportes_delete}`, {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              anexo_id: documentId,
+              soporte_id: soporteId,
+              evidencia_id: evidenciaId,
+            }),
+          });
+
+          if (!response.ok) throw new Error("Error al eliminar la evidencia");
+
+          Swal.close();
+
+          Swal.fire(
+            "Eliminado",
+            "La evidencia ha sido eliminada con éxito.",
+            "success"
+          );
+
+          // Volver a cargar la lista de soportes después de eliminar
+          handle_soporte(documentId, soporteId);
+        } catch (error) {
+          console.error("Error:", error);
+          Swal.fire(
+            "Error",
+            "Hubo un problema al eliminar la evidencia.",
+            "error"
+          );
+        }
+      }
+    });
   };
 
   console.log("nombre", nombre);

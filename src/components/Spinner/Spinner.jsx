@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./Spinner.module.css";
 
-const Spinner = () => {
+const Spinner = ({ envio }) => {
   return (
     <div className={styles.spinnerContainer}>
       <div className={styles.spinner}></div>
-      <p>Cargando datos, por favor espera...</p>
+      <p>{envio}</p>
     </div>
   );
 };

@@ -21,9 +21,6 @@ const Seguimiento = () => {
 
   const [estadoSoportes, setEstadoSoportes] = useState({});
 
-  const [obser_referente, setReferente] = useState("");
-  const [obser_operador, setOperador] = useState("");
-
   const [observaciones, setObservaciones] = useState({
     observacion_referente: "",
     observacion_operador: "",
