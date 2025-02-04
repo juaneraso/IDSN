@@ -196,13 +196,15 @@ const ReportForm = () => {
             // lineas_operativa: (event.linea_operativa || []).map((linea) => ({
             //   nombre: linea || null,
             // })),
-            lineas_operativa: event.linea_operativa
-              ? [
-                  {
-                    nombre: event.linea_operativa,
-                  },
-                ]
-              : [],
+            lineas_operativa: { nombre: event.linea_operativa || null },
+
+            // lineas_operativa: event.linea_operativa
+            //   ? [
+            //       {
+            //         nombre: event.linea_operativa,
+            //       },
+            //     ]
+            //   : [],
 
             productos: event.product_data.producto.map((producto, index) => ({
               descripcion: producto.descripcion_producto || null,

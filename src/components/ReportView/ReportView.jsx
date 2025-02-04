@@ -4,6 +4,9 @@ import Header from "../Header/Header";
 import styles from "./ReporView.module.css";
 import Spinner from "../Spinner/Spinner";
 import Swal from "sweetalert2";
+import { FaEdit } from "react-icons/fa";
+import { FaClipboardList } from "react-icons/fa";
+import { FaPaperclip } from "react-icons/fa";
 
 const ReportView = () => {
   const [data, setData] = useState(null);
@@ -168,129 +171,6 @@ const ReportView = () => {
   //   });
   // };
 
-  // const handle_soporte = async (documentId, soporteId) => {
-  //   console.log("documentId", documentId);
-  //   console.log("SoporteId", soporteId);
-
-  //   try {
-  //     // Hacer la petición GET para obtener datos existentes
-  //     const response = await fetch(
-  //       `${url_soportes_get}anexo_id=${documentId}&soporte_id=${soporteId}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     // if (!response.ok) throw new Error("Error al obtener los datos");
-
-  //     const existingData = await response.json();
-  //     console.log("Datos existentes:", existingData);
-
-  //     // Verificar si hay datos existentes
-  //     const hasExistingData =
-  //       existingData && Object.keys(existingData).length > 0;
-
-  //     const selectOptions = municipios
-  //       .map(
-  //         (muni) =>
-  //           `<option value="${muni.documentId}" ${
-  //             hasExistingData &&
-  //             muni.documentId === existingData.municipio.documentId
-  //               ? "selected"
-  //               : ""
-  //           }>${muni.label}</option>`
-  //       )
-  //       .join("");
-
-  //     // Mostrar SweetAlert con los datos obtenidos o en blanco
-  //     Swal.fire({
-  //       title: hasExistingData ? "Editar Soporte" : "Ingrese la Información",
-  //       html: `
-  //         <label for="region">Seleccionar Región:</label>
-  //         <select id="region" class="swal2-select">
-  //           <option value="">Selecciona una región</option>
-  //           ${selectOptions}
-  //         </select>
-
-  //    ${
-  //      hasExistingData
-  //        ? `<p><strong>Archivo actual:</strong> ${existingData.archivos[0].name}</p>`
-  //        : `<label for="archivo">Archivo Soporte:</label>
-  //          <input type="file" id="archivo" class="swal2-file">`
-  //    }
-  //       `,
-  //       showCancelButton: true,
-  //       confirmButtonText: hasExistingData ? "Actualizar" : "Enviar",
-  //       cancelButtonText: "Cancelar",
-  //       preConfirm: () => {
-  //         const region = document.getElementById("region").value;
-  //         const archivo = document.getElementById("archivo").files[0];
-
-  //         if (!region || (!archivo && !hasExistingData)) {
-  //           Swal.showValidationMessage("Por favor completa todos los campos.");
-  //           return false;
-  //         }
-
-  //         return { region, archivo };
-  //       },
-  //     }).then(async (result) => {
-  //       if (result.isConfirmed) {
-  //         const { region, archivo } = result.value;
-
-  //         // Crear FormData
-  //         const formData = new FormData();
-  //         formData.append("anexo_id", documentId);
-  //         formData.append("soporte_id", soporteId);
-  //         formData.append("municipio_id", region);
-
-  //         if (archivo) {
-  //           formData.append("files", archivo);
-  //         }
-
-  //         try {
-  //           // Enviar POST o PUT al backend
-  //           const response = await fetch(`${url_soportes}`, {
-  //             method: hasExistingData ? "PUT" : "POST",
-  //             body: formData,
-  //             headers: {
-  //               Authorization: `Bearer ${token}`,
-  //             },
-  //           });
-
-  //           if (!response.ok) throw new Error("Error al enviar los datos");
-
-  //           const data = await response.json();
-  //           console.log("Respuesta del servidor:", data);
-
-  //           Swal.fire(
-  //             "¡Éxito!",
-  //             `Tus datos han sido ${
-  //               hasExistingData ? "actualizados" : "enviados"
-  //             } con éxito.`,
-  //             "success"
-  //           );
-  //         } catch (error) {
-  //           console.error("Error:", error);
-  //           Swal.fire(
-  //             "Error",
-  //             "Hubo un problema al enviar los datos.",
-  //             "error"
-  //           );
-  //         }
-  //       } else {
-  //         console.log("El usuario canceló el popup");
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     Swal.fire("Error", "No se pudieron obtener los datos.", "error");
-  //   }
-  // };
-
   const handle_soporte = async (documentId, soporteId) => {
     console.log("documentId", documentId);
     console.log("SoporteId", soporteId);
@@ -329,7 +209,8 @@ const ReportView = () => {
           (muni) =>
             `<option value="${muni.documentId}" ${
               hasExistingData &&
-              muni.documentId === existingData?.municipio?.documentId
+              muni.documentId ===
+                existingData?.evidencias[0]?.municipio?.documentId
                 ? "selected"
                 : ""
             }>${muni.label}</option>`
@@ -348,7 +229,7 @@ const ReportView = () => {
   
           ${
             hasExistingData
-              ? `<p><strong>Archivo actual:</strong> ${existingData.archivos[0].name}</p>`
+              ? `<p><strong>Archivo actual:</strong> ${existingData.evidencias[0].archivo.name}</p>`
               : `<label for="archivo">Archivo Soporte:</label>
                  <input type="file" id="archivo" class="swal2-file">`
           }
@@ -465,13 +346,17 @@ const ReportView = () => {
     }))
     .filter((row) => row.eventos.length > 0);
 
+  console.log("eventos", filteredData);
+
   return (
-    <>
+    <div className={styles.contenedor_principal}>
       <Header />
-      <h1>Anexo Técnicos</h1>
+
       {/* Menú desplegable para filtrar */}
       <div className={styles.filterContainer}>
-        <label htmlFor="proyectoFilter">Filtrar por Proyecto IDSN:</label>
+        <div className={styles.container_label}>
+          <label htmlFor="proyectoFilter">Filtrar por Proyecto IDSN:</label>
+        </div>
         <select
           value={filterValue}
           onChange={(e) => setFilterValue(e.target.value)}
@@ -488,7 +373,9 @@ const ReportView = () => {
         </select>
       </div>
       <div className={styles.filterContainer}>
-        <label htmlFor="operatorFilter">Filtrar por Operador:</label>
+        <div className={styles.container_label}>
+          <label htmlFor="operatorFilter">Filtrar por Operador:</label>
+        </div>
         <select
           value={operatorFilterValue}
           onChange={(e) => setOperatorFilterValue(e.target.value)}
@@ -530,18 +417,6 @@ const ReportView = () => {
               </thead>
               <tbody>
                 <tr>
-                  {/* <td>
-                    {Array.isArray(evento?.territorializacion?.municipios) &&
-                    evento.territorializacion.municipios.length > 0 ? (
-                      <ul>
-                        {evento.territorializacion.municipios.map((muni) => (
-                          <li key={muni.id || muni.label}>{muni.label}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      "Información sin ingresar"
-                    )}
-                  </td> */}
                   <td>
                     <table>
                       <tbody>
@@ -592,7 +467,7 @@ const ReportView = () => {
                       </tbody>
                     </table>
                   </td>
-                  <td>
+                  {/* <td>
                     <table>
                       <tbody>
                         {evento?.lineas_operativa?.map((linea) => (
@@ -600,9 +475,12 @@ const ReportView = () => {
                             <td>{linea.nombre}</td>
                           </tr>
                         ))}
+
+                     
                       </tbody>
                     </table>
-                  </td>
+                  </td> */}
+                  <td>{evento?.lineas_operativa?.nombre}</td>
                   {(filterValue || operatorFilterValue) != "" && (
                     <td>
                       <table>
@@ -690,22 +568,6 @@ const ReportView = () => {
                                                     {actividad.unidad_medida}
                                                   </td>
 
-                                                  {/* Entornos */}
-                                                  {/* <td>
-                                                    <ul>
-                                                      {actividad.entornos.map(
-                                                        (entorno, i) => (
-                                                          <li
-                                                            key={
-                                                              entorno.id || i
-                                                            }
-                                                          >
-                                                            {entorno.nombre}
-                                                          </li>
-                                                        )
-                                                      )}
-                                                    </ul>
-                                                  </td> */}
                                                   <td>
                                                     <table>
                                                       <tbody>
@@ -736,7 +598,7 @@ const ReportView = () => {
                                                               }
                                                             >
                                                               <td>
-                                                                *{tecno.nombre}
+                                                                {tecno.nombre}
                                                               </td>
                                                             </tr>
                                                           )
@@ -758,7 +620,6 @@ const ReportView = () => {
                                                               }
                                                             >
                                                               <td>
-                                                                *
                                                                 {
                                                                   poblacion.nombre
                                                                 }
@@ -814,10 +675,26 @@ const ReportView = () => {
                                                                       soporte.id
                                                                     )
                                                                   }
+                                                                  className={
+                                                                    styles.edit_button
+                                                                  }
                                                                 >
+                                                                  <FaPaperclip />{" "}
                                                                   Soporte
                                                                 </button>
                                                               </td>
+                                                              {/* <td>
+                                                                <button
+                                                                  onClick={() =>
+                                                                    handle_soporte(
+                                                                      row.documentId,
+                                                                      soporte.id
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  Soporte
+                                                                </button>
+                                                              </td> */}
                                                             </tr>
                                                           )
                                                         )}
@@ -881,7 +758,7 @@ const ReportView = () => {
                                                   </td>
 
                                                   {/* Acciones */}
-                                                  <td>
+                                                  {/* <td>
                                                     <button
                                                       onClick={() =>
                                                         handle_click_actividad({
@@ -891,6 +768,27 @@ const ReportView = () => {
                                                         })
                                                       }
                                                     >
+                                                      Seguimiento
+                                                    </button>
+                                                  </td> */}
+                                                  <td>
+                                                    <button
+                                                      className={
+                                                        styles.seguimiento_button
+                                                      }
+                                                      onClick={() =>
+                                                        handle_click_actividad({
+                                                          ...actividad,
+                                                          documentId:
+                                                            row.documentId,
+                                                        })
+                                                      }
+                                                    >
+                                                      <FaClipboardList
+                                                        style={{
+                                                          marginRight: "5px",
+                                                        }}
+                                                      />
                                                       Seguimiento
                                                     </button>
                                                   </td>
@@ -910,15 +808,15 @@ const ReportView = () => {
                       </table>
                     </td>
                   )}
+
                   <td>
                     <button
+                      className={styles.edit_button}
                       onClick={() =>
-                        handle_click({
-                          ...evento,
-                          documentId: row.documentId, // Agregar documentId aquí
-                        })
+                        handle_click({ ...evento, documentId: row.documentId })
                       }
                     >
+                      <FaEdit style={{ marginRight: "5px" }} />
                       Editar
                     </button>
                   </td>
@@ -928,7 +826,7 @@ const ReportView = () => {
           ))
         )}
       </div>
-    </>
+    </div>
   );
 };
 

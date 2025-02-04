@@ -187,20 +187,23 @@ const Seguimiento = () => {
                         <td>{soporte.descripcion}</td>
                         <td>{soporte.cantidad}</td>
                         <td>
-                          {soportes[soporte.id]?.archivos?.map((archivo, i) => (
-                            <tr key={i}>
-                              <td>{archivo.name}</td>
-                              <td>
-                                <a
-                                  href={archivo.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  Ver soporte
-                                </a>
-                              </td>
-                            </tr>
-                          )) || <p>No hay archivos</p>}
+                          {/* <p>{soportes[62].evidencias[0].archivo.url}</p> */}
+                          {soportes[soporte.id]?.evidencias?.map(
+                            (evidencia, i) => (
+                              <tr key={i}>
+                                <td>{evidencia.archivo.name}</td>
+                                <td>
+                                  <a
+                                    href={`${back}${evidencia.archivo.url}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    Ver soporte
+                                  </a>
+                                </td>
+                              </tr>
+                            )
+                          ) || <p>No hay archivos</p>}
                         </td>
                         <td>
                           <td>

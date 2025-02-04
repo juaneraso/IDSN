@@ -3,7 +3,7 @@ import Product from "../Product/Product";
 import styles from "./Event.module.css";
 import Select from "react-select"; // Importamos React Select
 
-const Event = ({ events, setEvents }) => {
+const Event = ({ events, setEvents, edit_button }) => {
   const [expandedEvents, setExpandedEvents] = useState(
     // events.map(() => true) // Inicializamos todos como colapsados
     events.map((_, index) => index === 0)
@@ -216,7 +216,7 @@ const Event = ({ events, setEvents }) => {
     setEvents(updatedEvents);
   };
 
-  // const handleLineaChange = (eventIndex, selectedOptions) => {
+  // const handle_linea_change = (eventIndex, selectedOptions) => {
   //   const updatedEvents = [...events];
   //   updatedEvents[eventIndex].linea_operativa = selectedOptions.map(
   //     (option) => option.value
@@ -306,7 +306,7 @@ const Event = ({ events, setEvents }) => {
   };
 
   return (
-    <div className={styles.eventContainer}>
+    <div>
       {events.map((event, index) => (
         <div key={index} className={styles.eventWrapper}>
           <div className={styles.contenedor_titulo_evento}>
@@ -684,6 +684,7 @@ const Event = ({ events, setEvents }) => {
                         -
                       </button>
                     )}
+                    {edit_button}
                   </td>
                 </tr>
               </tbody>

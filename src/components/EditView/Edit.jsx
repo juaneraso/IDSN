@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Event from "../Event/Event";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../Header/Header";
 import Swal from "sweetalert2";
 import styles from "../EditView/Edit.module.css";
-
+import { FaEdit } from "react-icons/fa"; // Si usas react-icons}
 const Edit = () => {
   const back = import.meta.env.VITE_APP_BACK;
   const token_object = JSON.parse(sessionStorage.getItem("token")) || {};
   const token = token_object.token;
 
   const location = useLocation();
+
   const evento = location.state?.evento; // Recupera los datos enviados
+  const [isEdited, setIsEdited] = useState(false); // Nuevo estado
+  const navigate = useNavigate();
 
   console.log("Evento recibido:", evento);
 
@@ -35,17 +38,6 @@ const Edit = () => {
             equipo: event.equipo_operativo || null,
             perfiles_profesional: event.perfil_profesional || null,
             perfil_operativo: event.perfil_operativo || null,
-            // territorializacion:
-            //   {
-            //     numero_hogares: parseInt(event.total_hogares, 10) || null,
-            //     municipios: {
-            //       connect: (event.subregion || []).map((region) => ({
-            //         documentId: region || null,
-            //       })),
-            //     },
-            //     territorio: event.codigo_nombre_territorio || null,
-            //     microterritorio: event.codigo_micro_territorio || null,
-            //   } || null,
             territorializacion:
               event.total_hogares ||
               (Array.isArray(event.subregion) && event.subregion.length > 0) ||
@@ -74,18 +66,7 @@ const Edit = () => {
             ejes_estrategicos: (event.eje_estrategico || []).map((eje) => ({
               nombre: eje || null,
             })),
-            // lineas_operativa: (event.linea_operativa || []).map((linea) => ({
-            //   nombre: linea || null,
-            // })),
-            lineas_operativa:
-              Array.isArray(event.linea_operativa) &&
-              event.linea_operativa.length > 0
-                ? [
-                    {
-                      nombre: event.linea_operativa,
-                    },
-                  ]
-                : [],
+            lineas_operativa: { nombre: event.linea_operativa || null },
 
             productos: event.product_data.producto.map((producto, index) => ({
               descripcion: producto.descripcion_producto || null,
@@ -158,6 +139,8 @@ const Edit = () => {
         text: "Informacion agregada correctamente!",
       });
 
+      setIsEdited(true); // Marcar que se ha editado
+
       //resetForm();
     } catch (error) {
       Swal.fire({
@@ -189,16 +172,8 @@ const Edit = () => {
       indicator_name: evento?.indicador_evento,
       meta_indicator: evento?.meta_indicador_evento,
       eje_estrategico: evento?.ejes_estrategicos?.map((eje) => eje.nombre),
-      linea_operativa: evento?.lineas_operativa?.map((linea) => linea.nombre),
-      // activities: [
-      //   evento.productos.map((producto) => {
-      //     console.log(
-      //       "producto_actividad",
-      //       producto.actividades[0].descripcion
-      //     );
-      //     descripcion_actividad: producto.actividades[0].descripcion;
-      //   }),
-      // ],
+      linea_operativa: evento?.lineas_operativa?.nombre,
+
       activities: evento.productos.map((producto) =>
         producto.actividades.map((actividad) => ({
           descripcion_actividad: actividad.descripcion,
@@ -277,8 +252,6 @@ const Edit = () => {
             indicador_linea_base: indicador.indicador_linea_base,
             meta_producto: indicador.meta_producto,
           })),
-          // operador_pic: producto.operador_pic.operador_pic,
-          // descripcion_operador: producto.operador_pic.descripcion,
         })),
       },
     };
@@ -286,16 +259,43 @@ const Edit = () => {
 
   const [events, setEvents] = useState([transformEvent(evento)]);
 
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (!isEdited) {
+        event.preventDefault();
+        event.returnValue =
+          "¿Estás seguro de que diste clic en el botón Editar? De lo contrario, los cambios no se guardarán.";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isEdited]);
+
+  console.log("url", location.pathname);
+
   console.log("Evento enviado", events);
 
   return (
     <>
       <Header />
       <div className={styles.formContainer}>
-        <Event events={events} setEvents={setEvents} />
-      </div>
-      <div>
-        <button onClick={() => handle_send(events)}>Editar</button>
+        <Event
+          events={events}
+          setEvents={setEvents}
+          edit_button={
+            <button
+              className={styles.edit_button}
+              onClick={() => handle_send(events)}
+            >
+              <FaEdit style={{ marginRight: "5px" }} />
+              Editar
+            </button>
+          }
+        />
       </div>
     </>
   );
