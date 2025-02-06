@@ -22,6 +22,8 @@ const Header = () => {
 
   const handleLogout = () => {
     console.log("Cerrar sesión");
+    sessionStorage.clear();
+
     navigate("/"); // Redirigir al login
   };
 

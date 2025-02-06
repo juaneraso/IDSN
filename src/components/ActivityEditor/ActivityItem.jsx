@@ -234,7 +234,7 @@ const ActivityItem = ({
   const addSoporte = () => {
     const newSoportes = [
       ...(activity.array_soportes || []),
-      { tipo_soporte: "", descripcion_soporte: "" },
+      { tipo_soporte: "", descripcion_soporte: "", cantidad_soporte: "" },
     ];
     handleActivityChange(
       { target: { name: "array_soportes", value: newSoportes } },
@@ -538,64 +538,6 @@ const ActivityItem = ({
                                   }
                                   placeholder="Seleccionar Soporte"
                                 />
-
-                                {/* <Select
-                                  className={styles.soporte_select}
-                                  value={options.tipo_soporte
-                                    .filter(
-                                      (option) =>
-                                        option === soporte.tipo_soporte
-                                    )
-                                    .map((option) => ({
-                                      label: option,
-                                      value: option,
-                                    }))}
-                                  onChange={(selectedOption) =>
-                                    handleSoporteChange(
-                                      {
-                                        target: {
-                                          name: "tipo_soporte",
-                                          value: selectedOption?.value,
-                                        },
-                                      },
-                                      soporteIndex
-                                    )
-                                  }
-                                  options={options.tipo_soporte.map(
-                                    (option) => ({
-                                      label: option,
-                                      value: option,
-                                      isDisabled:
-                                        selectedOptions.includes(option) &&
-                                        option !== soporte.tipo_soporte,
-                                    })
-                                  )}
-                                  isOptionDisabled={(option) =>
-                                    option.isDisabled
-                                  }
-                                /> */}
-                                {/* <select
-                                  className={styles.soporte_select}
-                                  name="tipo_soporte"
-                                  value={soporte.tipo_soporte}
-                                  onChange={(e) =>
-                                    handleSoporteChange(e, soporteIndex)
-                                  }
-                                >
-                                  <option value="">Seleccionar Soporte</option>
-                                  {options.tipo_soporte.map((option, idx) => (
-                                    <option
-                                      key={idx}
-                                      value={option}
-                                      disabled={
-                                        selectedOptions.includes(option) &&
-                                        option !== soporte.tipo_soporte
-                                      }
-                                    >
-                                      {option}
-                                    </option>
-                                  ))}
-                                </select> */}
                               </td>
                               <td>
                                 <textarea

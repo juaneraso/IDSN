@@ -5,6 +5,7 @@ import Header from "../Header/Header";
 import Swal from "sweetalert2";
 import styles from "../EditView/Edit.module.css";
 import { FaEdit } from "react-icons/fa"; // Si usas react-icons}
+import { use } from "react";
 const Edit = () => {
   const back = import.meta.env.VITE_APP_BACK;
   const token_object = JSON.parse(sessionStorage.getItem("token")) || {};
@@ -17,6 +18,14 @@ const Edit = () => {
   const navigate = useNavigate();
 
   console.log("Evento recibido:", evento);
+
+  useEffect(() => {
+    Swal.fire({
+      title: "Información",
+      text: "Recuerda luego de realizar  cambios , dar clic en el boton Editar para guardar los cambios",
+      icon: "warning",
+    });
+  }, [evento]);
 
   const handle_send = async (event) => {
     // event.preventDefault();
@@ -259,21 +268,23 @@ const Edit = () => {
 
   const [events, setEvents] = useState([transformEvent(evento)]);
 
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      if (!isEdited) {
-        event.preventDefault();
-        event.returnValue =
-          "¿Estás seguro de que diste clic en el botón Editar? De lo contrario, los cambios no se guardarán.";
-      }
-    };
+  //Use efect para cuando el usuario salga sin guardar
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event) => {
+  //     if (!isEdited) {
+  //       event.preventDefault();
+  //       event.returnValue =
+  //         "¿Estás seguro de que diste clic en el botón Editar? De lo contrario, los cambios no se guardarán.";
+  //     }
+  //   };
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [isEdited]);
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, [isEdited]);
 
   console.log("url", location.pathname);
 

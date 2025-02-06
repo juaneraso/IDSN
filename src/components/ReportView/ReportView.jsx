@@ -33,7 +33,6 @@ const ReportView = () => {
   const MySwal = withReactContent(Swal);
 
   const showLoadingSwal = (mensaje, mensaje_2) => {
-    console.log("mensaje", mensaje_2);
     MySwal.fire({
       title: mensaje_2,
       html: <Spinner envio={mensaje} />, // Aquí se muestra el spinner
@@ -247,12 +246,27 @@ const ReportView = () => {
               nuevasEvidencias.push(evidenciaId);
 
               // Evento para eliminar evidencias antes de enviarlas
+              // document
+              //   .querySelector(`[data-id="${evidenciaId}"]`)
+              //   .addEventListener("click", (event) => {
+              //     const id = event.target.getAttribute("data-id");
+              //     document.getElementById(id).remove();
+              //     nuevasEvidencias = nuevasEvidencias.filter((e) => e !== id);
+              //   });
               document
                 .querySelector(`[data-id="${evidenciaId}"]`)
                 .addEventListener("click", (event) => {
-                  const id = event.target.getAttribute("data-id");
-                  document.getElementById(id).remove();
-                  nuevasEvidencias = nuevasEvidencias.filter((e) => e !== id);
+                  const id = event.currentTarget.getAttribute("data-id"); // Usamos event.currentTarget para evitar problemas
+                  const evidenciaElement = document.getElementById(id);
+
+                  if (evidenciaElement) {
+                    evidenciaElement.remove();
+                    nuevasEvidencias = nuevasEvidencias.filter((e) => e !== id);
+                  } else {
+                    console.warn(
+                      `Elemento con id ${id} no encontrado o ya eliminado.`
+                    );
+                  }
                 });
             });
         },
@@ -414,7 +428,7 @@ const ReportView = () => {
     ),
   ].filter(Boolean);
 
-  console.log("operadores", operatorOptions);
+  // console.log("operadores", operatorOptions);
 
   // Filtrar datos basados en los valores seleccionados
   const filteredData = data?.data
@@ -755,21 +769,44 @@ const ReportView = () => {
                                                                 }
                                                               </td>
                                                               <td>
-                                                                <button
-                                                                  onClick={() =>
-                                                                    handle_soporte(
-                                                                      row.documentId,
-                                                                      soporte.id
-                                                                    )
-                                                                  }
-                                                                  className={
-                                                                    styles.edit_button
-                                                                  }
-                                                                >
-                                                                  <FaPaperclip />{" "}
-                                                                  Soporte
-                                                                </button>
+                                                                {(soporte.cantidad ??
+                                                                  0) > 0 && (
+                                                                  <button
+                                                                    onClick={() =>
+                                                                      handle_soporte(
+                                                                        row.documentId,
+                                                                        soporte.id
+                                                                      )
+                                                                    }
+                                                                    className={
+                                                                      styles.edit_button
+                                                                    }
+                                                                  >
+                                                                    <FaPaperclip />{" "}
+                                                                    Soporte
+                                                                  </button>
+                                                                )}
                                                               </td>
+                                                              {/* <td>
+                                                                {soporte &&
+                                                                soporte.id ? ( // Verifica si soporte existe y tiene un id
+                                                                  <button
+                                                                    onClick={() =>
+                                                                      handle_soporte(
+                                                                        row.documentId,
+                                                                        soporte.id
+                                                                      )
+                                                                    }
+                                                                    className={
+                                                                      styles.edit_button
+                                                                    }
+                                                                  >
+                                                                    <FaPaperclip />{" "}
+                                                                    Soporte
+                                                                  </button>
+                                                                ) : null}
+                                                              </td> */}
+
                                                               {/* <td>
                                                                 <button
                                                                   onClick={() =>

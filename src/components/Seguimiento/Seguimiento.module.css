@@ -1,9 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
 .table {
-  /* width: 100%; */
-  border-collapse: collapse;
+  width: 100%;
+  /* border-collapse: collapse; */
   /* margin: 20px 0; */
   font-size: 1rem;
-  text-align: left;
+  font-family: "Roboto", sans-serif;
   /* max-width: 100%; */
   text-align: center;
 }
@@ -13,6 +15,7 @@
   border: 1px solid #ddd;
   padding: 10px;
   vertical-align: top;
+  width: fit-content;
 }
 
 .table th {
@@ -20,7 +23,7 @@
   color: rgb(243, 243, 243);
 }
 
-.table tr:nth-child(even) {
+.table tr {
   background-color: #f9f9f9;
 }
 
@@ -44,6 +47,70 @@
 }
 
 .select {
-  /* background-color: aquamarine; */
   width: fit-content;
+}
+.contenedor_principal {
+  width: fit-content;
+}
+
+.table_soportes {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table_soportes th,
+.table_soportes td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  white-space: nowrap;
+}
+
+.table_soportes th {
+  background-color: #079486;
+  color: white;
+}
+
+.table_soportes td {
+  text-align: center;
+}
+
+.table_evidencias {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table_evidencias th,
+.table_evidencias td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  white-space: nowrap;
+}
+
+.table_evidencias th {
+  background-color: #079486;
+  color: white;
+  text-align: center;
+}
+
+.table_evidencias td {
+  text-align: center;
+}
+
+.input_fecha {
+  width: fit-content;
+  text-align: center;
+  /* background-color: #95a5a6; */
+}
+
+.textarea {
+  width: fit-content;
+  text-align: justify;
+  min-height: 40px; /* Altura mínima */
+  max-height: 150px; /* Altura máxima */
+  box-sizing: border-box;
+  padding: 5px;
+  font-size: 0.9rem;
+  /* background-color: #1abc9c; */
+  resize: vertical; /* Permitir que el usuario cambie la altura */
+  overflow-y: auto; /* Scroll si el contenido excede */
 }

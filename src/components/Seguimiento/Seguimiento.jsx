@@ -24,6 +24,8 @@ const Seguimiento = () => {
   const [observaciones, setObservaciones] = useState({
     observacion_referente: "",
     observacion_operador: "",
+    fecha_referente: "",
+    fecha_operador: "",
   });
 
   const handleEstadoChange = (soporteId, nuevoEstado) => {
@@ -85,12 +87,8 @@ const Seguimiento = () => {
   console.log("soportes", soportes);
 
   return (
-    <>
+    <div className={styles.contenedor_principal}>
       <Header />
-
-      <div>
-        <h1>Seguimiento</h1>
-      </div>
 
       <div className={styles.formContainer}>
         <table className={styles.table} style={{ marginBottom: "1rem" }}>
@@ -119,54 +117,24 @@ const Seguimiento = () => {
               <td>{actividad.unidad_medida}</td>
               <td>
                 {actividad.entornos.map((entorno, index) => (
-                  <p key={index}>*{entorno.nombre}</p>
+                  <p key={index}>{entorno.nombre}</p>
                 ))}
               </td>
               <td>
                 {actividad.tecnologias.map((tecno, index) => (
-                  <p key={index}>*{tecno.nombre}</p>
+                  <p key={index}>{tecno.nombre}</p>
                 ))}
               </td>
               <td>
                 {actividad.poblaciones.map((poblacion, index) => (
-                  <p key={index}>*{poblacion.nombre}</p>
+                  <p key={index}>{poblacion.nombre}</p>
                 ))}
               </td>
               <td>
-                {/* {actividad.soportes.map((soporte, index) => (
-                  <table
-                    key={index}
-                    className={styles.subTable}
-                    style={{ marginBottom: "1rem" }}
-                  >
-                    <thead>
-                      <tr>
-                        <th>Tipo Soporte</th>
-                        <th>Descripción</th>
-                        <th>Cantidad</th>
-                        <th>Soportes</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{soporte.tipo}</td>
-                        <td>{soporte.descripcion}</td>
-                        <td>{soporte.cantidad}</td>
-
-                        {soportes.map((soportes, index) => (
-                          <tr key={index}>
-                            <td>{soportes.archivos[0].name}</td>
-                            <td>{soportes.archivos[0].url}</td>
-                          </tr>
-                        ))}
-                      </tr>
-                    </tbody>
-                  </table>
-                ))} */}
                 {actividad.soportes.map((soporte, index) => (
                   <table
+                    className={styles.table_soportes}
                     key={index}
-                    className={styles.subTable}
                     style={{ marginBottom: "1rem" }}
                   >
                     <thead>
@@ -183,53 +151,64 @@ const Seguimiento = () => {
                         <td>{soporte.tipo}</td>
                         <td>{soporte.descripcion}</td>
                         <td>{soporte.cantidad}</td>
+
                         <td>
-                          {/* <p>{soportes[62].evidencias[0].archivo.url}</p> */}
-                          {soportes[soporte.id]?.evidencias?.map(
-                            (evidencia, i) => (
-                              <tr key={i}>
-                                <td>{evidencia.archivo.name}</td>
-                                <td>
-                                  <a
-                                    href={`${back}${evidencia.archivo.url}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    Ver soporte
-                                  </a>
-                                </td>
+                          <table className={styles.table_evidencias}>
+                            <thead>
+                              <tr>
+                                <th>Nombre</th>
+                                <th>Archivo</th>
+                                <th>Región</th>
                               </tr>
-                            )
-                          ) || <p>No hay archivos</p>}
+                            </thead>
+                            <tbody>
+                              {soportes[soporte.id]?.evidencias?.length > 0 ? (
+                                soportes[soporte.id].evidencias.map(
+                                  (evidencia, i) => (
+                                    <tr key={i}>
+                                      <td>{evidencia.archivo.name}</td>
+                                      <td>
+                                        <a
+                                          href={`${back}${evidencia.archivo.url}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                        >
+                                          Ver soporte
+                                        </a>
+                                      </td>
+                                      <td>{evidencia.municipio.label}</td>
+                                    </tr>
+                                  )
+                                )
+                              ) : (
+                                <tr>
+                                  <td
+                                    colSpan="3"
+                                    style={{ textAlign: "center" }}
+                                  >
+                                    No hay archivos
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
                         </td>
+
                         <td>
-                          <td>
-                            {/* <select
-                              className={styles.select}
-                              value={estadoSoportes[soporte.id] || "En proceso"}
-                              onChange={(e) =>
-                                handleEstadoChange(soporte.id, e.target.value)
-                              }
-                            >
-                              <option value="Cumple">✅ Cumple</option>
-                              <option value="No cumple">❌ No cumple</option>
-                              <option value="En proceso">⏳ En proceso</option>
-                            </select> */}
-                            <select
-                              className={styles.select}
-                              value={estadoSoportes[soporte.id] || ""}
-                              onChange={(e) =>
-                                handleEstadoChange(soporte.id, e.target.value)
-                              }
-                            >
-                              <option value="" disabled>
-                                🟡 Selecciona un estado
-                              </option>
-                              <option value="Cumple">✅ Cumple</option>
-                              <option value="No cumple">❌ No cumple</option>
-                              <option value="En proceso">⏳ En proceso</option>
-                            </select>
-                          </td>
+                          <select
+                            className={styles.select}
+                            value={estadoSoportes[soporte.id] || ""}
+                            onChange={(e) =>
+                              handleEstadoChange(soporte.id, e.target.value)
+                            }
+                          >
+                            <option value="" disabled>
+                              🟡 Selecciona un estado
+                            </option>
+                            <option value="Cumple">✅ Cumple</option>
+                            <option value="No cumple">❌ No cumple</option>
+                            <option value="En proceso">⏳ En proceso</option>
+                          </select>
                         </td>
                       </tr>
                     </tbody>
@@ -266,16 +245,39 @@ const Seguimiento = () => {
                 </table>
               </td>
               <td>
-                <textarea
-                  //   className={styles.textarea}
-                  name="observacion_referente"
-                  type="text"
-                  value={observaciones.observacion_referente}
-                  onChange={onChange_observaciones}
-                />
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Observacion</th>
+                      <th>Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <textarea
+                          className={styles.textarea}
+                          name="observacion_referente"
+                          type="text"
+                          value={observaciones.observacion_referente}
+                          onChange={onChange_observaciones}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className={styles.input_fecha}
+                          name="fecha_referente"
+                          type="text"
+                          value={observaciones.fecha_referente}
+                          onChange={onChange_observaciones}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </td>
 
-              <td>
+              {/* <td>
                 <textarea
                   //   className={styles.textarea}
                   name="observacion_operador"
@@ -283,6 +285,38 @@ const Seguimiento = () => {
                   value={observaciones.observacion_operador}
                   onChange={onChange_observaciones}
                 />
+              </td> */}
+              <td>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Observacion</th>
+                      <th>Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <textarea
+                          className={styles.textarea}
+                          name="observacion_operador"
+                          type="text"
+                          value={observaciones.observacion_operador}
+                          onChange={onChange_observaciones}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          className={styles.input_fecha}
+                          name="fecha_operador"
+                          type="text"
+                          value={observaciones.fecha_operador}
+                          onChange={onChange_observaciones}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </td>
 
               <td>
@@ -301,7 +335,7 @@ const Seguimiento = () => {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 };
 

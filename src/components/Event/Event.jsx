@@ -433,7 +433,7 @@ const Event = ({ events, setEvents, edit_button }) => {
                       <textarea
                         className={styles.textarea}
                         type="text"
-                        value={event.codigo_nombre_territorio}
+                        value={event.codigo_nombre_territorio || ""}
                         onChange={(e) =>
                           handleEventChange(
                             index,
@@ -449,7 +449,7 @@ const Event = ({ events, setEvents, edit_button }) => {
                       <textarea
                         className={styles.textarea}
                         type="text"
-                        value={event.codigo_micro_territorio}
+                        value={event.codigo_micro_territorio || ""}
                         onChange={(e) =>
                           handleEventChange(
                             index,
@@ -501,7 +501,7 @@ const Event = ({ events, setEvents, edit_button }) => {
                     <textarea
                       className={styles.textarea}
                       type="text"
-                      value={event.perfil_profesional}
+                      value={event.perfil_profesional || ""}
                       onChange={(e) =>
                         handleEventChange(
                           index,
@@ -515,7 +515,7 @@ const Event = ({ events, setEvents, edit_button }) => {
                     <textarea
                       className={styles.textarea}
                       type="text"
-                      value={event.perfil_operativo}
+                      value={event.perfil_operativo || ""}
                       onChange={(e) =>
                         handleEventChange(
                           index,
@@ -555,7 +555,7 @@ const Event = ({ events, setEvents, edit_button }) => {
                     <textarea
                       className={styles.textarea}
                       type="text"
-                      value={event.description_event}
+                      value={event.description_event || ""}
                       onChange={(e) =>
                         handleEventChange(
                           index,
@@ -569,7 +569,7 @@ const Event = ({ events, setEvents, edit_button }) => {
                     <textarea
                       className={styles.textarea}
                       type="text"
-                      value={event.indicator_name}
+                      value={event.indicator_name || ""}
                       onChange={(e) =>
                         handleEventChange(
                           index,
@@ -583,7 +583,7 @@ const Event = ({ events, setEvents, edit_button }) => {
                     <textarea
                       className={styles.textarea}
                       type="text"
-                      value={event.meta_indicator}
+                      value={event.meta_indicator || ""}
                       onChange={(e) =>
                         handleEventChange(
                           index,
