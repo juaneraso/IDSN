@@ -50,6 +50,40 @@ const Seguimiento = () => {
   console.log("estadoSoportes", estadoSoportes);
   console.log("observaciones", observaciones);
 
+  // useEffect(() => {
+  //   const fetchSoportes = async () => {
+  //     if (!actividad || !actividad.soportes || actividad.soportes.length === 0)
+  //       return;
+
+  //     try {
+  //       const requests = actividad.soportes.map(async (soporte) => {
+  //         const response = await fetch(
+  //           `${url_soportes}anexo_id=${actividad.documentId}&soporte_id=${soporte.id}`,
+  //           {
+  //             headers: { Authorization: `Bearer ${token}` },
+  //           }
+  //         );
+  //         if (!response.ok) throw new Error("Error al obtener soportes");
+  //         const data = await response.json();
+  //         return { soporteId: soporte.id, data };
+  //       });
+
+  //       const results = await Promise.all(requests);
+  //       // Convertir el array de resultados en un objeto { soporteId: data }
+  //       const soportesMap = results.reduce((acc, { soporteId, data }) => {
+  //         acc[soporteId] = data;
+  //         return acc;
+  //       }, {});
+
+  //       setSoportes(soportesMap);
+  //     } catch (error) {
+  //       console.error("Error fetching soportes:", error);
+  //     }
+  //   };
+
+  //   fetchSoportes();
+  // }, [token, actividad]); // Se ejecuta cuando `actividad` o `token` cambian
+
   useEffect(() => {
     const fetchSoportes = async () => {
       if (!actividad || !actividad.soportes || actividad.soportes.length === 0)
@@ -63,19 +97,26 @@ const Seguimiento = () => {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
-          if (!response.ok) throw new Error("Error al obtener soportes");
+          if (!response.ok) return null; // Si la respuesta no es OK, devuelve null
+
           const data = await response.json();
           return { soporteId: soporte.id, data };
         });
 
         const results = await Promise.all(requests);
-        // Convertir el array de resultados en un objeto { soporteId: data }
-        const soportesMap = results.reduce((acc, { soporteId, data }) => {
-          acc[soporteId] = data;
-          return acc;
-        }, {});
 
-        setSoportes(soportesMap);
+        // Obtener el estado anterior y conservar datos previos
+        setSoportes((prevSoportes) => {
+          const nuevosSoportes = { ...prevSoportes }; // Clonar el estado anterior
+
+          results.forEach((result) => {
+            if (result) {
+              nuevosSoportes[result.soporteId] = result.data; // Solo actualiza los nuevos
+            }
+          });
+
+          return nuevosSoportes; // Retorna el nuevo estado sin borrar datos previos
+        });
       } catch (error) {
         console.error("Error fetching soportes:", error);
       }

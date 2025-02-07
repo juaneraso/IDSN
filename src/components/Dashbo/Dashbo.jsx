@@ -72,7 +72,7 @@ const Dashbo = () => {
         };
         console.log("data_usuario", data);
         console.log("datos", datos);
-        // sessionStorage.setItem("usuario", JSON.stringify(datos));
+        sessionStorage.setItem("usuario", JSON.stringify(datos));
         setUsuario_dos(datos.usuario);
         //setSubregions(data.data);
         // setMunicipios(data.data);

@@ -18,6 +18,12 @@ const ReportView = () => {
 
   const [nombre, setNombre] = useState("");
 
+  const usuario_object = JSON.parse(sessionStorage.getItem("usuario")) || {};
+
+  const usuario = usuario_object.usuario;
+
+  console.log("rol_view", usuario);
+
   const back = import.meta.env.VITE_APP_BACK;
   const token_object = JSON.parse(sessionStorage.getItem("token")) || {};
   const token = token_object.token;
@@ -25,6 +31,7 @@ const ReportView = () => {
   const url_municipios = `${back}/api/municipios?pagination[pageSize]=100`;
   const [municipios, setMunicipios] = useState([]);
 
+  const url_anexos = `${back}/api/anexo-tecnicos?pLevel=10&pagination[pageSize]=100`;
   const url_soportes = `${back}/api/seguimiento/upload-file`;
   const url_soportes_get = `${back}/api/check-seguimiento?`;
   const url_soportes_delete = `${back}/api/seguimiento/remove-file`;
@@ -47,7 +54,7 @@ const ReportView = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${back}/api/anexo-tecnicos?pLevel=10`, {
+        const response = await fetch(`${url_anexos}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -513,7 +520,7 @@ const ReportView = () => {
                   {(filterValue || operatorFilterValue) != "" && (
                     <th>Productos</th>
                   )}
-                  <th>Acciones</th>
+                  {usuario === "referente_instituto" && <th>Acciones</th>}
                 </tr>
               </thead>
               <tbody>
@@ -744,7 +751,10 @@ const ReportView = () => {
                                                           <th>Tipo Soporte</th>
                                                           <th>Descripción</th>
                                                           <th>Cantidad</th>
-                                                          <th>Acciones</th>
+                                                          {usuario ===
+                                                            "operador" && (
+                                                            <th>Acciones</th>
+                                                          )}
                                                         </tr>
                                                       </thead>
                                                       <tbody>
@@ -768,25 +778,29 @@ const ReportView = () => {
                                                                   soporte.cantidad
                                                                 }
                                                               </td>
-                                                              <td>
-                                                                {(soporte.cantidad ??
-                                                                  0) > 0 && (
-                                                                  <button
-                                                                    onClick={() =>
-                                                                      handle_soporte(
-                                                                        row.documentId,
-                                                                        soporte.id
-                                                                      )
-                                                                    }
-                                                                    className={
-                                                                      styles.edit_button
-                                                                    }
-                                                                  >
-                                                                    <FaPaperclip />{" "}
-                                                                    Soporte
-                                                                  </button>
+
+                                                              {(soporte.cantidad ??
+                                                                0) > 0 &&
+                                                                usuario ===
+                                                                  "operador" && (
+                                                                  <td>
+                                                                    <button
+                                                                      onClick={() =>
+                                                                        handle_soporte(
+                                                                          row.documentId,
+                                                                          soporte.id
+                                                                        )
+                                                                      }
+                                                                      className={
+                                                                        styles.edit_button
+                                                                      }
+                                                                    >
+                                                                      <FaPaperclip />{" "}
+                                                                      Soporte
+                                                                    </button>
+                                                                  </td>
                                                                 )}
-                                                              </td>
+
                                                               {/* <td>
                                                                 {soporte &&
                                                                 soporte.id ? ( // Verifica si soporte existe y tiene un id
@@ -932,18 +946,22 @@ const ReportView = () => {
                       </table>
                     </td>
                   )}
-
-                  <td>
-                    <button
-                      className={styles.edit_button}
-                      onClick={() =>
-                        handle_click({ ...evento, documentId: row.documentId })
-                      }
-                    >
-                      <FaEdit style={{ marginRight: "5px" }} />
-                      Editar
-                    </button>
-                  </td>
+                  {usuario === "referente_instituto" && (
+                    <td>
+                      <button
+                        className={styles.edit_button}
+                        onClick={() =>
+                          handle_click({
+                            ...evento,
+                            documentId: row.documentId,
+                          })
+                        }
+                      >
+                        <FaEdit style={{ marginRight: "5px" }} />
+                        Editar
+                      </button>
+                    </td>
+                  )}
                 </tr>
               </tbody>
             </table>

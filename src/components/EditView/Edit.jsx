@@ -5,6 +5,8 @@ import Header from "../Header/Header";
 import Swal from "sweetalert2";
 import styles from "../EditView/Edit.module.css";
 import { FaEdit } from "react-icons/fa"; // Si usas react-icons}
+import { FaSave } from "react-icons/fa";
+
 import { use } from "react";
 const Edit = () => {
   const back = import.meta.env.VITE_APP_BACK;
@@ -22,7 +24,7 @@ const Edit = () => {
   useEffect(() => {
     Swal.fire({
       title: "Información",
-      text: "Recuerda luego de realizar  cambios , dar clic en el boton Editar para guardar los cambios",
+      text: "Recuerda luego de realizar  cambios , dar clic en el boton Guardar para conservar los cambios",
       icon: "warning",
     });
   }, [evento]);
@@ -302,8 +304,8 @@ const Edit = () => {
               className={styles.edit_button}
               onClick={() => handle_send(events)}
             >
-              <FaEdit style={{ marginRight: "5px" }} />
-              Editar
+              <FaSave />
+              Guardar Cambios
             </button>
           }
         />
