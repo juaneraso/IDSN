@@ -643,27 +643,32 @@ const ReportView = () => {
 
                                       {/* Actividades */}
                                       <td>
-                                        <table className={styles.subTable}>
-                                          <thead>
-                                            <tr>
-                                              <th>Descripcion</th>
-                                              <th>Cantidad a Ejecutar</th>
-                                              <th>Unidad de Medida</th>
-                                              <th>Entornos</th>
-                                              <th>Tecnologias</th>
-                                              <th>Poblacion Sujeto</th>
-                                              <th>Soportes</th>
-                                              <th>Código Cups</th>
-                                              <th>Valor Unitario</th>
-                                              <th>Valor Total</th>
-                                              <th>Cronograma</th>
-                                              <th>Acciones</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            {producto.actividades.map(
-                                              (actividad, index) => (
-                                                <tr key={actividad.id || index}>
+                                        {producto.actividades.map(
+                                          (actividad, index) => (
+                                            <table
+                                              key={actividad.id || index}
+                                              className={styles.subTable}
+                                            >
+                                              <thead>
+                                                <tr>
+                                                  <th>
+                                                    Descripción de Actividad
+                                                  </th>
+                                                  <th>Cantidad a Ejecutar</th>
+                                                  <th>Unidad de Medida</th>
+                                                  <th>Entornos</th>
+                                                  <th>Tecnologías</th>
+                                                  <th>Población Sujeto</th>
+                                                  <th>Soportes</th>
+                                                  <th>Código Cups</th>
+                                                  <th>Valor Unitario</th>
+                                                  <th>Valor Total</th>
+                                                  <th>Cronograma</th>
+                                                  <th>Acciones</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr>
                                                   <td>
                                                     {actividad.descripcion}
                                                   </td>
@@ -676,6 +681,7 @@ const ReportView = () => {
                                                     {actividad.unidad_medida}
                                                   </td>
 
+                                                  {/* Entornos */}
                                                   <td>
                                                     <table>
                                                       <tbody>
@@ -738,8 +744,8 @@ const ReportView = () => {
                                                       </tbody>
                                                     </table>
                                                   </td>
-                                                  {/* Soportes */}
 
+                                                  {/* Soportes */}
                                                   <td>
                                                     <table
                                                       className={
@@ -778,7 +784,6 @@ const ReportView = () => {
                                                                   soporte.cantidad
                                                                 }
                                                               </td>
-
                                                               {(soporte.cantidad ??
                                                                 0) > 0 &&
                                                                 usuario ===
@@ -788,7 +793,7 @@ const ReportView = () => {
                                                                       onClick={() =>
                                                                         handle_soporte(
                                                                           row.documentId,
-                                                                          soporte.id
+                                                                          soporte.uuid
                                                                         )
                                                                       }
                                                                       className={
@@ -800,39 +805,6 @@ const ReportView = () => {
                                                                     </button>
                                                                   </td>
                                                                 )}
-
-                                                              {/* <td>
-                                                                {soporte &&
-                                                                soporte.id ? ( // Verifica si soporte existe y tiene un id
-                                                                  <button
-                                                                    onClick={() =>
-                                                                      handle_soporte(
-                                                                        row.documentId,
-                                                                        soporte.id
-                                                                      )
-                                                                    }
-                                                                    className={
-                                                                      styles.edit_button
-                                                                    }
-                                                                  >
-                                                                    <FaPaperclip />{" "}
-                                                                    Soporte
-                                                                  </button>
-                                                                ) : null}
-                                                              </td> */}
-
-                                                              {/* <td>
-                                                                <button
-                                                                  onClick={() =>
-                                                                    handle_soporte(
-                                                                      row.documentId,
-                                                                      soporte.id
-                                                                    )
-                                                                  }
-                                                                >
-                                                                  Soporte
-                                                                </button>
-                                                              </td> */}
                                                             </tr>
                                                           )
                                                         )}
@@ -874,7 +846,7 @@ const ReportView = () => {
                                                                 porcentaje,
                                                               ]) =>
                                                                 porcentaje >
-                                                                  0 && (
+                                                                0 ? (
                                                                   <tr
                                                                     key={`${i}-${mes}`}
                                                                   >
@@ -888,7 +860,7 @@ const ReportView = () => {
                                                                       %
                                                                     </td>
                                                                   </tr>
-                                                                )
+                                                                ) : null
                                                             )
                                                         )}
                                                       </tbody>
@@ -896,19 +868,6 @@ const ReportView = () => {
                                                   </td>
 
                                                   {/* Acciones */}
-                                                  {/* <td>
-                                                    <button
-                                                      onClick={() =>
-                                                        handle_click_actividad({
-                                                          ...actividad,
-                                                          documentId:
-                                                            row.documentId,
-                                                        })
-                                                      }
-                                                    >
-                                                      Seguimiento
-                                                    </button>
-                                                  </td> */}
                                                   <td>
                                                     <button
                                                       className={
@@ -931,10 +890,10 @@ const ReportView = () => {
                                                     </button>
                                                   </td>
                                                 </tr>
-                                              )
-                                            )}
-                                          </tbody>
-                                        </table>
+                                              </tbody>
+                                            </table>
+                                          )
+                                        )}
                                       </td>
                                     </tr>
                                   </tbody>

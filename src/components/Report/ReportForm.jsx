@@ -3,6 +3,7 @@ import styles from "./ReportForm.module.css";
 import Header from "../Header/Header";
 import Event from "../Event/Event";
 import { useSelector } from "react-redux";
+import Spinner from "../Spinner/Spinner";
 
 import Swal from "sweetalert2";
 
@@ -25,6 +26,7 @@ const ReportForm = () => {
   const [soportes, setSoportes] = useState([]);
   const [cups, setCups] = useState([]);
 
+  const [loading, setLoading] = useState(false);
   const [labels, setLabels] = useState([]);
 
   const [events, setEvents] = useState([
@@ -139,6 +141,7 @@ const ReportForm = () => {
     event.preventDefault();
 
     try {
+      setLoading(true);
       // Transformar los datos al formato requerido
       const transformedData = {
         data: {
@@ -171,7 +174,8 @@ const ReportForm = () => {
               event.codigo_nombre_territorio ||
               event.codigo_micro_territorio
                 ? {
-                    numero_hogares: parseInt(event.total_hogares, 10) || null,
+                    // numero_hogares: parseInt(event.total_hogares, 10) || null,
+                    numero_hogares: event.total_hogares || null,
                     municipios:
                       Array.isArray(event.subregion) &&
                       event.subregion.length > 0
@@ -268,13 +272,15 @@ const ReportForm = () => {
       if (!response.ok) throw new Error("Error al enviar el reporte.");
 
       // Reiniciar el formulario
+      setLoading(false);
+
       Swal.fire({
         icon: "success",
         title: "¡Envío correcto!",
         text: "Informacion agregada correctamente!",
       });
 
-      //resetForm();
+      resetForm();
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -284,6 +290,8 @@ const ReportForm = () => {
       console.error(error);
     }
   };
+
+  if (loading) return <Spinner envio={"Enviando datos, por favor espera..."} />;
 
   return (
     <>

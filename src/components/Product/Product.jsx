@@ -206,6 +206,19 @@ const Product = ({
                               `${productIndex}-${indicatorIndex}`
                             ] && (
                               <div className={styles.indicatorContent}>
+                                <label>Indicador de Producto</label>
+                                <input
+                                  type="text"
+                                  value={indicator.meta_producto}
+                                  onChange={(e) =>
+                                    handleUpdateIndicator(
+                                      productIndex,
+                                      indicatorIndex,
+                                      "meta_producto",
+                                      e.target.value
+                                    )
+                                  }
+                                />
                                 <label>Cantidad</label>
                                 <input
                                   type="number"
@@ -216,19 +229,6 @@ const Product = ({
                                       productIndex,
                                       indicatorIndex,
                                       "cantidad",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                                <label>Meta Producto</label>
-                                <input
-                                  type="text"
-                                  value={indicator.meta_producto}
-                                  onChange={(e) =>
-                                    handleUpdateIndicator(
-                                      productIndex,
-                                      indicatorIndex,
-                                      "meta_producto",
                                       e.target.value
                                     )
                                   }

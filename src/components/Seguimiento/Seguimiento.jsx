@@ -92,7 +92,7 @@ const Seguimiento = () => {
       try {
         const requests = actividad.soportes.map(async (soporte) => {
           const response = await fetch(
-            `${url_soportes}anexo_id=${actividad.documentId}&soporte_id=${soporte.id}`,
+            `${url_soportes}anexo_id=${actividad.documentId}&soporte_id=${soporte.uuid}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -135,7 +135,7 @@ const Seguimiento = () => {
         <table className={styles.table} style={{ marginBottom: "1rem" }}>
           <thead>
             <tr>
-              <th>Descripción</th>
+              <th>Descripción de Actividad</th>
               <th>Cantidad a Ejecutar</th>
               <th>Unidad de Medida</th>
               <th>Entornos</th>

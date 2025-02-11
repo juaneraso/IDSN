@@ -463,8 +463,8 @@ const Event = ({ events, setEvents, edit_button }) => {
                   <td>
                     <input
                       className={styles.input_hogares}
-                      type="text"
-                      value={event.total_hogares}
+                      type="number"
+                      value={event.total_hogares || ""}
                       onChange={(e) =>
                         handleEventChange(
                           index,

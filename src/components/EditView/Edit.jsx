@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, act } from "react";
 import Event from "../Event/Event";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../Header/Header";
@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import styles from "../EditView/Edit.module.css";
 import { FaEdit } from "react-icons/fa"; // Si usas react-icons}
 import { FaSave } from "react-icons/fa";
+import Spinner from "../Spinner/Spinner";
 
 import { use } from "react";
 const Edit = () => {
@@ -19,6 +20,7 @@ const Edit = () => {
   const [isEdited, setIsEdited] = useState(false); // Nuevo estado
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
   console.log("Evento recibido:", evento);
 
   useEffect(() => {
@@ -35,6 +37,7 @@ const Edit = () => {
     try {
       // Transformar los datos al formato requerido
 
+      setLoading(true);
       const transformedData = {
         data: {
           eventos: events.map((event) => ({
@@ -104,10 +107,12 @@ const Edit = () => {
                   tipo: soporte.tipo_soporte || null,
                   descripcion: soporte.descripcion_soporte || null,
                   cantidad: soporte.cantidad_soporte || null,
+                  uuid: soporte.uuid || null,
                 })),
                 cronograma: activity.cronograma.map((item) => ({
                   [item.mes]: parseInt(item.peso, 10),
                 })),
+                uuid: activity.uuid || null,
               })),
 
               indicadores: (producto.indicadores || []).map((indicador) => ({
@@ -142,6 +147,8 @@ const Edit = () => {
       );
 
       if (!response.ok) throw new Error("Error al enviar el reporte.");
+
+      setLoading(false);
 
       // Reiniciar el formulario
       Swal.fire({
@@ -189,6 +196,7 @@ const Edit = () => {
         producto.actividades.map((actividad) => ({
           descripcion_actividad: actividad.descripcion,
           cantidad: actividad.cantidad_a_ejecutar,
+          uuid: actividad.uuid,
           unidad_medida: actividad.unidad_medida,
           entorno: actividad.entornos.map((entorno) => entorno.nombre),
           tecnologia: actividad.tecnologias.map((tecno) => tecno.nombre),
@@ -200,6 +208,7 @@ const Edit = () => {
             tipo_soporte: soporte.tipo,
             descripcion_soporte: soporte.descripcion,
             cantidad_soporte: soporte.cantidad,
+            uuid: soporte.uuid,
           })),
 
           cronograma: [
@@ -291,6 +300,7 @@ const Edit = () => {
   console.log("url", location.pathname);
 
   console.log("Evento enviado", events);
+  if (loading) return <Spinner envio={"Enviando datos, por favor espera..."} />;
 
   return (
     <>
