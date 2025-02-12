@@ -1,13 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
 .table {
-  width: 100%;
+  /* width: 100%; */
   /* border-collapse: collapse; */
   /* margin: 20px 0; */
   font-size: 1rem;
   font-family: "Roboto", sans-serif;
   /* max-width: 100%; */
   text-align: center;
+  width: 100%;
 }
 
 .table th,
@@ -15,6 +16,7 @@
   border: 1px solid #ddd;
   padding: 10px;
   vertical-align: top;
+
   width: fit-content;
 }
 
@@ -46,15 +48,12 @@
   overflow-x: auto;
 }
 
-.select {
-  width: fit-content;
-}
 .contenedor_principal {
   width: fit-content;
 }
 
 .table_soportes {
-  width: 100%;
+  /* width: 100%; */
   border-collapse: collapse;
 }
 
@@ -113,4 +112,71 @@
   /* background-color: #1abc9c; */
   resize: vertical; /* Permitir que el usuario cambie la altura */
   overflow-y: auto; /* Scroll si el contenido excede */
+}
+
+/* .select_check {
+  width: fit-content;
+} */
+
+.select {
+  width: fit-content; /* O ajusta según necesites */
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 2px solid #08a188; /* Borde con color atractivo */
+  border-radius: 8px; /* Bordes redondeados */
+  background-color: #ffffff;
+  color: #333;
+  appearance: none; /* Oculta la flecha por defecto en algunos navegadores */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Agregar una flecha personalizada */
+.select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%234a90e2' d='M5.516 7.548l4.484 4.482 4.484-4.482c.39-.39.39-1.023 0-1.414-.39-.39-1.023-.39-1.414 0L10 9.102 6.93 6.134c-.39-.39-1.023-.39-1.414 0-.39.39-.39 1.024 0 1.414z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+}
+
+/* Efecto hover */
+.select:hover {
+  border-color: #357abd;
+}
+
+/* Efecto cuando está enfocado */
+.select:focus {
+  border-color: #357abd;
+  outline: none;
+  box-shadow: 0 0 8px rgba(74, 144, 226, 0.5);
+}
+
+/* Para cambiar el color de las opciones */
+.select option {
+  background-color: #ffffff;
+  color: #333;
+}
+
+.edit_button {
+  background-color: #09766d;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Espacio entre el icono y el texto */
+  transition: background 0.3s ease-in-out;
+}
+
+.edit_button:hover {
+  background-color: #08b5a7;
+  transform: scale(1.05);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.edit_button svg {
+  font-size: 35px;
 }

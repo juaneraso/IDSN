@@ -13,7 +13,7 @@ const ActivityList = ({
 }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
 
-  console.log("actividades_en_activitylist", activities);
+  // console.log("actividades_en_activitylist", activities);
 
   const initialActivity = {
     descripcion_actividad: "",

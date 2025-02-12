@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Seguimiento.module.css";
 import Header from "../Header/Header";
+import Swal from "sweetalert2";
+import { FaSave } from "react-icons/fa";
 
 import { useLocation } from "react-router-dom";
 
@@ -12,12 +14,21 @@ const Seguimiento = () => {
   const token_object = JSON.parse(sessionStorage.getItem("token")) || {};
   const token = token_object.token;
   const url_soportes = `${back}/api/check-seguimiento?`;
+  const url_observaciones = `${back}/api/observacio/read?`;
+  const url_post_observaciones = `${back}/api/observaciones/register`;
   const [soportes, setSoportes] = useState([]);
+  const [porcentaje, setPorcentaje] = useState("0");
+
+  const usuario_object = JSON.parse(sessionStorage.getItem("usuario")) || {};
+
+  const usuario = usuario_object.usuario;
 
   console.log("Actividad", actividad);
 
-  const documentId = actividad.documentId;
-  const soporteId = actividad.soportes[0].id;
+  console.log("Usuario_seguimiento", usuario);
+
+  const documentId = actividad?.documentId;
+  const uuid = actividad?.uuid;
 
   const [estadoSoportes, setEstadoSoportes] = useState({});
 
@@ -35,9 +46,9 @@ const Seguimiento = () => {
     }));
   };
 
-  //   const onChangeReferente = (event) => {
-  //     setReferente(event.target.value);
-  //   };
+  const onchange_porcentaje = (event) => {
+    setPorcentaje(event.target.value);
+  };
 
   const onChange_observaciones = (event) => {
     const property = event.target.name;
@@ -47,42 +58,99 @@ const Seguimiento = () => {
     // validate({ ...observaciones, [property]: value });
   };
 
+  const handle_send = async () => {
+    // event.preventDefault();
+
+    try {
+      // setLoading(true);
+
+      // Realizar la solicitud
+
+      const response = await fetch(`${url_post_observaciones}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          observacion:
+            usuario === "referente_instituto"
+              ? observaciones.observacion_referente
+              : observaciones.observacion_operador,
+          anexo_id: documentId,
+          id_actividad: uuid,
+          tipo: usuario === "referente_instituto" ? "referente" : "operador",
+        }),
+      });
+
+      if (!response.ok) throw new Error("Error al enviar el reporte.");
+
+      // setLoading(false);
+
+      // Reiniciar el formulario
+      Swal.fire({
+        icon: "success",
+        title: "¡Envío correcto!",
+        text: "Informacion agregada correctamente!",
+      });
+
+      //resetForm();
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor revise que todos los datos esten completos !",
+      });
+      console.error(error);
+    }
+  };
+
   console.log("estadoSoportes", estadoSoportes);
   console.log("observaciones", observaciones);
 
-  // useEffect(() => {
-  //   const fetchSoportes = async () => {
-  //     if (!actividad || !actividad.soportes || actividad.soportes.length === 0)
-  //       return;
+  useEffect(() => {
+    if (!documentId || !uuid) return; // Evita hacer la petición si los valores son undefined
 
-  //     try {
-  //       const requests = actividad.soportes.map(async (soporte) => {
-  //         const response = await fetch(
-  //           `${url_soportes}anexo_id=${actividad.documentId}&soporte_id=${soporte.id}`,
-  //           {
-  //             headers: { Authorization: `Bearer ${token}` },
-  //           }
-  //         );
-  //         if (!response.ok) throw new Error("Error al obtener soportes");
-  //         const data = await response.json();
-  //         return { soporteId: soporte.id, data };
-  //       });
+    const fetch_observacion = async () => {
+      try {
+        const response = await fetch(
+          `${url_observaciones}anexo_id=${documentId}&id_actividad=${uuid}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!response.ok) throw new Error("Error al obtener observaciones.");
+        const data = await response.json();
 
-  //       const results = await Promise.all(requests);
-  //       // Convertir el array de resultados en un objeto { soporteId: data }
-  //       const soportesMap = results.reduce((acc, { soporteId, data }) => {
-  //         acc[soporteId] = data;
-  //         return acc;
-  //       }, {});
+        console.log("Data-Observacion", data);
 
-  //       setSoportes(soportesMap);
-  //     } catch (error) {
-  //       console.error("Error fetching soportes:", error);
-  //     }
-  //   };
+        const fecha_operador = data.operador?.fecha ?? "";
+        const fecha_local_operador = fecha_operador
+          ? new Date(fecha_operador).toLocaleString()
+          : "";
+        const fecha_referente = data.referente?.fecha ?? "";
+        const fecha_local_referente = fecha_referente
+          ? new Date(fecha_referente).toLocaleString()
+          : "";
 
-  //   fetchSoportes();
-  // }, [token, actividad]); // Se ejecuta cuando `actividad` o `token` cambian
+        // console.log("Data-Observacion-fecha", fechaLocal);
+        setObservaciones((prev) => ({
+          ...prev,
+          observacion_referente:
+            data.referente?.observacion ?? "Sin observación",
+          observacion_operador: data.operador?.observacion ?? "Sin observación",
+          fecha_operador: fecha_local_operador,
+          fecha_referente: fecha_local_referente,
+        }));
+      } catch (error) {
+        console.error("Error fetching observaciones", error);
+      }
+    };
+
+    fetch_observacion();
+  }, [token, documentId, uuid]);
 
   useEffect(() => {
     const fetchSoportes = async () => {
@@ -127,6 +195,8 @@ const Seguimiento = () => {
 
   console.log("soportes", soportes);
 
+  console.log("Porcentaje", porcentaje);
+
   return (
     <div className={styles.contenedor_principal}>
       <Header />
@@ -148,6 +218,7 @@ const Seguimiento = () => {
               <th>Cronograma</th>
               <th>Observación Referente</th>
               <th>Observación Operador</th>
+              <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -189,8 +260,46 @@ const Seguimiento = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{soporte.tipo}</td>
-                        <td>{soporte.descripcion}</td>
+                        {/* <td>
+                          <p
+                            style={{
+                              margin: 0,
+                              padding: "5px",
+                              fontSize: "16px",
+                              width: "400px",
+                            }}
+                          >
+                            {soporte.tipo}
+                          </p>
+                        </td> */}
+                        <td
+                          style={{
+                            wordWrap: "break-word",
+                            whiteSpace: "normal",
+                            maxWidth: "150px",
+                          }}
+                        >
+                          {soporte.tipo}
+                        </td>
+                        <td
+                          style={{
+                            wordWrap: "break-word",
+                            whiteSpace: "normal",
+                            maxWidth: "200px",
+                          }}
+                        >
+                          <p
+                            style={{
+                              margin: 0,
+                              wordWrap: "break-word",
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {soporte.descripcion}
+                          </p>
+                          {/* {soporte.descripcion} */}
+                        </td>
+
                         <td>{soporte.cantidad}</td>
 
                         <td>
@@ -207,7 +316,19 @@ const Seguimiento = () => {
                                 soportes[soporte.id].evidencias.map(
                                   (evidencia, i) => (
                                     <tr key={i}>
-                                      <td>{evidencia.archivo.name}</td>
+                                      <td>
+                                        {/* <p
+                                          style={{
+                                            margin: 0,
+                                            padding: "5px",
+                                            fontSize: "16px",
+                                            width: "fit-content",
+                                          }}
+                                        >
+                                          {evidencia.archivo.name}
+                                        </p> */}
+                                        {evidencia.archivo.name}
+                                      </td>
                                       <td>
                                         <a
                                           href={`${back}${evidencia.archivo.url}`}
@@ -290,29 +411,55 @@ const Seguimiento = () => {
                   <thead>
                     <tr>
                       <th>Observacion</th>
-                      <th>Fecha</th>
+                      {observaciones.fecha_referente && <th>Fecha</th>}
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
-                        <textarea
-                          className={styles.textarea}
-                          name="observacion_referente"
-                          type="text"
-                          value={observaciones.observacion_referente}
-                          onChange={onChange_observaciones}
-                        />
+                        {usuario === "referente_instituto" ? (
+                          <textarea
+                            className={styles.textarea}
+                            name="observacion_referente"
+                            type="text"
+                            value={observaciones.observacion_referente}
+                            onChange={onChange_observaciones}
+                          />
+                        ) : (
+                          <p
+                            style={{
+                              margin: 0,
+                              padding: "5px",
+                              fontSize: "16px",
+                              width: "200px",
+                            }}
+                          >
+                            {observaciones.observacion_referente}
+                          </p>
+                        )}
                       </td>
-                      <td>
-                        <input
-                          className={styles.input_fecha}
-                          name="fecha_referente"
-                          type="text"
-                          value={observaciones.fecha_referente}
-                          onChange={onChange_observaciones}
-                        />
-                      </td>
+                      {observaciones.fecha_referente && (
+                        <td>
+                          {/* <span
+                          style={{ display: "inline-block", width: "200px" }}
+                        >
+                          {observaciones.fecha_referente}
+                        </span> */}
+
+                          <p
+                            style={{
+                              margin: 0,
+                              padding: "5px",
+                              fontSize: "16px",
+                              width: "200px",
+                            }}
+                          >
+                            {observaciones.fecha_referente}
+                          </p>
+
+                          {/* {observaciones.fecha_referente} */}
+                        </td>
+                      )}
                     </tr>
                   </tbody>
                 </table>
@@ -332,45 +479,95 @@ const Seguimiento = () => {
                   <thead>
                     <tr>
                       <th>Observacion</th>
-                      <th>Fecha</th>
+                      {observaciones.fecha_operador && <th>Fecha</th>}
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
-                        <textarea
+                        {/* <textarea
                           className={styles.textarea}
                           name="observacion_operador"
                           type="text"
                           value={observaciones.observacion_operador}
                           onChange={onChange_observaciones}
-                        />
+                        /> */}
+
+                        {usuario === "operador" ? (
+                          <textarea
+                            className={styles.textarea}
+                            name="observacion_operador"
+                            type="text"
+                            value={observaciones.observacion_operador}
+                            onChange={onChange_observaciones}
+                          />
+                        ) : (
+                          <p>{observaciones.observacion_operador}</p>
+                        )}
                       </td>
-                      <td>
-                        <input
+                      {observaciones.fecha_operador && (
+                        <td>
+                          {/* <input
                           className={styles.input_fecha}
                           name="fecha_operador"
                           type="text"
                           value={observaciones.fecha_operador}
                           onChange={onChange_observaciones}
-                        />
-                      </td>
+                        /> */}
+
+                          <p
+                            style={{
+                              margin: 0,
+                              padding: "5px",
+                              fontSize: "16px",
+                              width: "200px",
+                            }}
+                          >
+                            {observaciones.fecha_operador}
+                          </p>
+                        </td>
+                      )}
                     </tr>
                   </tbody>
                 </table>
               </td>
+              <td>
+                <select
+                  id="estado"
+                  name="estado"
+                  className={styles.select}
+                  value={porcentaje}
+                  onChange={onchange_porcentaje}
+                >
+                  <option value="0">0%</option>
+                  <option value="5">5%</option>
+                  <option value="10">10%</option>
+                  <option value="15">15%</option>
+                  <option value="20">20%</option>
+                  <option value="25">25%</option>
+                  <option value="30">30%</option>
+                  <option value="35">35%</option>
+                  <option value="40">40%</option>
+                  <option value="45">45%</option>
+                  <option value="50">50%</option>
+                  <option value="55">55%</option>
+                  <option value="60">60%</option>
+                  <option value="65">65%</option>
+                  <option value="70">70%</option>
+                  <option value="75">75%</option>
+                  <option value="80">80%</option>
+                  <option value="85">85%</option>
+                  <option value="90">90%</option>
+                  <option value="95">95%</option>
+                  <option value="100">100%</option>
+                </select>
+              </td>
 
               <td>
-                {/* <button
-                  onClick={() =>
-                    handle_click_actividad({
-                      ...actividad,
-                      documentId: actividad.documentId,
-                    })
-                  }
-                >
-                  Seguimiento
-                </button> */}
+                <button className={styles.edit_button} onClick={handle_send}>
+                  <FaSave />
+                  Guardar
+                </button>
               </td>
             </tr>
           </tbody>

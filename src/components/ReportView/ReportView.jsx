@@ -31,11 +31,37 @@ const ReportView = () => {
   const url_municipios = `${back}/api/municipios?pagination[pageSize]=100`;
   const [municipios, setMunicipios] = useState([]);
 
-  const url_anexos = `${back}/api/anexo-tecnicos?pLevel=10&pagination[pageSize]=100`;
+  // const url_anexos = `${back}/api/anexo-tecnicos?pLevel=10&pagination[pageSize]=100`;
+
+  // const url_anexos = `${back}/api/anexo-tecnicos?pLevel=10&pagination[pageSize]=100${
+  //   filterValue
+  //     ? `&filters[eventos][proyectos_idsn][proyecto][$eq]=${filterValue}`
+  //     : ""
+  // }${
+  //   operatorFilterValue
+  //     ? `&filters[eventos][operador_pic][operador_pic][$eq]=${operatorFilterValue}`
+  //     : ""
+  // }`;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10); // Puedes cambiar el valor si necesitas más registros por página.
+
+  const url_anexos = `${back}/api/anexo-tecnicos?pLevel=10&pagination[page]=${currentPage}&pagination[pageSize]=${pageSize}${
+    filterValue
+      ? `&filters[eventos][proyectos_idsn][proyecto][$eq]=${filterValue}`
+      : ""
+  }${
+    operatorFilterValue
+      ? `&filters[eventos][operador_pic][operador_pic][$eq]=${operatorFilterValue}`
+      : ""
+  }`;
+
   const url_soportes = `${back}/api/seguimiento/upload-file`;
   const url_soportes_get = `${back}/api/check-seguimiento?`;
   const url_soportes_delete = `${back}/api/seguimiento/remove-file`;
   const navigate = useNavigate(); // Hook para navegación
+
+  //Paginacion
 
   const MySwal = withReactContent(Swal);
 
@@ -51,10 +77,60 @@ const ReportView = () => {
     });
   };
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(`${url_anexos}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+
+  //       const result = await response.json();
+  //       setData(result);
+  //     } catch (error) {
+  //       setError(error.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [token]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(url_anexos, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+
+  //       const result = await response.json();
+  //       setData(result);
+  //     } catch (error) {
+  //       setError(error.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [token, filterValue, operatorFilterValue]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${url_anexos}`, {
+        const response = await fetch(url_anexos, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -74,7 +150,9 @@ const ReportView = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, [token, filterValue, operatorFilterValue, currentPage, pageSize]);
+
+  console.log("data", data);
 
   useEffect(() => {
     const fetch_subregion = async () => {
@@ -193,11 +271,95 @@ const ReportView = () => {
         showCancelButton: true,
         confirmButtonText: "Enviar",
         cancelButtonText: "Cancelar",
+        // didOpen: () => {
+        //   const extraEvidenciasDiv =
+        //     document.getElementById("extra-evidencias");
+
+        //   // 🔹 Evento para eliminar evidencias existentes
+        //   document.querySelectorAll(".btn-delete").forEach((btn) => {
+        //     btn.addEventListener("click", async (event) => {
+        //       const evidenciaId =
+        //         event.target.getAttribute("data-evidencia-id");
+
+        //       await deleteEvidencia(evidenciaId, documentId, soporteId);
+        //       document.getElementById(`evidencia-existente-${evidenciaId}`);
+        //     });
+        //   });
+
+        //   // 🔹 Evento para agregar una nueva evidencia
+        //   document
+        //     .getElementById("add-evidencia")
+        //     .addEventListener("click", () => {
+        //       const evidenciaId = `evidencia-${nuevasEvidencias.length}`;
+        //       console.log("evidencias ID", evidenciaId);
+        //       const newEvidenciaHTML = `
+        //         <div id="${evidenciaId}"
+        //           style="margin-bottom: 10px; padding: 10px; border: 1px solid #ccc;
+        //           border-radius: 5px; display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%;">
+
+        //           <div style="flex: 1; min-width: 200px;">
+        //             <label for="region-${evidenciaId}" style="margin-top: 10px;margin-left:40px">Seleccionar Región:</label>
+        //             <select id="region-${evidenciaId}" class="swal2-select" style="width: 100%; margin-top: 5px;">
+        //               <option value="">Selecciona una región</option>
+        //               ${municipios
+        //                 .map(
+        //                   (muni) =>
+        //                     `<option value="${muni.documentId}">${muni.label}</option>`
+        //                 )
+        //                 .join("")}
+        //             </select>
+
+        //            <label for="archivo-${evidenciaId}" style="margin-top: 10px; margin-left:40px;">Archivo Soporte:</label>
+        //            <input type="file" hidden id="archivo-${evidenciaId}" class="swal2-file">
+        //            <button id="botonpersonal-${evidenciaId}" style="margin-left:40px; background-color: #007bff; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer;">
+        //             Adjuntar documento
+        //            </button>
+        //            <small id="tagsmall-${evidenciaId}" style="margin-left:40px; display: block;">No hay archivos adjuntos</small>
+        //           </div>
+
+        //           <div style="display: flex; align-items: center; justify-content: flex-end; min-width: 80px;">
+        //             <button class="swal2-confirm btn-delete-evidencia" data-id="${evidenciaId}"
+        //               style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer;
+        //               display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 5px;">
+        //               <i class="fa-solid fa-trash"></i>
+        //             </button>
+        //           </div>
+
+        //         </div>
+        //       `;
+
+        //       extraEvidenciasDiv.insertAdjacentHTML(
+        //         "beforeend",
+        //         newEvidenciaHTML
+        //       );
+        //       nuevasEvidencias.push(evidenciaId);
+        //       console.log("nuevasEvidencias", nuevasEvidencias);
+
+        //       // Evento para eliminar evidencias antes de enviarlas
+
+        //       document
+        //         .querySelector(`[data-id="${evidenciaId}"]`)
+        //         .addEventListener("click", (event) => {
+        //           const id = event.currentTarget.getAttribute("data-id"); // Usamos event.currentTarget para evitar problemas
+        //           const evidenciaElement = document.getElementById(id);
+
+        //           if (evidenciaElement) {
+        //             evidenciaElement.remove();
+        //             nuevasEvidencias = nuevasEvidencias.filter((e) => e !== id);
+        //           } else {
+        //             console.warn(
+        //               `Elemento con id ${id} no encontrado o ya eliminado.`
+        //             );
+        //           }
+        //         });
+        //     });
+        // },
+
         didOpen: () => {
           const extraEvidenciasDiv =
             document.getElementById("extra-evidencias");
 
-          // 🔹 Evento para eliminar evidencias existentes
+          // Evento para eliminar evidencias existentes
           document.querySelectorAll(".btn-delete").forEach((btn) => {
             btn.addEventListener("click", async (event) => {
               const evidenciaId =
@@ -208,17 +370,36 @@ const ReportView = () => {
             });
           });
 
-          // 🔹 Evento para agregar una nueva evidencia
+          // Evento para manejar la selección de archivos
+          document.querySelectorAll("[id^=botonpersonal-]").forEach((btn) => {
+            btn.addEventListener("click", (event) => {
+              const evidenciaId = event.target.id.split("-")[1];
+              document.getElementById(`archivo-${evidenciaId}`).click();
+            });
+          });
+
+          // Evento para actualizar el texto del archivo adjunto
+          document.querySelectorAll("[id^=archivo-]").forEach((input) => {
+            input.addEventListener("change", (event) => {
+              const evidenciaId = event.target.id.split("-")[1];
+              const fileName =
+                event.target.files.length > 0
+                  ? event.target.files[0].name
+                  : "No hay archivos adjuntos";
+              document.getElementById(`tagsmall-${evidenciaId}`).textContent =
+                fileName;
+            });
+          });
+
+          // Evento para agregar nueva evidencia
           document
             .getElementById("add-evidencia")
             .addEventListener("click", () => {
               const evidenciaId = `evidencia-${nuevasEvidencias.length}`;
-
               const newEvidenciaHTML = `
-              <div id="${evidenciaId}" 
-                style="margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; 
+              <div id="${evidenciaId}" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ccc;
                 border-radius: 5px; display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%;">
-            
+        
                 <div style="flex: 1; min-width: 200px;">
                   <label for="region-${evidenciaId}" style="margin-top: 10px;margin-left:40px">Seleccionar Región:</label>
                   <select id="region-${evidenciaId}" class="swal2-select" style="width: 100%; margin-top: 5px;">
@@ -230,19 +411,29 @@ const ReportView = () => {
                       )
                       .join("")}
                   </select>
-                  
-                  <label for="archivo-${evidenciaId}" style="margin-top: 10px;margin-left:40px">Archivo Soporte:</label>
-                  <input type="file" id="archivo-${evidenciaId}" class="swal2-file" style="width: 100%; margin-top: 5px; margin-left:40px">
+        
+                  <label for="archivo-${evidenciaId}" style="margin-top: 10px; margin-left:40px;">Archivo Soporte:</label>
+                  <input type="file" hidden id="archivo-${evidenciaId}" class="swal2-file">
+                  <button id="botonpersonal-${evidenciaId}" style="margin-left:40px; background-color:rgb(84, 138, 196); color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer;">
+                    Adjuntar documento
+                  </button>
+                <span id="tagsmall-${evidenciaId}" 
+                 style="margin-left:40px; display: block; margin-top:20px; 
+                 padding: 5px 10px; border: 1px solid #ccc; border-radius: 5px; 
+                 color: #333; font-size: 18px;">
+                 No hay archivos adjuntos
+                </span>
+
                 </div>
-            
+        
                 <div style="display: flex; align-items: center; justify-content: flex-end; min-width: 80px;">
-                  <button class="swal2-confirm btn-delete-evidencia" data-id="${evidenciaId}" 
-                    style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer; 
+                  <button class="swal2-confirm btn-delete-evidencia" data-id="${evidenciaId}"
+                    style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer;
                     display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 5px;">
                     <i class="fa-solid fa-trash"></i>
                   </button>
                 </div>
-            
+        
               </div>
             `;
 
@@ -252,28 +443,31 @@ const ReportView = () => {
               );
               nuevasEvidencias.push(evidenciaId);
 
-              // Evento para eliminar evidencias antes de enviarlas
-              // document
-              //   .querySelector(`[data-id="${evidenciaId}"]`)
-              //   .addEventListener("click", (event) => {
-              //     const id = event.target.getAttribute("data-id");
-              //     document.getElementById(id).remove();
-              //     nuevasEvidencias = nuevasEvidencias.filter((e) => e !== id);
-              //   });
+              // Agregar eventos a los nuevos elementos creados dinámicamente
+              document
+                .getElementById(`botonpersonal-${evidenciaId}`)
+                .addEventListener("click", () => {
+                  document.getElementById(`archivo-${evidenciaId}`).click();
+                });
+
+              document
+                .getElementById(`archivo-${evidenciaId}`)
+                .addEventListener("change", (event) => {
+                  const fileName =
+                    event.target.files.length > 0
+                      ? event.target.files[0].name
+                      : "No hay archivos adjuntos";
+                  document.getElementById(
+                    `tagsmall-${evidenciaId}`
+                  ).textContent = fileName;
+                });
+
               document
                 .querySelector(`[data-id="${evidenciaId}"]`)
                 .addEventListener("click", (event) => {
-                  const id = event.currentTarget.getAttribute("data-id"); // Usamos event.currentTarget para evitar problemas
-                  const evidenciaElement = document.getElementById(id);
-
-                  if (evidenciaElement) {
-                    evidenciaElement.remove();
-                    nuevasEvidencias = nuevasEvidencias.filter((e) => e !== id);
-                  } else {
-                    console.warn(
-                      `Elemento con id ${id} no encontrado o ya eliminado.`
-                    );
-                  }
+                  const id = event.currentTarget.getAttribute("data-id");
+                  document.getElementById(id)?.remove();
+                  nuevasEvidencias = nuevasEvidencias.filter((e) => e !== id);
                 });
             });
         },
@@ -446,10 +640,6 @@ const ReportView = () => {
           (!filterValue || evento.proyectos_idsn?.proyecto === filterValue) &&
           (!operatorFilterValue ||
             evento?.operador_pic?.operador_pic === operatorFilterValue)
-        // evento.productos.some(
-        //   (producto) =>
-        //     producto.operador_pic.operador_pic === operatorFilterValue
-        // )
       ),
     }))
     .filter((row) => row.eventos.length > 0);
@@ -498,7 +688,8 @@ const ReportView = () => {
         </select>
       </div>
       <div className={styles.formContainer}>
-        {filteredData?.map((row, index) =>
+        {/* {filteredData?.map((row, index) => */}
+        {data?.data?.map((row, index) =>
           row.eventos.map((evento) => (
             <table key={`${index}-${evento.id}`} className={styles.table}>
               <thead>
@@ -926,6 +1117,23 @@ const ReportView = () => {
             </table>
           ))
         )}
+        <div className={styles.pagination}>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Anterior
+          </button>
+
+          <span>Página {currentPage}</span>
+
+          <button
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            disabled={data?.meta?.pagination?.pageCount === currentPage} // Esto evita ir más allá del total de páginas.
+          >
+            Siguiente
+          </button>
+        </div>
       </div>
     </div>
   );

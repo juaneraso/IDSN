@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./ActivityItem.module.css";
 import Select from "react-select";
+import Swal from "sweetalert2";
 
 const ActivityItem = ({
   activity,
@@ -271,6 +272,42 @@ const ActivityItem = ({
     (soporte) => soporte.tipo_soporte
   );
 
+  const handle_remove_soporte = (index) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará el soporte ",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeSoporte(index);
+        Swal.fire("Eliminado", "El soporte ha sido eliminado.", "success");
+      }
+    });
+  };
+
+  const handle_remove_actividad = (index) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará la actividad",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleRemoveActivity(index);
+        Swal.fire("Eliminada", "La actividad ha sido borrada", "success");
+      }
+    });
+  };
+
   const renderCronogramaField = () => {
     const allMonths = options.meses;
 
@@ -325,7 +362,8 @@ const ActivityItem = ({
             className={styles.removeButton}
             onClick={(e) => {
               e.stopPropagation();
-              handleRemoveActivity(index);
+              // handleRemoveActivity(index);
+              handle_remove_actividad(index);
             }}
           >
             -
@@ -570,8 +608,11 @@ const ActivityItem = ({
                                     <button
                                       className={styles.removeButton}
                                       type="button"
+                                      // onClick={() =>
+                                      //   removeSoporte(soporteIndex)
+                                      // }
                                       onClick={() =>
-                                        removeSoporte(soporteIndex)
+                                        handle_remove_soporte(soporteIndex)
                                       }
                                     >
                                       -

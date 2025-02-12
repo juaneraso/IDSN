@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Product from "../Product/Product";
 import styles from "./Event.module.css";
 import Select from "react-select"; // Importamos React Select
+import Swal from "sweetalert2";
 
 const Event = ({ events, setEvents, edit_button }) => {
   const [expandedEvents, setExpandedEvents] = useState(
@@ -305,6 +306,24 @@ const Event = ({ events, setEvents, edit_button }) => {
     setEvents(updatedEvents);
   };
 
+  const handle_remove_event = (index) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará el evento",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleRemoveEvent(index);
+        Swal.fire("Eliminado", "El evento ha sido eliminado.", "success");
+      }
+    });
+  };
+
   return (
     <div>
       {events.map((event, index) => (
@@ -330,7 +349,7 @@ const Event = ({ events, setEvents, edit_button }) => {
               <button
                 type="button"
                 className={styles.removeButton_añadir}
-                onClick={() => handleRemoveEvent(index)}
+                onClick={() => handle_remove_event(index)}
               >
                 -
               </button>

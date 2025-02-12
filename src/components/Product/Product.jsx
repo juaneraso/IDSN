@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Product.module.css";
 import ActivityList from "../Activities/ActivityList";
 import { FaEye } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const Product = ({
   product_data,
@@ -102,6 +103,42 @@ const Product = ({
     setProductData({ ...product_data, producto: updatedProducts });
   };
 
+  const handle_remove_indicador = (productIndex, indicatorIndex) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará el indicador",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleRemoveIndicator(productIndex, indicatorIndex);
+        Swal.fire("Eliminado", "El indicador ha sido eliminado.", "success");
+      }
+    });
+  };
+
+  const handle_remove_producto = (index) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará el producto",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleRemoveProduct(index);
+        Swal.fire("Eliminado", "El producto ha sido eliminado.", "success");
+      }
+    });
+  };
+
   return (
     <div className={styles.productContainer}>
       {(product_data.producto || []).map((product, productIndex) => (
@@ -118,7 +155,7 @@ const Product = ({
               {productIndex > 0 && (
                 <button
                   type="button"
-                  onClick={() => handleRemoveProduct(productIndex)}
+                  onClick={() => handle_remove_producto(productIndex)}
                   className={styles.removeButton_añadir}
                 >
                   -
@@ -141,7 +178,6 @@ const Product = ({
                   <tr>
                     <th>Descripción del Producto</th>
                     <th>Indicadores</th>
-                    {/* <th>Operador PIC</th> */}
                     <th>Actividades</th>
                     <th>Acciones</th>
                   </tr>
@@ -184,7 +220,11 @@ const Product = ({
                                 <button
                                   type="button"
                                   onClick={() =>
-                                    handleRemoveIndicator(
+                                    // handleRemoveIndicator(
+                                    //   productIndex,
+                                    //   indicatorIndex
+                                    // )
+                                    handle_remove_indicador(
                                       productIndex,
                                       indicatorIndex
                                     )
@@ -302,7 +342,7 @@ const Product = ({
                       {productIndex > 0 && (
                         <button
                           type="button"
-                          onClick={() => handleRemoveProduct(productIndex)}
+                          onClick={() => handle_remove_producto(productIndex)}
                           className={styles.removeButton_añadir}
                         >
                           -
