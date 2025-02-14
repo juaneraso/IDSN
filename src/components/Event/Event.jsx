@@ -483,6 +483,7 @@ const Event = ({ events, setEvents, edit_button }) => {
                     <input
                       className={styles.input_hogares}
                       type="number"
+                      min="0"
                       value={event.total_hogares || ""}
                       onChange={(e) =>
                         handleEventChange(

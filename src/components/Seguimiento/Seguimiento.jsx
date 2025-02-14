@@ -16,8 +16,11 @@ const Seguimiento = () => {
   const url_soportes = `${back}/api/check-seguimiento?`;
   const url_observaciones = `${back}/api/observacio/read?`;
   const url_post_observaciones = `${back}/api/observaciones/register`;
+  const url_post_check = `${back}/api/observaciones/register`;
+
   const [soportes, setSoportes] = useState([]);
   const [porcentaje, setPorcentaje] = useState("0");
+  const [estado_porcentaje, setEstado] = useState("");
 
   const usuario_object = JSON.parse(sessionStorage.getItem("usuario")) || {};
 
@@ -47,7 +50,12 @@ const Seguimiento = () => {
   };
 
   const onchange_porcentaje = (event) => {
-    setPorcentaje(event.target.value);
+    const valor_numerico = parseInt(event.target.value, 10);
+    setPorcentaje(valor_numerico);
+  };
+
+  const onchange_estado_porcentaje = (event) => {
+    setEstado(event.target.value);
   };
 
   const onChange_observaciones = (event) => {
@@ -67,6 +75,55 @@ const Seguimiento = () => {
       // Realizar la solicitud
 
       const response = await fetch(`${url_post_observaciones}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          observacion:
+            usuario === "referente_instituto"
+              ? observaciones.observacion_referente
+              : observaciones.observacion_operador,
+          porcentaje_completado: porcentaje,
+          anexo_id: documentId,
+          estado: estado_porcentaje,
+          id_actividad: uuid,
+          tipo: usuario === "referente_instituto" ? "referente" : "operador",
+        }),
+      });
+
+      if (!response.ok) throw new Error("Error al enviar el reporte.");
+
+      // setLoading(false);
+
+      // Reiniciar el formulario
+      Swal.fire({
+        icon: "success",
+        title: "¡Envío correcto!",
+        text: "Informacion agregada correctamente!",
+      });
+
+      //resetForm();
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Por favor revise que todos los datos esten completos !",
+      });
+      console.error(error);
+    }
+  };
+
+  const handle_send_check = async () => {
+    // event.preventDefault();
+
+    try {
+      // setLoading(true);
+
+      // Realizar la solicitud
+
+      const response = await fetch(`${url_post_check}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,9 +162,6 @@ const Seguimiento = () => {
     }
   };
 
-  console.log("estadoSoportes", estadoSoportes);
-  console.log("observaciones", observaciones);
-
   useEffect(() => {
     if (!documentId || !uuid) return; // Evita hacer la petición si los valores son undefined
 
@@ -144,6 +198,9 @@ const Seguimiento = () => {
           fecha_operador: fecha_local_operador,
           fecha_referente: fecha_local_referente,
         }));
+
+        setEstado(data.referente.estado);
+        setPorcentaje(data.referente.porcentaje_completado);
       } catch (error) {
         console.error("Error fetching observaciones", error);
       }
@@ -196,6 +253,10 @@ const Seguimiento = () => {
   console.log("soportes", soportes);
 
   console.log("Porcentaje", porcentaje);
+  console.log("Estado-Porcentaje", estado_porcentaje);
+
+  console.log("estadoSoportes", estadoSoportes);
+  console.log("observaciones", observaciones);
 
   return (
     <div className={styles.contenedor_principal}>
@@ -242,7 +303,17 @@ const Seguimiento = () => {
                   <p key={index}>{poblacion.nombre}</p>
                 ))}
               </td>
-              <td>
+              <td
+              // style={{
+              //   width: "1000px", // Ancho fijo
+              //   maxWidth: "1000px",
+              //   wordWrap: "break-word",
+              //   overflowWrap: "break-word",
+              //   whiteSpace: "normal", // Permite que el texto baje en varias líneas
+              //   backgroundColor: "#4ebd35",
+              //   // color: "#fff", // Mejora el contraste del texto
+              // }}
+              >
                 {actividad.soportes.map((soporte, index) => (
                   <table
                     className={styles.table_soportes}
@@ -256,6 +327,7 @@ const Seguimiento = () => {
                         <th>Cantidad</th>
                         <th>Soportes</th>
                         <th>Check</th>
+                        <th>Guardar</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -274,9 +346,13 @@ const Seguimiento = () => {
                         </td> */}
                         <td
                           style={{
-                            wordWrap: "break-word",
-                            whiteSpace: "normal",
+                            width: "150px", // Ancho fijo
                             maxWidth: "150px",
+                            wordWrap: "break-word",
+                            overflowWrap: "break-word",
+                            whiteSpace: "normal", // Permite que el texto baje en varias líneas
+                            backgroundColor: "#079486",
+                            color: "#fff", // Mejora el contraste del texto
                           }}
                         >
                           {soporte.tipo}
@@ -285,7 +361,7 @@ const Seguimiento = () => {
                           style={{
                             wordWrap: "break-word",
                             whiteSpace: "normal",
-                            maxWidth: "200px",
+                            maxWidth: "150px",
                           }}
                         >
                           <p
@@ -371,6 +447,14 @@ const Seguimiento = () => {
                             <option value="No cumple">❌ No cumple</option>
                             <option value="En proceso">⏳ En proceso</option>
                           </select>
+                        </td>
+                        <td>
+                          <button
+                            className={styles.edit_button}
+                            onClick={handle_send_check}
+                          >
+                            <FaSave />
+                          </button>
                         </td>
                       </tr>
                     </tbody>
@@ -531,7 +615,7 @@ const Seguimiento = () => {
                   </tbody>
                 </table>
               </td>
-              <td>
+              {/* <td>
                 <select
                   id="estado"
                   name="estado"
@@ -561,6 +645,70 @@ const Seguimiento = () => {
                   <option value="95">95%</option>
                   <option value="100">100%</option>
                 </select>
+              </td> */}
+
+              <td>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Porcentaje</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <select
+                          id="estado"
+                          name="estado"
+                          className={styles.select}
+                          value={porcentaje}
+                          onChange={onchange_porcentaje}
+                        >
+                          <option value="0">0%</option>
+                          <option value="5">5%</option>
+                          <option value="10">10%</option>
+                          <option value="15">15%</option>
+                          <option value="20">20%</option>
+                          <option value="25">25%</option>
+                          <option value="30">30%</option>
+                          <option value="35">35%</option>
+                          <option value="40">40%</option>
+                          <option value="45">45%</option>
+                          <option value="50">50%</option>
+                          <option value="55">55%</option>
+                          <option value="60">60%</option>
+                          <option value="65">65%</option>
+                          <option value="70">70%</option>
+                          <option value="75">75%</option>
+                          <option value="80">80%</option>
+                          <option value="85">85%</option>
+                          <option value="90">90%</option>
+                          <option value="95">95%</option>
+                          <option value="100">100%</option>
+                        </select>
+                      </td>
+
+                      <td>
+                        {" "}
+                        <select
+                          id="estado_porcentaje"
+                          name="estado_porcentaje"
+                          className={styles.select}
+                          value={estado_porcentaje}
+                          onChange={onchange_estado_porcentaje}
+                        >
+                          <option value="" disabled>
+                            🟡 Selecciona un estado
+                          </option>
+                          <option value="Cumple">✅ Cumple</option>
+                          <option value="No cumple">❌ No cumple</option>
+                          <option value="En proceso">⏳ En proceso</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </td>
 
               <td>
