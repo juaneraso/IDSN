@@ -55,6 +55,8 @@ const Dashbo = () => {
   const token = token_object.token;
 
   const [usuario_dos, setUsuario_dos] = useState(null);
+  const [super_usuario, setSuper] = useState(null);
+  // let super_usuario = false;
 
   useEffect(() => {
     const fetch_user = async () => {
@@ -70,10 +72,16 @@ const Dashbo = () => {
         const datos = {
           usuario: data.custom_roles[0].name,
         };
+
+        if (data.custom_roles.length > 1) {
+          setSuper(true);
+        }
+
         console.log("data_usuario", data);
         console.log("datos", datos);
         sessionStorage.setItem("usuario", JSON.stringify(datos));
         setUsuario_dos(datos.usuario);
+        console.log("super_user", super_usuario);
         //setSubregions(data.data);
         // setMunicipios(data.data);
       } catch (error) {
@@ -94,7 +102,7 @@ const Dashbo = () => {
     <div className={styles.dashboard}>
       <Header />
       <div className={styles.main}>
-        <Sidebar usuario_dos={usuario_dos} />
+        <Sidebar usuario_dos={usuario_dos} super_usuario={super_usuario} />
         <div className={styles.content}>
           <h2>Bienvenido al Dashboard</h2>
 

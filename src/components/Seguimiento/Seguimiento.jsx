@@ -19,8 +19,6 @@ const Seguimiento = () => {
   const url_post_check = `${back}/api/observaciones/register`;
 
   const [soportes, setSoportes] = useState([]);
-  const [porcentaje, setPorcentaje] = useState("0");
-  const [estado_porcentaje, setEstado] = useState("");
 
   const usuario_object = JSON.parse(sessionStorage.getItem("usuario")) || {};
 
@@ -42,20 +40,33 @@ const Seguimiento = () => {
     fecha_operador: "",
   });
 
+  const [status_porcentaje, setStatus] = useState({
+    estado_referente: "",
+    estado_operador: "",
+    porcentaje_referente: "",
+    porcentaje_operador: "",
+  });
+
+  const onchange_status = (event) => {
+    const property = event.target.name;
+    let value = event.target.value;
+
+    // Convertir a entero solo si es porcentaje
+    if (
+      property === "porcentaje_referente" ||
+      property === "porcentaje_operador"
+    ) {
+      value = parseInt(value, 10) || 0; // Convierte y evita NaN con || 0
+    }
+
+    setStatus({ ...status_porcentaje, [property]: value });
+  };
+
   const handleEstadoChange = (soporteId, nuevoEstado) => {
     setEstadoSoportes((prevState) => ({
       ...prevState,
       [soporteId]: nuevoEstado,
     }));
-  };
-
-  const onchange_porcentaje = (event) => {
-    const valor_numerico = parseInt(event.target.value, 10);
-    setPorcentaje(valor_numerico);
-  };
-
-  const onchange_estado_porcentaje = (event) => {
-    setEstado(event.target.value);
   };
 
   const onChange_observaciones = (event) => {
@@ -85,9 +96,17 @@ const Seguimiento = () => {
             usuario === "referente_instituto"
               ? observaciones.observacion_referente
               : observaciones.observacion_operador,
-          porcentaje_completado: porcentaje,
           anexo_id: documentId,
-          estado: estado_porcentaje,
+          porcentaje_completado:
+            usuario === "referente_instituto"
+              ? status_porcentaje.porcentaje_referente
+              : status_porcentaje.porcentaje_operador,
+
+          estado:
+            usuario === "referente_instituto"
+              ? status_porcentaje.estado_referente
+              : status_porcentaje.estado_operador,
+
           id_actividad: uuid,
           tipo: usuario === "referente_instituto" ? "referente" : "operador",
         }),
@@ -199,8 +218,15 @@ const Seguimiento = () => {
           fecha_referente: fecha_local_referente,
         }));
 
-        setEstado(data.referente.estado);
-        setPorcentaje(data.referente.porcentaje_completado);
+        setStatus((prev) => ({
+          ...prev,
+          estado_referente: data.referente?.estado ?? "Sin Estado",
+          estado_operador: data.operador?.estado ?? "Sin Estado",
+          porcentaje_operador:
+            data.operador?.porcentaje_completado ?? "Sin porcentaje",
+          porcentaje_referente:
+            data.referente?.porcentaje_completado ?? "Sin porcentaje",
+        }));
       } catch (error) {
         console.error("Error fetching observaciones", error);
       }
@@ -252,11 +278,10 @@ const Seguimiento = () => {
 
   console.log("soportes", soportes);
 
-  console.log("Porcentaje", porcentaje);
-  console.log("Estado-Porcentaje", estado_porcentaje);
-
   console.log("estadoSoportes", estadoSoportes);
   console.log("observaciones", observaciones);
+
+  console.log("status_porcentaje", status_porcentaje);
 
   return (
     <div className={styles.contenedor_principal}>
@@ -278,8 +303,9 @@ const Seguimiento = () => {
               <th>Valor Total</th>
               <th>Cronograma</th>
               <th>Observación Referente</th>
+              <th>Estado Referente</th>
               <th>Observación Operador</th>
-              <th>Estado</th>
+              <th>Estado Operador</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -304,15 +330,15 @@ const Seguimiento = () => {
                 ))}
               </td>
               <td
-              // style={{
-              //   width: "1000px", // Ancho fijo
-              //   maxWidth: "1000px",
-              //   wordWrap: "break-word",
-              //   overflowWrap: "break-word",
-              //   whiteSpace: "normal", // Permite que el texto baje en varias líneas
-              //   backgroundColor: "#4ebd35",
-              //   // color: "#fff", // Mejora el contraste del texto
-              // }}
+                style={{
+                  width: "800px", // Ancho fijo
+                  maxWidth: "1500px",
+                  //   wordWrap: "break-word",
+                  //   overflowWrap: "break-word",
+                  //   whiteSpace: "normal", // Permite que el texto baje en varias líneas
+                  //   backgroundColor: "#4ebd35",
+                  //   // color: "#fff", // Mejora el contraste del texto
+                }}
               >
                 {actividad.soportes.map((soporte, index) => (
                   <table
@@ -322,7 +348,7 @@ const Seguimiento = () => {
                   >
                     <thead>
                       <tr>
-                        <th>Tipo Soporte</th>
+                        <th>Tipo Soporte </th>
                         <th>Descripción</th>
                         <th>Cantidad</th>
                         <th>Soportes</th>
@@ -346,13 +372,13 @@ const Seguimiento = () => {
                         </td> */}
                         <td
                           style={{
-                            width: "150px", // Ancho fijo
-                            maxWidth: "150px",
+                            width: "200px", // Ancho fijo
+                            maxWidth: "200px",
                             wordWrap: "break-word",
                             overflowWrap: "break-word",
                             whiteSpace: "normal", // Permite que el texto baje en varias líneas
-                            backgroundColor: "#079486",
-                            color: "#fff", // Mejora el contraste del texto
+                            // backgroundColor: "#079486",
+                            // color: "#fff", // Mejora el contraste del texto
                           }}
                         >
                           {soporte.tipo}
@@ -549,15 +575,76 @@ const Seguimiento = () => {
                 </table>
               </td>
 
-              {/* <td>
-                <textarea
-                  //   className={styles.textarea}
-                  name="observacion_operador"
-                  type="text"
-                  value={observaciones.observacion_operador}
-                  onChange={onChange_observaciones}
-                />
-              </td> */}
+              <td>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Porcentaje</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        {usuario === "referente_instituto" ? (
+                          <select
+                            id="referente_porcentaje"
+                            name="porcentaje_referente"
+                            className={styles.select}
+                            value={status_porcentaje.porcentaje_referente}
+                            onChange={onchange_status}
+                          >
+                            <option value="0">0%</option>
+                            <option value="5">5%</option>
+                            <option value="10">10%</option>
+                            <option value="15">15%</option>
+                            <option value="20">20%</option>
+                            <option value="25">25%</option>
+                            <option value="30">30%</option>
+                            <option value="35">35%</option>
+                            <option value="40">40%</option>
+                            <option value="45">45%</option>
+                            <option value="50">50%</option>
+                            <option value="55">55%</option>
+                            <option value="60">60%</option>
+                            <option value="65">65%</option>
+                            <option value="70">70%</option>
+                            <option value="75">75%</option>
+                            <option value="80">80%</option>
+                            <option value="85">85%</option>
+                            <option value="90">90%</option>
+                            <option value="95">95%</option>
+                            <option value="100">100%</option>
+                          </select>
+                        ) : (
+                          <p>{status_porcentaje.porcentaje_referente}%</p>
+                        )}
+                      </td>
+
+                      <td>
+                        {usuario === "referente_instituto" ? (
+                          <select
+                            id="referente"
+                            name="estado_referente"
+                            className={styles.select}
+                            value={status_porcentaje.estado_referente}
+                            onChange={onchange_status}
+                          >
+                            <option value="Sin Estado" disabled>
+                              🟡 Selecciona un estado
+                            </option>
+                            <option value="Cumple">✅ Cumple</option>
+                            <option value="No cumple">❌ No cumple</option>
+                            <option value="En proceso">⏳ En proceso</option>
+                          </select>
+                        ) : (
+                          <p>{status_porcentaje.estado_referente}</p>
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
               <td>
                 <table>
                   <thead>
@@ -569,14 +656,6 @@ const Seguimiento = () => {
                   <tbody>
                     <tr>
                       <td>
-                        {/* <textarea
-                          className={styles.textarea}
-                          name="observacion_operador"
-                          type="text"
-                          value={observaciones.observacion_operador}
-                          onChange={onChange_observaciones}
-                        /> */}
-
                         {usuario === "operador" ? (
                           <textarea
                             className={styles.textarea}
@@ -591,14 +670,6 @@ const Seguimiento = () => {
                       </td>
                       {observaciones.fecha_operador && (
                         <td>
-                          {/* <input
-                          className={styles.input_fecha}
-                          name="fecha_operador"
-                          type="text"
-                          value={observaciones.fecha_operador}
-                          onChange={onChange_observaciones}
-                        /> */}
-
                           <p
                             style={{
                               margin: 0,
@@ -615,39 +686,8 @@ const Seguimiento = () => {
                   </tbody>
                 </table>
               </td>
-              {/* <td>
-                <select
-                  id="estado"
-                  name="estado"
-                  className={styles.select}
-                  value={porcentaje}
-                  onChange={onchange_porcentaje}
-                >
-                  <option value="0">0%</option>
-                  <option value="5">5%</option>
-                  <option value="10">10%</option>
-                  <option value="15">15%</option>
-                  <option value="20">20%</option>
-                  <option value="25">25%</option>
-                  <option value="30">30%</option>
-                  <option value="35">35%</option>
-                  <option value="40">40%</option>
-                  <option value="45">45%</option>
-                  <option value="50">50%</option>
-                  <option value="55">55%</option>
-                  <option value="60">60%</option>
-                  <option value="65">65%</option>
-                  <option value="70">70%</option>
-                  <option value="75">75%</option>
-                  <option value="80">80%</option>
-                  <option value="85">85%</option>
-                  <option value="90">90%</option>
-                  <option value="95">95%</option>
-                  <option value="100">100%</option>
-                </select>
-              </td> */}
-
               <td>
+                {" "}
                 <table>
                   <thead>
                     <tr>
@@ -658,53 +698,61 @@ const Seguimiento = () => {
                   <tbody>
                     <tr>
                       <td>
-                        <select
-                          id="estado"
-                          name="estado"
-                          className={styles.select}
-                          value={porcentaje}
-                          onChange={onchange_porcentaje}
-                        >
-                          <option value="0">0%</option>
-                          <option value="5">5%</option>
-                          <option value="10">10%</option>
-                          <option value="15">15%</option>
-                          <option value="20">20%</option>
-                          <option value="25">25%</option>
-                          <option value="30">30%</option>
-                          <option value="35">35%</option>
-                          <option value="40">40%</option>
-                          <option value="45">45%</option>
-                          <option value="50">50%</option>
-                          <option value="55">55%</option>
-                          <option value="60">60%</option>
-                          <option value="65">65%</option>
-                          <option value="70">70%</option>
-                          <option value="75">75%</option>
-                          <option value="80">80%</option>
-                          <option value="85">85%</option>
-                          <option value="90">90%</option>
-                          <option value="95">95%</option>
-                          <option value="100">100%</option>
-                        </select>
+                        {usuario === "operador" ? (
+                          <select
+                            id="operador"
+                            name="porcentaje_operador"
+                            className={styles.select}
+                            value={status_porcentaje.porcentaje_operador}
+                            onChange={onchange_status}
+                          >
+                            <option value="0">0%</option>
+                            <option value="5">5%</option>
+                            <option value="10">10%</option>
+                            <option value="15">15%</option>
+                            <option value="20">20%</option>
+                            <option value="25">25%</option>
+                            <option value="30">30%</option>
+                            <option value="35">35%</option>
+                            <option value="40">40%</option>
+                            <option value="45">45%</option>
+                            <option value="50">50%</option>
+                            <option value="55">55%</option>
+                            <option value="60">60%</option>
+                            <option value="65">65%</option>
+                            <option value="70">70%</option>
+                            <option value="75">75%</option>
+                            <option value="80">80%</option>
+                            <option value="85">85%</option>
+                            <option value="90">90%</option>
+                            <option value="95">95%</option>
+                            <option value="100">100%</option>
+                          </select>
+                        ) : (
+                          <p>{status_porcentaje.porcentaje_operador}%</p>
+                        )}
                       </td>
 
                       <td>
                         {" "}
-                        <select
-                          id="estado_porcentaje"
-                          name="estado_porcentaje"
-                          className={styles.select}
-                          value={estado_porcentaje}
-                          onChange={onchange_estado_porcentaje}
-                        >
-                          <option value="" disabled>
-                            🟡 Selecciona un estado
-                          </option>
-                          <option value="Cumple">✅ Cumple</option>
-                          <option value="No cumple">❌ No cumple</option>
-                          <option value="En proceso">⏳ En proceso</option>
-                        </select>
+                        {usuario === "operador" ? (
+                          <select
+                            id="operador_status"
+                            name="estado_operador"
+                            className={styles.select}
+                            value={status_porcentaje.estado_operador}
+                            onChange={onchange_status}
+                          >
+                            <option value="Sin Estado" disabled>
+                              🟡 Selecciona un estado
+                            </option>
+                            <option value="Cumple">✅ Cumple</option>
+                            <option value="No cumple">❌ No cumple</option>
+                            <option value="En proceso">⏳ En proceso</option>
+                          </select>
+                        ) : (
+                          <p>{status_porcentaje.estado_operador}</p>
+                        )}
                       </td>
                     </tr>
                   </tbody>

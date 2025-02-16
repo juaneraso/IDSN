@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 
-const Sidebar = ({ usuario_dos }) => {
+const Sidebar = ({ usuario_dos, super_usuario }) => {
   // const usuario_object = JSON.parse(sessionStorage.getItem("usuario")) || {};
 
   // const usuario = usuario_object.usuario;
@@ -12,6 +12,7 @@ const Sidebar = ({ usuario_dos }) => {
   console.log("rol", usuario);
   console.log("rol_dos", usuario_dos);
 
+  console.log("super_usuario_side_bar", super_usuario);
   return (
     <aside className={styles.sidebar}>
       <nav>
@@ -21,10 +22,10 @@ const Sidebar = ({ usuario_dos }) => {
               Inicio
             </NavLink>
           </li>
-          {usuario === "referente_instituto" && (
+          {(usuario === "referente_instituto" || super_usuario === true) && (
             <li>
               <NavLink to="/repo" className={styles.active}>
-                Anexo Tecnico
+                Anexo Técnico
               </NavLink>
             </li>
           )}
@@ -37,6 +38,17 @@ const Sidebar = ({ usuario_dos }) => {
               Visualización
             </NavLink>
           </li>
+          {super_usuario === true && (
+            <li>
+              <NavLink
+                to="/register"
+                // className={({ isActive }) => (isActive ? styles.active : "")}
+                className={styles.active}
+              >
+                Registro
+              </NavLink>
+            </li>
+          )}
         </ul>
       </nav>
     </aside>
