@@ -766,19 +766,7 @@ const ReportView = () => {
                       </tbody>
                     </table>
                   </td>
-                  {/* <td>
-                    <table>
-                      <tbody>
-                        {evento?.lineas_operativa?.map((linea) => (
-                          <tr key={linea.id}>
-                            <td>{linea.nombre}</td>
-                          </tr>
-                        ))}
 
-                     
-                      </tbody>
-                    </table>
-                  </td> */}
                   <td>{evento?.lineas_operativa?.nombre}</td>
                   {(filterValue || operatorFilterValue) != "" && (
                     <td>
@@ -1007,10 +995,30 @@ const ReportView = () => {
                                                     {actividad.cups.codigo}
                                                   </td>
                                                   <td>
-                                                    {actividad.valor_unitario}
+                                                    <tr>
+                                                      <td>
+                                                        {/* {actividad.valor_unitario} */}
+
+                                                        {actividad.valor_unitario
+                                                          ? new Intl.NumberFormat(
+                                                              "es-ES"
+                                                            ).format(
+                                                              actividad.valor_unitario
+                                                            )
+                                                          : ""}
+                                                      </td>
+                                                    </tr>
                                                   </td>
                                                   <td>
-                                                    {actividad.valor_total}
+                                                    {/* {actividad.valor_total} */}
+
+                                                    {actividad.valor_total
+                                                      ? new Intl.NumberFormat(
+                                                          "es-ES"
+                                                        ).format(
+                                                          actividad.valor_total
+                                                        )
+                                                      : ""}
                                                   </td>
 
                                                   {/* Cronograma */}

@@ -570,8 +570,18 @@ const Seguimiento = () => {
               </td>
 
               <td>{actividad.cups.codigo}</td>
-              <td>{actividad.valor_unitario}</td>
-              <td>{actividad.valor_total}</td>
+              <td>
+                {actividad.valor_unitario
+                  ? new Intl.NumberFormat("es-ES").format(
+                      actividad.valor_unitario
+                    )
+                  : ""}
+              </td>
+              <td>
+                {actividad.valor_total
+                  ? new Intl.NumberFormat("es-ES").format(actividad.valor_total)
+                  : ""}
+              </td>
               <td>
                 <table
                   className={styles.subTable}
