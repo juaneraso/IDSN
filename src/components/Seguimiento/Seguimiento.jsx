@@ -329,17 +329,7 @@ const Seguimiento = () => {
                   <p key={index}>{poblacion.nombre}</p>
                 ))}
               </td>
-              <td
-                style={{
-                  width: "800px", // Ancho fijo
-                  maxWidth: "1500px",
-                  //   wordWrap: "break-word",
-                  //   overflowWrap: "break-word",
-                  //   whiteSpace: "normal", // Permite que el texto baje en varias líneas
-                  //   backgroundColor: "#4ebd35",
-                  //   // color: "#fff", // Mejora el contraste del texto
-                }}
-              >
+              {/* <td>
                 {actividad.soportes.map((soporte, index) => (
                   <table
                     className={styles.table_soportes}
@@ -358,27 +348,13 @@ const Seguimiento = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        {/* <td>
-                          <p
-                            style={{
-                              margin: 0,
-                              padding: "5px",
-                              fontSize: "16px",
-                              width: "400px",
-                            }}
-                          >
-                            {soporte.tipo}
-                          </p>
-                        </td> */}
                         <td
                           style={{
-                            width: "200px", // Ancho fijo
+                            width: "200px",
                             maxWidth: "200px",
                             wordWrap: "break-word",
                             overflowWrap: "break-word",
-                            whiteSpace: "normal", // Permite que el texto baje en varias líneas
-                            // backgroundColor: "#079486",
-                            // color: "#fff", // Mejora el contraste del texto
+                            whiteSpace: "normal",
                           }}
                         >
                           {soporte.tipo}
@@ -399,7 +375,6 @@ const Seguimiento = () => {
                           >
                             {soporte.descripcion}
                           </p>
-                          {/* {soporte.descripcion} */}
                         </td>
 
                         <td>{soporte.cantidad}</td>
@@ -418,19 +393,7 @@ const Seguimiento = () => {
                                 soportes[soporte.id].evidencias.map(
                                   (evidencia, i) => (
                                     <tr key={i}>
-                                      <td>
-                                        {/* <p
-                                          style={{
-                                            margin: 0,
-                                            padding: "5px",
-                                            fontSize: "16px",
-                                            width: "fit-content",
-                                          }}
-                                        >
-                                          {evidencia.archivo.name}
-                                        </p> */}
-                                        {evidencia.archivo.name}
-                                      </td>
+                                      <td>{evidencia.archivo.name}</td>
                                       <td>
                                         <a
                                           href={`${back}${evidencia.archivo.url}`}
@@ -486,6 +449,124 @@ const Seguimiento = () => {
                     </tbody>
                   </table>
                 ))}
+              </td> */}
+
+              <td>
+                <table
+                  className={styles.table_soportes}
+                  style={{ marginBottom: "1rem" }}
+                >
+                  <thead>
+                    <tr>
+                      <th>Tipo Soporte</th>
+                      <th>Descripción</th>
+                      <th>Cantidad</th>
+                      <th>Soportes</th>
+                      <th>Check</th>
+                      <th>Guardar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {actividad.soportes.map((soporte, index) => (
+                      <tr key={index}>
+                        <td
+                          style={{
+                            width: "200px",
+                            maxWidth: "200px",
+                            wordWrap: "break-word",
+                            overflowWrap: "break-word",
+                            whiteSpace: "normal",
+                          }}
+                        >
+                          {soporte.tipo}
+                        </td>
+                        <td
+                          style={{
+                            wordWrap: "break-word",
+                            whiteSpace: "normal",
+                            maxWidth: "150px",
+                          }}
+                        >
+                          <p
+                            style={{
+                              margin: 0,
+                              wordWrap: "break-word",
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {soporte.descripcion}
+                          </p>
+                        </td>
+                        <td>{soporte.cantidad}</td>
+                        <td>
+                          <table className={styles.table_evidencias}>
+                            <thead>
+                              <tr>
+                                <th>Nombre</th>
+                                <th>Archivo</th>
+                                <th>Región</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {soportes[soporte.id]?.evidencias?.length > 0 ? (
+                                soportes[soporte.id].evidencias.map(
+                                  (evidencia, i) => (
+                                    <tr key={i}>
+                                      <td>{evidencia.archivo.name}</td>
+                                      <td>
+                                        <a
+                                          href={`${back}${evidencia.archivo.url}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                        >
+                                          Ver soporte
+                                        </a>
+                                      </td>
+                                      <td>{evidencia.municipio.label}</td>
+                                    </tr>
+                                  )
+                                )
+                              ) : (
+                                <tr>
+                                  <td
+                                    colSpan="3"
+                                    style={{ textAlign: "center" }}
+                                  >
+                                    No hay archivos
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </td>
+                        <td>
+                          <select
+                            className={styles.select}
+                            value={estadoSoportes[soporte.id] || ""}
+                            onChange={(e) =>
+                              handleEstadoChange(soporte.id, e.target.value)
+                            }
+                          >
+                            <option value="" disabled>
+                              🟡 Selecciona un estado
+                            </option>
+                            <option value="Cumple">✅ Cumple</option>
+                            <option value="No cumple">❌ No cumple</option>
+                            <option value="En proceso">⏳ En proceso</option>
+                          </select>
+                        </td>
+                        <td>
+                          <button
+                            className={styles.edit_button}
+                            onClick={handle_send_check}
+                          >
+                            <FaSave />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </td>
 
               <td>{actividad.cups.codigo}</td>
