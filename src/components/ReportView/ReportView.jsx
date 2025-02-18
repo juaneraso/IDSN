@@ -995,30 +995,42 @@ const ReportView = () => {
                                                     {actividad.cups.codigo}
                                                   </td>
                                                   <td>
-                                                    <tr>
-                                                      <td>
-                                                        {/* {actividad.valor_unitario} */}
+                                                    <table>
+                                                      <tbody>
+                                                        <tr>
+                                                          <td>
+                                                            {/* {actividad.valor_unitario} */}
 
-                                                        {actividad.valor_unitario
-                                                          ? new Intl.NumberFormat(
-                                                              "es-ES"
-                                                            ).format(
-                                                              actividad.valor_unitario
-                                                            )
-                                                          : ""}
-                                                      </td>
-                                                    </tr>
+                                                            {actividad.valor_unitario
+                                                              ? new Intl.NumberFormat(
+                                                                  "es-ES"
+                                                                ).format(
+                                                                  actividad.valor_unitario
+                                                                )
+                                                              : ""}
+                                                          </td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
                                                   </td>
                                                   <td>
                                                     {/* {actividad.valor_total} */}
-
-                                                    {actividad.valor_total
-                                                      ? new Intl.NumberFormat(
-                                                          "es-ES"
-                                                        ).format(
-                                                          actividad.valor_total
-                                                        )
-                                                      : ""}
+                                                    <div
+                                                      style={{
+                                                        border:
+                                                          "1px solid #c0bcbc",
+                                                        padding: "5px",
+                                                        display: "inline-block",
+                                                      }}
+                                                    >
+                                                      {actividad.valor_total
+                                                        ? new Intl.NumberFormat(
+                                                            "es-ES"
+                                                          ).format(
+                                                            actividad.valor_total
+                                                          )
+                                                        : ""}
+                                                    </div>
                                                   </td>
 
                                                   {/* Cronograma */}

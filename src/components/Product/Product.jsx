@@ -189,7 +189,7 @@ const Product = ({
                         <textarea
                           className={styles.textarea}
                           type="text"
-                          value={product.descripcion_producto}
+                          value={product.descripcion_producto || ""}
                           onChange={(e) =>
                             handleInputChange(
                               productIndex,

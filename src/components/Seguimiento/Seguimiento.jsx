@@ -16,7 +16,7 @@ const Seguimiento = () => {
   const url_soportes = `${back}/api/check-seguimiento?`;
   const url_observaciones = `${back}/api/observacio/read?`;
   const url_post_observaciones = `${back}/api/observaciones/register`;
-  const url_post_check = `${back}/api/observaciones/register`;
+  const url_post_check = `${back}/api/seguimiento/evidencia-status`;
 
   const [soportes, setSoportes] = useState([]);
 
@@ -134,9 +134,10 @@ const Seguimiento = () => {
     }
   };
 
-  const handle_send_check = async () => {
+  const handle_send_check = async (id) => {
     // event.preventDefault();
 
+    console.log("soporte", id);
     try {
       // setLoading(true);
 
@@ -149,13 +150,9 @@ const Seguimiento = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          observacion:
-            usuario === "referente_instituto"
-              ? observaciones.observacion_referente
-              : observaciones.observacion_operador,
           anexo_id: documentId,
-          id_actividad: uuid,
-          tipo: usuario === "referente_instituto" ? "referente" : "operador",
+          soporte_id: id,
+          status: estadoSoportes[id],
         }),
       });
 
@@ -251,7 +248,7 @@ const Seguimiento = () => {
           if (!response.ok) return null; // Si la respuesta no es OK, devuelve null
 
           const data = await response.json();
-          return { soporteId: soporte.id, data };
+          return { soporteId: soporte.uuid, data };
         });
 
         const results = await Promise.all(requests);
@@ -268,6 +265,18 @@ const Seguimiento = () => {
 
           return nuevosSoportes; // Retorna el nuevo estado sin borrar datos previos
         });
+
+        setEstadoSoportes((prevEstado) => {
+          const nuevosEstados = { ...prevEstado };
+
+          results.forEach((result) => {
+            if (result && result.data.estado) {
+              nuevosEstados[result.soporteId] = result.data.estado;
+            }
+          });
+
+          return nuevosEstados;
+        });
       } catch (error) {
         console.error("Error fetching soportes:", error);
       }
@@ -276,7 +285,8 @@ const Seguimiento = () => {
     fetchSoportes();
   }, [token, actividad]); // Se ejecuta cuando `actividad` o `token` cambian
 
-  console.log("soportes", soportes);
+  console.log("soportes", soportes["283"]?.estado);
+  console.log("Soportes", soportes);
 
   console.log("estadoSoportes", estadoSoportes);
   console.log("observaciones", observaciones);
@@ -329,127 +339,6 @@ const Seguimiento = () => {
                   <p key={index}>{poblacion.nombre}</p>
                 ))}
               </td>
-              {/* <td>
-                {actividad.soportes.map((soporte, index) => (
-                  <table
-                    className={styles.table_soportes}
-                    key={index}
-                    style={{ marginBottom: "1rem" }}
-                  >
-                    <thead>
-                      <tr>
-                        <th>Tipo Soporte </th>
-                        <th>Descripción</th>
-                        <th>Cantidad</th>
-                        <th>Soportes</th>
-                        <th>Check</th>
-                        <th>Guardar</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td
-                          style={{
-                            width: "200px",
-                            maxWidth: "200px",
-                            wordWrap: "break-word",
-                            overflowWrap: "break-word",
-                            whiteSpace: "normal",
-                          }}
-                        >
-                          {soporte.tipo}
-                        </td>
-                        <td
-                          style={{
-                            wordWrap: "break-word",
-                            whiteSpace: "normal",
-                            maxWidth: "150px",
-                          }}
-                        >
-                          <p
-                            style={{
-                              margin: 0,
-                              wordWrap: "break-word",
-                              whiteSpace: "normal",
-                            }}
-                          >
-                            {soporte.descripcion}
-                          </p>
-                        </td>
-
-                        <td>{soporte.cantidad}</td>
-
-                        <td>
-                          <table className={styles.table_evidencias}>
-                            <thead>
-                              <tr>
-                                <th>Nombre</th>
-                                <th>Archivo</th>
-                                <th>Región</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {soportes[soporte.id]?.evidencias?.length > 0 ? (
-                                soportes[soporte.id].evidencias.map(
-                                  (evidencia, i) => (
-                                    <tr key={i}>
-                                      <td>{evidencia.archivo.name}</td>
-                                      <td>
-                                        <a
-                                          href={`${back}${evidencia.archivo.url}`}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                        >
-                                          Ver soporte
-                                        </a>
-                                      </td>
-                                      <td>{evidencia.municipio.label}</td>
-                                    </tr>
-                                  )
-                                )
-                              ) : (
-                                <tr>
-                                  <td
-                                    colSpan="3"
-                                    style={{ textAlign: "center" }}
-                                  >
-                                    No hay archivos
-                                  </td>
-                                </tr>
-                              )}
-                            </tbody>
-                          </table>
-                        </td>
-
-                        <td>
-                          <select
-                            className={styles.select}
-                            value={estadoSoportes[soporte.id] || ""}
-                            onChange={(e) =>
-                              handleEstadoChange(soporte.id, e.target.value)
-                            }
-                          >
-                            <option value="" disabled>
-                              🟡 Selecciona un estado
-                            </option>
-                            <option value="Cumple">✅ Cumple</option>
-                            <option value="No cumple">❌ No cumple</option>
-                            <option value="En proceso">⏳ En proceso</option>
-                          </select>
-                        </td>
-                        <td>
-                          <button
-                            className={styles.edit_button}
-                            onClick={handle_send_check}
-                          >
-                            <FaSave />
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                ))}
-              </td> */}
 
               <td>
                 <table
@@ -462,8 +351,9 @@ const Seguimiento = () => {
                       <th>Descripción</th>
                       <th>Cantidad</th>
                       <th>Soportes</th>
+                      {/* {usuario === "referente_instituto" && <th>Check</th>} */}
                       <th>Check</th>
-                      <th>Guardar</th>
+                      {usuario === "referente_instituto" && <th>Guardar</th>}
                     </tr>
                   </thead>
                   <tbody>
@@ -508,8 +398,9 @@ const Seguimiento = () => {
                               </tr>
                             </thead>
                             <tbody>
-                              {soportes[soporte.id]?.evidencias?.length > 0 ? (
-                                soportes[soporte.id].evidencias.map(
+                              {soportes[soporte.uuid]?.evidencias?.length >
+                              0 ? (
+                                soportes[soporte.uuid].evidencias.map(
                                   (evidencia, i) => (
                                     <tr key={i}>
                                       <td>{evidencia.archivo.name}</td>
@@ -539,30 +430,67 @@ const Seguimiento = () => {
                             </tbody>
                           </table>
                         </td>
-                        <td>
+
+                        {/* <td>
                           <select
                             className={styles.select}
-                            value={estadoSoportes[soporte.id] || ""}
+                            value={estadoSoportes[soporte.uuid] || ""}
+                            // value={soportes[soporte.uuid]?.estado || ""}
                             onChange={(e) =>
-                              handleEstadoChange(soporte.id, e.target.value)
+                              handleEstadoChange(soporte.uuid, e.target.value)
                             }
                           >
                             <option value="" disabled>
                               🟡 Selecciona un estado
                             </option>
-                            <option value="Cumple">✅ Cumple</option>
-                            <option value="No cumple">❌ No cumple</option>
-                            <option value="En proceso">⏳ En proceso</option>
+                            <option value="cumple">✅ Cumple</option>
+                            <option value="no cumple">❌ No cumple</option>
+                            <option value="en proceso">⏳ En proceso</option>
                           </select>
-                        </td>
+                        </td> */}
                         <td>
-                          <button
-                            className={styles.edit_button}
-                            onClick={handle_send_check}
-                          >
-                            <FaSave />
-                          </button>
+                          {usuario === "referente_instituto" ? (
+                            estadoSoportes[soporte.uuid] ? (
+                              <select
+                                className={styles.select}
+                                value={estadoSoportes[soporte.uuid] || ""}
+                                onChange={(e) =>
+                                  handleEstadoChange(
+                                    soporte.uuid,
+                                    e.target.value
+                                  )
+                                }
+                              >
+                                <option value="" disabled>
+                                  🟡 Selecciona un estado
+                                </option>
+                                <option value="cumple">✅ Cumple</option>
+                                <option value="no cumple">❌ No cumple</option>
+                                <option value="en proceso">
+                                  ⏳ En proceso
+                                </option>
+                              </select>
+                            ) : null
+                          ) : (
+                            <p>
+                              {/* {estadoSoportes[soporte.uuid] || "sin check"} ✅{" "} */}
+                              {estadoSoportes[soporte.uuid] || "sin check"}
+                            </p>
+                          )}
                         </td>
+
+                        {usuario === "referente_instituto" && (
+                          <td>
+                            {estadoSoportes[soporte.uuid] && (
+                              <button
+                                className={styles.edit_button}
+                                onClick={() => handle_send_check(soporte.uuid)}
+                              >
+                                <FaSave />
+                              </button>
+                            )}
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
