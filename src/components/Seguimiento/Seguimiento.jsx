@@ -450,7 +450,7 @@ const Seguimiento = () => {
                         </td> */}
                         <td>
                           {usuario === "referente_instituto" ? (
-                            estadoSoportes[soporte.uuid] ? (
+                            soportes[soporte.uuid]?.evidencias?.length > 0 ? (
                               <select
                                 className={styles.select}
                                 value={estadoSoportes[soporte.uuid] || ""}
@@ -481,7 +481,7 @@ const Seguimiento = () => {
 
                         {usuario === "referente_instituto" && (
                           <td>
-                            {estadoSoportes[soporte.uuid] && (
+                            {soportes[soporte.uuid]?.evidencias?.length > 0 && (
                               <button
                                 className={styles.edit_button}
                                 onClick={() => handle_send_check(soporte.uuid)}
