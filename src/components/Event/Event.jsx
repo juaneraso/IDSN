@@ -151,20 +151,6 @@ const Event = ({ events, setEvents, edit_button }) => {
   // console.log("Operadores", operadores);
   // console.log("proyectos", proyectos);
 
-  // const ejes = [
-  //   "Gobernabilidad y gobernanza de la salud pública ",
-  //   "Pueblos y comunidades étnicas y campesinas, mujeres, sectores LGBTIQ+ y otras poblaciones por condición y/o situación.",
-  //   "Determinantes Sociales de la Salud",
-  //   "Atención Primaria en Salud",
-  //   "Cambio climático, emergencias, desastres y pandemias",
-  //   "Conocimiento en salud pública y Soberanía Sanitaria",
-  //   "Personal de salud",
-  // ];
-
-  // const equipos = ["Equipos básicos en salud", "Equipo complementario"];
-
-  // const lineas = ["Cuidado de la salud en el territorio"];
-
   const customStyles = {
     control: (base) => ({
       ...base,
@@ -216,14 +202,6 @@ const Event = ({ events, setEvents, edit_button }) => {
       : ""; // Guarda el valor seleccionado o una cadena vacía si no hay selección
     setEvents(updatedEvents);
   };
-
-  // const handle_linea_change = (eventIndex, selectedOptions) => {
-  //   const updatedEvents = [...events];
-  //   updatedEvents[eventIndex].linea_operativa = selectedOptions.map(
-  //     (option) => option.value
-  //   ); // Almacenar solo los valores seleccionados
-  //   setEvents(updatedEvents);
-  // };
 
   const handleEventChange = (index, field, value) => {
     const updatedEvents = [...events];
@@ -634,23 +612,6 @@ const Event = ({ events, setEvents, edit_button }) => {
                   </td>
 
                   <td>
-                    {/* <Select
-                      isMulti
-                      value={event.linea_operativa.map((axis) => ({
-                        value: axis,
-                        label: axis,
-                      }))}
-                      options={lineas.map((linea) => ({
-                        value: linea,
-                        label: linea,
-                      }))}
-                      onChange={(selectedOptions) =>
-                        handleLineaChange(index, selectedOptions)
-                      }
-                      placeholder="Seleccionar Lineas..."
-                      styles={customStyles}
-                    /> */}
-
                     <Select
                       name="linea"
                       options={lineas.map((option) => ({
@@ -712,14 +673,6 @@ const Event = ({ events, setEvents, edit_button }) => {
           )}
         </div>
       ))}
-
-      {/* <button
-        className={styles.buttonAdd}
-        type="button"
-        onClick={handleAddEvent}
-      >
-        Añadir Otro Evento
-      </button> */}
     </div>
   );
 };

@@ -292,37 +292,7 @@ const Product = ({
                         )
                       )}
                     </td>
-                    {/* <td>
-                      <div>
-                        <label>Nombre Operador</label>
-                        <input
-                          type="text"
-                          value={product.nombre_entidad}
-                          onChange={(e) =>
-                            handleInputChange(
-                              productIndex,
-                              "nombre_entidad",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div> 
-                     <div className={styles.cellWrapper}>
-                        <label className={styles.label}>Descripción</label>
-                        <textarea
-                          type="text"
-                          value={product.descripcion_operador}
-                          onChange={(e) =>
-                            handleInputChange(
-                              productIndex,
-                              "descripcion_operador",
-                              e.target.value
-                            )
-                          }
-                          className={styles.textarea}
-                        />
-                      </div> 
-                    </td> */}
+
                     <td>
                       <ActivityList
                         entornos={entornos}

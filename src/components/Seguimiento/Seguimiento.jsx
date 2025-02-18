@@ -431,23 +431,6 @@ const Seguimiento = () => {
                           </table>
                         </td>
 
-                        {/* <td>
-                          <select
-                            className={styles.select}
-                            value={estadoSoportes[soporte.uuid] || ""}
-                            // value={soportes[soporte.uuid]?.estado || ""}
-                            onChange={(e) =>
-                              handleEstadoChange(soporte.uuid, e.target.value)
-                            }
-                          >
-                            <option value="" disabled>
-                              🟡 Selecciona un estado
-                            </option>
-                            <option value="cumple">✅ Cumple</option>
-                            <option value="no cumple">❌ No cumple</option>
-                            <option value="en proceso">⏳ En proceso</option>
-                          </select>
-                        </td> */}
                         <td>
                           {usuario === "referente_instituto" ? (
                             soportes[soporte.uuid]?.evidencias?.length > 0 ? (

@@ -521,28 +521,7 @@ const ActivityItem = ({
                     styles={custom_styles_cups}
                   />
                 </td>
-                {/* <td>
-                  <div className={styles.input_valor_container}>
-                    <input
-                      type="text"
-                      name="valor_unitario"
-                      // value={activity.valor_unitario}
-                      value={new Intl.NumberFormat("es-ES").format(
-                        activity.valor_unitario
-                      )}
-                      // onChange={(e) => handleActivityChange(e, index)}
-                      onChange={(e) => {
-                        const rawValue = e.target.value.replace(/\./g, ""); // Elimina puntos
-                        handleActivityChange(
-                          { target: { name: e.target.name, value: rawValue } },
-                          index
-                        );
-                      }}
-                      className={styles.input_valor}
-                      min="0"
-                    />
-                  </div>
-                </td> */}
+
                 <td>
                   <div className={styles.input_valor_container}>
                     <input
@@ -580,18 +559,6 @@ const ActivityItem = ({
                   </div>
                 </td>
 
-                {/* <td>
-                  <div className={styles.input_valor_container}>
-                    <input
-                      type="number"
-                      name="valor_total"
-                      value={activity.valor_total}
-                      onChange={(e) => handleActivityChange(e, index)}
-                      className={styles.input_valor}
-                      min="0"
-                    />
-                  </div>
-                </td> */}
                 <td>
                   <div className={styles.input_valor_container}>
                     <input
