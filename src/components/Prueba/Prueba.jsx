@@ -35,11 +35,14 @@ function Prueba() {
 
   const dispatch = useDispatch();
 
+  const back = import.meta.env.VITE_APP_BACK;
+
   const submitHandler = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:1337/api/auth/local", {
+      // const response = await fetch("http://localhost:1337/api/auth/local", {
+      const response = await fetch(`${back}/api/auth/local`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -133,10 +136,10 @@ function Prueba() {
               >
                 INGRESAR
               </MDBBtn>
-              <a className="small text-muted" href="#!">
+              <a className={styles.etiqueta} href="#!">
                 Olvidaste tu contraseña?
               </a>
-              <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
+              <p className={styles.etiqueta} style={{ color: "#393f81" }}>
                 ¿No tienes cuenta ?
                 <a href="/register" style={{ color: "#393f81" }}>
                   Registrate Aqui

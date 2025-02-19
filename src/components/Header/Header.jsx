@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaHome, FaUserCircle } from "react-icons/fa"; // Importar íconos
-import { useNavigate } from "react-router-dom"; // Para manejar navegación
+import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import { useSelector } from "react-redux";
 
@@ -22,7 +22,9 @@ const Header = () => {
 
   const handleLogout = () => {
     console.log("Cerrar sesión");
-    navigate("/repo"); // Redirigir al login
+    sessionStorage.clear();
+
+    navigate("/"); // Redirigir al login
   };
 
   return (

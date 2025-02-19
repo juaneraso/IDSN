@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import styles from "./Product.module.css";
 import ActivityList from "../Activities/ActivityList";
 import { FaEye } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const Product = ({
   product_data,
   setProductData,
   activities,
   setActivities,
-  subregions,
   entornos,
   tecnologias,
   poblaciones,
@@ -87,8 +87,8 @@ const Product = ({
           indicador_linea_base: "",
         },
       ],
-      nombre_entidad: "",
-      descripcion_operador: "",
+      // nombre_entidad: "",
+      // descripcion_operador: "",
     };
     const updatedProducts = [...(product_data.producto || []), newProduct];
     setProductData({ ...product_data, producto: updatedProducts });
@@ -103,18 +103,49 @@ const Product = ({
     setProductData({ ...product_data, producto: updatedProducts });
   };
 
+  const handle_remove_indicador = (productIndex, indicatorIndex) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará el indicador",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleRemoveIndicator(productIndex, indicatorIndex);
+        Swal.fire("Eliminado", "El indicador ha sido eliminado.", "success");
+      }
+    });
+  };
+
+  const handle_remove_producto = (index) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará el producto",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleRemoveProduct(index);
+        Swal.fire("Eliminado", "El producto ha sido eliminado.", "success");
+      }
+    });
+  };
+
   return (
     <div className={styles.productContainer}>
       {(product_data.producto || []).map((product, productIndex) => (
         <div key={productIndex} className={styles.product}>
           <div className={styles.contenedor_title_product}>
             <div className={styles.titleAndIcon}>
-              <h4
-              // onClick={() => toggleProduct(productIndex)}
-              // className={styles.productTitle}
-              >
-                Producto {productIndex + 1}
-              </h4>
+              <h4>Producto {productIndex + 1}</h4>
               <FaEye
                 className={styles.eye}
                 onClick={() => toggleProduct(productIndex)}
@@ -124,7 +155,7 @@ const Product = ({
               {productIndex > 0 && (
                 <button
                   type="button"
-                  onClick={() => handleRemoveProduct(productIndex)}
+                  onClick={() => handle_remove_producto(productIndex)}
                   className={styles.removeButton_añadir}
                 >
                   -
@@ -147,7 +178,6 @@ const Product = ({
                   <tr>
                     <th>Descripción del Producto</th>
                     <th>Indicadores</th>
-                    <th>Operador PIC</th>
                     <th>Actividades</th>
                     <th>Acciones</th>
                   </tr>
@@ -159,7 +189,7 @@ const Product = ({
                         <textarea
                           className={styles.textarea}
                           type="text"
-                          value={product.descripcion_producto}
+                          value={product.descripcion_producto || ""}
                           onChange={(e) =>
                             handleInputChange(
                               productIndex,
@@ -190,7 +220,11 @@ const Product = ({
                                 <button
                                   type="button"
                                   onClick={() =>
-                                    handleRemoveIndicator(
+                                    // handleRemoveIndicator(
+                                    //   productIndex,
+                                    //   indicatorIndex
+                                    // )
+                                    handle_remove_indicador(
                                       productIndex,
                                       indicatorIndex
                                     )
@@ -212,20 +246,7 @@ const Product = ({
                               `${productIndex}-${indicatorIndex}`
                             ] && (
                               <div className={styles.indicatorContent}>
-                                <label>Cantidad</label>
-                                <input
-                                  type="text"
-                                  value={indicator.cantidad}
-                                  onChange={(e) =>
-                                    handleUpdateIndicator(
-                                      productIndex,
-                                      indicatorIndex,
-                                      "cantidad",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                                <label>Meta Producto</label>
+                                <label>Indicador de Producto</label>
                                 <input
                                   type="text"
                                   value={indicator.meta_producto}
@@ -234,6 +255,20 @@ const Product = ({
                                       productIndex,
                                       indicatorIndex,
                                       "meta_producto",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                                <label>Cantidad</label>
+                                <input
+                                  type="number"
+                                  value={indicator.cantidad}
+                                  min="0"
+                                  onChange={(e) =>
+                                    handleUpdateIndicator(
+                                      productIndex,
+                                      indicatorIndex,
+                                      "cantidad",
                                       e.target.value
                                     )
                                   }
@@ -257,38 +292,7 @@ const Product = ({
                         )
                       )}
                     </td>
-                    <td>
-                      {/* Operador */}
-                      <div>
-                        <label>Nombre Operador</label>
-                        <input
-                          type="text"
-                          value={product.nombre_entidad}
-                          onChange={(e) =>
-                            handleInputChange(
-                              productIndex,
-                              "nombre_entidad",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                      <div className={styles.cellWrapper}>
-                        <label className={styles.label}>Descripción</label>
-                        <textarea
-                          type="text"
-                          value={product.descripcion_operador}
-                          onChange={(e) =>
-                            handleInputChange(
-                              productIndex,
-                              "descripcion_operador",
-                              e.target.value
-                            )
-                          }
-                          className={styles.textarea}
-                        />
-                      </div>
-                    </td>
+
                     <td>
                       <ActivityList
                         entornos={entornos}
@@ -302,14 +306,13 @@ const Product = ({
                           newActivities[productIndex] = updatedActivities;
                           setActivities(newActivities);
                         }}
-                        subregions={subregions}
                       />
                     </td>
                     <td>
                       {productIndex > 0 && (
                         <button
                           type="button"
-                          onClick={() => handleRemoveProduct(productIndex)}
+                          onClick={() => handle_remove_producto(productIndex)}
                           className={styles.removeButton_añadir}
                         >
                           -

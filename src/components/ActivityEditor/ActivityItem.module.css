@@ -23,7 +23,7 @@
 
 .input_valor_container {
   display: flex;
-  width: 70px;
+  width: 120px;
 }
 
 .textarea_actividad {
@@ -112,7 +112,8 @@
 }
 
 .soporte_input {
-  width: 300px; /* Define el ancho específico */
+  width: fit-content; /* Define el ancho específico */
+  /* background-color: #1abc9c; */
 }
 
 .soporte_select {

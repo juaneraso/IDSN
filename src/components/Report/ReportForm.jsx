@@ -3,41 +3,20 @@ import styles from "./ReportForm.module.css";
 import Header from "../Header/Header";
 import Event from "../Event/Event";
 import { useSelector } from "react-redux";
-import qs from "qs";
+import Spinner from "../Spinner/Spinner";
+
 import Swal from "sweetalert2";
 
-const queryParameters = {
-  fields: ["documentId", "nombre"], // Campos del recurso principal
-  populate: {
-    municipios: {
-      fields: ["nombre"], // Campos específicos de la relación
-    },
-  },
-};
-
-const queryString = qs.stringify(queryParameters, { encodeValuesOnly: true });
-
 // URL PARA PETICION BACK
-const url = `http://localhost:1337/api/labels`;
+// const url = `http://localhost:1337/api/labels`;
+const back = import.meta.env.VITE_APP_BACK;
+const url = `${back}/api/labels`;
 
 const ReportForm = () => {
-  const [reportData, setReportData] = useState({
-    subregion: "",
-    municipio: "",
-    fechaRegistro: "",
-    codigo_territorio: "",
-    codigo_micro_territorio: "",
-    numero_micro_territorio: "",
-    numero_hogares: "",
-    tipo_territorio: "",
-    tipo_micro_territorio: "",
-    nombre_micro_territorio: "",
-  });
-
   //const token = useSelector((state) => state.token.token);
   const token_object = JSON.parse(sessionStorage.getItem("token")) || {};
   const token = token_object.token;
-  console.log("token", token_object.token);
+  // console.log("token", token_object.token);
 
   const [ejes, setEjes] = useState([]);
   const [lineas, setLineas] = useState([]);
@@ -47,12 +26,14 @@ const ReportForm = () => {
   const [soportes, setSoportes] = useState([]);
   const [cups, setCups] = useState([]);
 
+  const [loading, setLoading] = useState(false);
   const [labels, setLabels] = useState([]);
 
   const [events, setEvents] = useState([
     {
-      subregion: "",
-      municipio_priorizado: "",
+      subregion: [],
+      operador_pic: "",
+      // municipio_priorizado: "",
       codigo_nombre_territorio: "",
       codigo_micro_territorio: "",
       total_hogares: "",
@@ -64,7 +45,7 @@ const ReportForm = () => {
       indicator_name: "",
       meta_indicator: "",
       eje_estrategico: [],
-      linea_operativa: [],
+      linea_operativa: "",
       activities: [],
       product_data: {
         producto: [
@@ -77,8 +58,8 @@ const ReportForm = () => {
                 meta_producto: "",
               },
             ],
-            nombre_entidad: "",
-            descripcion_operador: "",
+            // nombre_entidad: "",
+            // descripcion_operador: "",
           },
         ],
       },
@@ -89,8 +70,9 @@ const ReportForm = () => {
     // Reiniciar los datos del evento
     setEvents([
       {
-        subregion: "",
-        municipio_priorizado: "",
+        subregion: [],
+        operador_pic: "",
+        // municipio_priorizado: "",
         codigo_nombre_territorio: "",
         codigo_micro_territorio: "",
         total_hogares: "",
@@ -102,7 +84,7 @@ const ReportForm = () => {
         indicator_name: "",
         meta_indicator: "",
         eje_estrategico: [],
-        linea_operativa: [],
+        linea_operativa: "",
         activities: [],
         product_data: {
           producto: [
@@ -115,8 +97,8 @@ const ReportForm = () => {
                   meta_producto: "",
                 },
               ],
-              nombre_entidad: "",
-              descripcion_operador: "",
+              // nombre_entidad: "",
+              // descripcion_operador: "",
             },
           ],
         },
@@ -154,26 +136,59 @@ const ReportForm = () => {
   }, [token]);
 
   console.log("Datos eventos", events);
-  console.log("produc", events[0].activities.length);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
+      setLoading(true);
       // Transformar los datos al formato requerido
       const transformedData = {
         data: {
           eventos: events.map((event) => ({
+            // operador_pic: {
+            //   connect: [{ documentId: event.operador_pic }] || null,
+            // },
+            operador_pic: event.operador_pic
+              ? {
+                  connect: [{ documentId: event.operador_pic }],
+                }
+              : null,
             equipo: event.equipo_operativo || null,
             perfiles_profesional: event.perfil_profesional || null,
             perfil_operativo: event.perfil_operativo || null,
-            territorializacion: {
-              numero_hogares: parseInt(event.total_hogares, 10) || null,
-              municipio: event.municipio_priorizado || null,
-              territorio: event.codigo_nombre_territorio || null,
-              microterritorio: event.codigo_micro_territorio || null,
-              subregion: event.subregion || null,
-            },
+            // territorializacion:
+            //   {
+            //     numero_hogares: parseInt(event.total_hogares, 10) || null,
+            //     municipios: {
+            //       connect: (event.subregion || []).map((region) => ({
+            //         documentId: region || null,
+            //       })),
+            //     },
+            //     territorio: event.codigo_nombre_territorio || null,
+            //     microterritorio: event.codigo_micro_territorio || null,
+            //   } || null,
+            territorializacion:
+              event.total_hogares ||
+              (Array.isArray(event.subregion) && event.subregion.length > 0) ||
+              event.codigo_nombre_territorio ||
+              event.codigo_micro_territorio
+                ? {
+                    // numero_hogares: parseInt(event.total_hogares, 10) || null,
+                    numero_hogares: event.total_hogares || null,
+                    municipios:
+                      Array.isArray(event.subregion) &&
+                      event.subregion.length > 0
+                        ? {
+                            connect: (event.subregion || []).map((region) => ({
+                              documentId: region || null,
+                            })),
+                          }
+                        : [],
+                    territorio: event.codigo_nombre_territorio || null,
+                    microterritorio: event.codigo_micro_territorio || null,
+                  }
+                : null,
 
             descripcion: event.description_event || null,
             indicador_evento: event.indicator_name || null,
@@ -182,9 +197,18 @@ const ReportForm = () => {
             ejes_estrategicos: (event.eje_estrategico || []).map((eje) => ({
               nombre: eje || null,
             })),
-            lineas_operativa: (event.linea_operativa || []).map((linea) => ({
-              nombre: linea || null,
-            })),
+            // lineas_operativa: (event.linea_operativa || []).map((linea) => ({
+            //   nombre: linea || null,
+            // })),
+            lineas_operativa: { nombre: event.linea_operativa || null },
+
+            // lineas_operativa: event.linea_operativa
+            //   ? [
+            //       {
+            //         nombre: event.linea_operativa,
+            //       },
+            //     ]
+            //   : [],
 
             productos: event.product_data.producto.map((producto, index) => ({
               descripcion: producto.descripcion_producto || null,
@@ -193,9 +217,6 @@ const ReportForm = () => {
                 descripcion: activity.descripcion_actividad || null,
                 cantidad_a_ejecutar: activity.cantidad || null,
                 unidad_medida: activity.unidad_medida || null,
-                equipo: activity.equipo_operativo || null,
-                perfiles_profesional: activity.perfil_profesional || null,
-                perfil_operativo: activity.perfil_operativo || null,
                 valor_unitario: activity.valor_unitario || null,
                 valor_total: activity.valor_total || null,
                 entornos: activity.entorno.map((entorno) => ({
@@ -209,7 +230,7 @@ const ReportForm = () => {
                 poblaciones: activity.poblacion_sujeto.map((poblacion) => ({
                   nombre: poblacion || null,
                 })),
-                cups: [{ codigo: activity.codigo_cups }] || null,
+                cups: { codigo: activity.codigo_cups } || null,
                 soportes: activity.array_soportes.map((soporte) => ({
                   tipo: soporte.tipo_soporte || null,
                   descripcion: soporte.descripcion_soporte || null,
@@ -220,19 +241,17 @@ const ReportForm = () => {
                 })),
               })),
 
-              operador_pic: {
-                nombre_entidad: producto.nombre_entidad || null,
-                descripcion: producto.descripcion_operador || null,
-              },
               indicadores: (producto.indicadores || []).map((indicador) => ({
                 meta_producto: indicador.meta_producto || null,
                 cantidad: indicador.cantidad || null,
                 indicador_linea_base: indicador.indicador_linea_base || null,
               })),
             })),
-            proyecto_idsn: {
-              proyecto: event.proyecto || null,
-            },
+            proyectos_idsn: event.proyecto
+              ? {
+                  connect: [{ documentId: event.proyecto }] || null,
+                }
+              : null,
           })),
         },
       };
@@ -240,7 +259,8 @@ const ReportForm = () => {
       console.log("Transformed Data:", transformedData);
 
       // Realizar la solicitud
-      const response = await fetch("http://localhost:1337/api/anexo-tecnicos", {
+      // const response = await fetch("http://localhost:1337/api/anexo-tecnicos", {
+      const response = await fetch(`${back}/api/anexo-tecnicos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -252,13 +272,15 @@ const ReportForm = () => {
       if (!response.ok) throw new Error("Error al enviar el reporte.");
 
       // Reiniciar el formulario
+      setLoading(false);
+
       Swal.fire({
         icon: "success",
         title: "¡Envío correcto!",
         text: "Informacion agregada correctamente!",
       });
 
-      //resetForm();
+      resetForm();
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -268,6 +290,8 @@ const ReportForm = () => {
       console.error(error);
     }
   };
+
+  if (loading) return <Spinner envio={"Enviando datos, por favor espera..."} />;
 
   return (
     <>

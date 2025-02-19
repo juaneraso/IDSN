@@ -5,7 +5,6 @@ import styles from "./ActivityList.module.css";
 const ActivityList = ({
   activities,
   setActivities,
-  subregions,
   entornos,
   tecnologias,
   poblaciones,
@@ -13,6 +12,8 @@ const ActivityList = ({
   cups,
 }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
+
+  // console.log("actividades_en_activitylist", activities);
 
   const initialActivity = {
     descripcion_actividad: "",
@@ -32,18 +33,18 @@ const ActivityList = ({
       },
     ],
     cronograma: [
-      { mes: "Ene", peso: "0" },
-      { mes: "Feb", peso: "0" },
-      { mes: "Mar", peso: "0" },
-      { mes: "Abr", peso: "0" },
-      { mes: "May", peso: "0" },
-      { mes: "Jun", peso: "0" },
-      { mes: "Jul", peso: "0" },
-      { mes: "Ago", peso: "0" },
-      { mes: "Sept", peso: "0" },
-      { mes: "Oct", peso: "0" },
-      { mes: "Nov", peso: "0" },
-      { mes: "Dic", peso: "0" },
+      { mes: "Ene", peso: 0 },
+      { mes: "Feb", peso: 0 },
+      { mes: "Mar", peso: 0 },
+      { mes: "Abr", peso: 0 },
+      { mes: "May", peso: 0 },
+      { mes: "Jun", peso: 0 },
+      { mes: "Jul", peso: 0 },
+      { mes: "Ago", peso: 0 },
+      { mes: "Sept", peso: 0 },
+      { mes: "Oct", peso: 0 },
+      { mes: "Nov", peso: 0 },
+      { mes: "Dic", peso: 0 },
     ],
   };
 
@@ -96,7 +97,6 @@ const ActivityList = ({
             handleActivityChange={handleActivityChange}
             handleRemoveActivity={handleRemoveActivity}
             handleAddActivity={handleAddActivity}
-            subregions={subregions}
             entornos={entornos}
             tecnologias={tecnologias}
             poblaciones={poblaciones}
