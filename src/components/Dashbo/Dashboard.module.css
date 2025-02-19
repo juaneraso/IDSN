@@ -1,17 +1,23 @@
 .dashboard {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .main {
-    display: flex;
-    flex: 1;
-  }
-  
-  .content {
-    flex: 1;
-    padding: 20px;
-    background-color: #ecf0f1;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  /* height: 100vh; */
+  overflow: auto;
+  width: fit-content;
+
+  /* overflow: hidden; */
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  overflow: auto;
+  width: fit-content;
+  /* height: 100vh; */
+}
+
+/* .content {
+  flex: 1;
+  padding: 20px;
+  background-color: #ecf0f1;
+} */

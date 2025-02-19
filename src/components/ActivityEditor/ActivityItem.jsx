@@ -263,7 +263,7 @@ const ActivityItem = ({
                     <textarea
                       type="text"
                       name="descripcion_actividad"
-                      value={activity.descripcion_actividad}
+                      value={activity.descripcion_actividad || ""}
                       onChange={(e) => handleActivityChange(e, index)}
                       className={styles.textarea_actividad}
                     />
@@ -438,7 +438,7 @@ const ActivityItem = ({
                                 <textarea
                                   type="text"
                                   name="descripcion_soporte"
-                                  value={soporte.descripcion_soporte}
+                                  value={soporte.descripcion_soporte || ""}
                                   onChange={(e) =>
                                     handleSoporteChange(e, soporteIndex)
                                   }
