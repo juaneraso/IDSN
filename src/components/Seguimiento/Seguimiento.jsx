@@ -456,8 +456,17 @@ const Seguimiento = () => {
                             ) : null
                           ) : (
                             <p>
-                              {/* {estadoSoportes[soporte.uuid] || "sin check"} ✅{" "} */}
-                              {estadoSoportes[soporte.uuid] || "sin check"}
+                              {estadoSoportes[soporte.uuid] === "no cumple" && (
+                                <>❌ No cumple</>
+                              )}
+                              {estadoSoportes[soporte.uuid] === "cumple" && (
+                                <>✅ Cumple</>
+                              )}
+                              {estadoSoportes[soporte.uuid] ===
+                                "en proceso" && <>⏳ En proceso</>}
+                              {!estadoSoportes[soporte.uuid] && (
+                                <>❔ Sin check</>
+                              )}
                             </p>
                           )}
                         </td>
@@ -640,7 +649,17 @@ const Seguimiento = () => {
                             <option value="En proceso">⏳ En proceso</option>
                           </select>
                         ) : (
-                          <p>{status_porcentaje.estado_referente}</p>
+                          <p>
+                            {/* {status_porcentaje.estado_referente} */}
+                            {status_porcentaje.estado_referente ===
+                              "No cumple" && <>❌ No cumple</>}
+
+                            {status_porcentaje.estado_referente ===
+                              "Cumple" && <>✅ Cumple</>}
+
+                            {status_porcentaje.estado_referente ===
+                              "En proceso" && <>⏳ En proceso</>}
+                          </p>
                         )}
                       </td>
                     </tr>
@@ -753,7 +772,18 @@ const Seguimiento = () => {
                             <option value="En proceso">⏳ En proceso</option>
                           </select>
                         ) : (
-                          <p>{status_porcentaje.estado_operador}</p>
+                          <p>
+                            {/* {status_porcentaje.estado_operador} */}
+                            {status_porcentaje.estado_operador ===
+                              "No cumple" && <>❌ No cumple</>}
+
+                            {status_porcentaje.estado_operador === "Cumple" && (
+                              <>✅ Cumple</>
+                            )}
+
+                            {status_porcentaje.estado_operador ===
+                              "En proceso" && <>⏳ En proceso</>}
+                          </p>
                         )}
                       </td>
                     </tr>
