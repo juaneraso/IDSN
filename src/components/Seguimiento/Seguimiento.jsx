@@ -47,6 +47,14 @@ const Seguimiento = () => {
     porcentaje_operador: "",
   });
 
+  useEffect(() => {
+    Swal.fire({
+      title: "Información",
+      text: "Recuerda luego de realizar  cambios , dar clic en los botones de  Guardar para conservar los cambios",
+      icon: "warning",
+    });
+  }, []);
+
   const onchange_status = (event) => {
     const property = event.target.name;
     let value = event.target.value;
